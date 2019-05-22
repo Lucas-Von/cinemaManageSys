@@ -45,8 +45,8 @@
 
         logining: false,
         ruleForm2: {
-          username: 'admin',
-          password: '123456',
+          username: '用户名',
+          password: '密码',
           pwdType: 'password',
           eyeType: 'fa fa-eye-slash fa-lg',
         },
@@ -66,17 +66,54 @@
               this.ruleForm2.password === '123456'){
               this.logining = false;
               sessionStorage.setItem('user', this.ruleForm2.username);
-              this.$router.push({path: '/'});
+              this.$router.push({path: '/admin'});
               if(this.rememberme){
                 this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
               }else{
                 this.deleteCookie()
               }
-            }else{
-              this.logining = false;
-              this.$alert('username or password wrong!', 'info', {
-                confirmButtonText: 'ok'
-              })
+            }else {
+              if (this.ruleForm2.username === 'root' &&
+                this.ruleForm2.password === '123456') {
+                this.logining = false;
+                sessionStorage.setItem('user', this.ruleForm2.username);
+                this.$router.push({path: '/root'});
+                if (this.rememberme) {
+                  this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
+                } else {
+                  this.deleteCookie()
+                }
+              } else {
+                if (this.ruleForm2.username === 'user' &&
+                  this.ruleForm2.password === '123456') {
+                  this.logining = false;
+                  sessionStorage.setItem('user', this.ruleForm2.username);
+                  this.$router.push({path: '/user'});
+                  if (this.rememberme) {
+                    this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
+                  } else {
+                    this.deleteCookie()
+                  }
+                } else {
+                  if (this.ruleForm2.username === 'saler' &&
+                    this.ruleForm2.password === '123456') {
+                    this.logining = false;
+                    sessionStorage.setItem('user', this.ruleForm2.username);
+                    this.$router.push({path: '/saler'});
+                    if (this.rememberme) {
+                      this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
+                    } else {
+                      this.deleteCookie()
+                    }
+                  } else {
+
+                    this.logining = false;
+                    this.$alert('username or password wrong!', 'info', {
+                      confirmButtonText: 'ok'
+                    })
+                  }
+                }
+              }
             }
           }else{
             console.log('error submit!');

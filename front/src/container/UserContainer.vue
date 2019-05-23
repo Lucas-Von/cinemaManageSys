@@ -40,68 +40,70 @@
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+
+        </div>
+        <!-- 我是样例菜单 -->
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+
+        </el-menu>
       </el-aside>
 
       <el-container>
-        <el-header class="app-header">
-          <div style="width: 60px; cursor: pointer;"
-               @click.prevent="toggleSideBar">
-            <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
-            <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+        <!--<el-header class="app-header">-->
+          <!--<div style="width: 60px; cursor: pointer;"-->
+               <!--@click.prevent="toggleSideBar">-->
+            <!--<i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>-->
+            <!--<i v-show="isCollapse" class="el-icon-d-arrow-right"></i>-->
 
-          </div>
-          <!-- 我是样例菜单 -->
-          <el-menu default-active="1"
-                   class="el-menu-demo tab-page"
-                   mode="horizontal"
-                   @select="handleSelect"
-                   active-text-color="#409EFF">
-            <!--<el-menu-item index="1">处理中心</el-menu-item>-->
-            <!--<el-submenu index="2">-->
-              <!--<template slot="title">我的工作台</template>-->
-              <!--<el-menu-item index="2-1">选项1</el-menu-item>-->
-              <!--<el-menu-item index="2-2">选项2</el-menu-item>-->
-              <!--<el-menu-item index="2-3">选项3</el-menu-item>-->
-              <!--<el-submenu index="2-4">-->
-                <!--<template slot="title">选项4</template>-->
-                <!--<el-menu-item index="2-4-1">选项1</el-menu-item>-->
-                <!--<el-menu-item index="2-4-2">选项2</el-menu-item>-->
-                <!--<el-menu-item index="2-4-3">选项3</el-menu-item>-->
-              <!--</el-submenu>-->
-            <!--</el-submenu>-->
-            <!--<el-menu-item index="3">消息中心</el-menu-item>-->
-            <!--<el-menu-item index="4">-->
-              <!--<a href="#">订单管理</a>-->
-            <!--</el-menu-item>-->
-          </el-menu>
+          <!--</div>-->
+          <!--&lt;!&ndash; 我是样例菜单 &ndash;&gt;-->
+          <!--<el-menu default-active="1"-->
+                   <!--class="el-menu-demo tab-page"-->
+                   <!--mode="horizontal"-->
+                   <!--@select="handleSelect"-->
+                   <!--active-text-color="#409EFF">-->
 
-          <div class="app-header-userinfo">
-            <el-dropdown trigger="hover"
-                         :hide-on-click="false">
-              <span class="el-dropdown-link">
-                {{ username }}
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>我的消息</el-dropdown-item>
-                <el-dropdown-item>设置</el-dropdown-item>
-                <el-dropdown-item divided
-                                  @click.native="logout">退出登录</el-dropdown-item>
-              </el-dropdown-menu>
+          <!--</el-menu>-->
 
-            </el-dropdown>
-          </div>
-          <div>
+          <!--<div class="app-header-userinfo">-->
+            <!--<el-dropdown trigger="hover"-->
+                         <!--:hide-on-click="false">-->
+              <!--<span class="el-dropdown-link">-->
+                <!--{{ username }}-->
+                <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+              <!--</span>-->
+              <!--<el-dropdown-menu slot="dropdown">-->
+                <!--<el-dropdown-item>我的消息</el-dropdown-item>-->
+                <!--<el-dropdown-item>设置</el-dropdown-item>-->
+                <!--<el-dropdown-item divided-->
+                                  <!--@click.native="logout">退出登录</el-dropdown-item>-->
+              <!--</el-dropdown-menu>-->
 
-          </div>
-        </el-header>
+            <!--</el-dropdown>-->
+          <!--</div>-->
+          <!--<div>-->
+
+          <!--</div>-->
+        <!--</el-header>-->
 
         <el-main class="app-body">
+
           <template>
-            <img src="@/assets/yep.png"
-                 :width="isCollapse ? '1160' : '1050'">
-            <router-view/>
+              <el-carousel :interval="4000" type="card" height="200px">
+                          <el-carousel-item v-for="item in imagesbox" :key="item.id">
+                             <img :src="item.idView" class="image">
+                          </el-carousel-item>
+             </el-carousel>
           </template>
+
         </el-main>
       </el-container>
     </el-container>
@@ -114,9 +116,17 @@
     data() {
       return {
         username: '',
-        isCollapse: false
+        isCollapse: false,
+        imagesbox:[
+          {id:0,idView:require("@/assets/test1.jpg")},     
+          {id:1,idView:require("@/assets/test2.jpg")},
+          {id:2,idView:require("@/assets/test3.jpg")}
+          ]
       }
-    },
+
+
+      }
+    ,
     methods: {
       toggleSideBar() {
         this.isCollapse = !this.isCollapse
@@ -148,6 +158,15 @@
   }
 </script>
 
-<style>
+<style lang="scss" scoped>
+  .el-carousel__item {
+    width: 100%;
+    display: flex;
+
+    .carousel-image {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
 </style>
 

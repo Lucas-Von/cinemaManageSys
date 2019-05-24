@@ -62,12 +62,49 @@
         <el-main class="app-body">
 
           <template>
+            <el-table
+              :data="tableData"
+              style="width: 100%">
+              <el-table-column
+                label="海报"
+                width="180">
+                <template slot-scope="scope">
+                  <img src="scope.row.picture" class="image">
+                </template>
+              </el-table-column>
 
-              <el-carousel :interval="4000" type="card" height="450px" width="1800px">
-                       <el-carousel-item v-for="item in imagesbox" :key="item.id">
-                             <img :src="item.idView" class="image">
-                       </el-carousel-item>
-             </el-carousel>
+              <el-table-column
+                label="具体详情"
+                width="250">
+                <template slot-scope="scope">
+
+                  <span style="margin-left: 10px">电影名称：{{scope.row.film }}<br></span>
+                  <span style="margin-left: 10px">电影时间：{{scope.row.open}}<br></span>
+                  <span style="margin-left: 10px">影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scope.row.room }}<br></span>
+                  <span style="margin-left: 10px">数&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp量：{{scope.row.num }}<br></span>
+                  <span style="margin-left: 10px">座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{scope.row.seat }}<br></span>
+                  <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.money }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="支付状态"
+                width="180">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{scope.row.state}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    @click="handleEdit(scope.$index, scope.row)">出票</el-button>
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="handleDelete(scope.$index, scope.row)">退票</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </template>
         </el-main>
       </el-container>
@@ -79,23 +116,49 @@
   export default {
     name: 'Container',
     data() {
+      const item = {
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      };
       return {
         username: '',
         isCollapse: false,
         imagesbox:[
-          {id:0,idView:require("@/assets/test1.jpg")},     
+          {id:0,idView:require("@/assets/test1.jpg")},
           {id:1,idView:require("@/assets/test2.jpg")},
           {id:2,idView:require("@/assets/test3.jpg")},
           {id:3,idView:require("@/assets/test4.jpg")},
           {id:4,idView:require("@/assets/test5.jpg")},
           {id:5,idView:require("@/assets/test6.jpg")}
-          ]
+        ],
+        tableData: [{
+          picture:require("@/assets/test1.jpg"),
+          date: '2016-05-02',
+          name: '王小虎',
+          state:'已完成',
+          film: '建国大业',
+          room:'一号厅',
+          open:'2019-8-10 12:12',
+          seat:'三排5座 三排4座',
+          money:'66',
+          num:2,
+        },
+          {
+            picture:require("@/assets/test1.jpg"),
+            date: '2016-05-02',
+            name: '王小虎',
+            state:'已完成',
+            film: '建国大业',
+            room:'一号厅',
+            open:'2019-8-10 12:12',
+            seat:'三排5座 三排4座',
+            money:'66',
+            num:2,
+          }]
       }
-
-
-      }
+    }
     ,
-
 
     methods: {
       toggleSideBar() {
@@ -137,7 +200,7 @@
         this.username = user;
       }
     },
-    }
+  }
 
 </script>
 
@@ -152,4 +215,5 @@
     }
   }
 </style>
+
 

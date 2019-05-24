@@ -63,11 +63,11 @@
 
           <template>
 
-              <el-carousel :interval="4000" type="card" height="450px" width="1800px">
-                       <el-carousel-item v-for="item in imagesbox" :key="item.id">
-                             <img :src="item.idView" class="image">
-                       </el-carousel-item>
-             </el-carousel>
+            <el-carousel :interval="4000" type="card" height="450px" width="1800px">
+                   <el-carousel-item v-for="item in imagesbox" :key="item.id">
+                         <img :src="item.idView" class="image">
+                   </el-carousel-item>
+            </el-carousel>
           </template>
         </el-main>
       </el-container>
@@ -83,17 +83,17 @@
         username: '',
         isCollapse: false,
         imagesbox:[
-          {id:0,idView:require("@/assets/test1.jpg")},     
+          {id:0,idView:require("@/assets/test1.jpg")},
           {id:1,idView:require("@/assets/test2.jpg")},
           {id:2,idView:require("@/assets/test3.jpg")},
           {id:3,idView:require("@/assets/test4.jpg")},
           {id:4,idView:require("@/assets/test5.jpg")},
           {id:5,idView:require("@/assets/test6.jpg")}
-          ]
+        ]
       }
 
 
-      }
+    }
     ,
 
 
@@ -137,7 +137,7 @@
         this.username = user;
       }
     },
-    }
+  }
 
 </script>
 

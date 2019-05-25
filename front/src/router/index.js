@@ -5,10 +5,10 @@ import AdminContainer from '@/container/AdminContainer'
 import RootContainer from '@/container/RootContainer'
 import SalerContainer from '@/container/SalerContainer'
 import UserContainer from '@/container/UserContainer'
-import UserIno from '@/views/UserIno'
-import UserMovieList from '@/views/UserMovieList'
-import UserMyCard from '@/views/UserMyCard'
-import UserMyMovie from '@/views/UserMyMovie'
+import UserIno from '@/views/user/UserInfo'
+import UserMovieList from '@/views/user/UserMovieList'
+import UserMyCard from '@/views/user/UserMyCard'
+import UserMyMovie from '@/views/user/UserMyMovie'
 
 Vue.use(Router)
 

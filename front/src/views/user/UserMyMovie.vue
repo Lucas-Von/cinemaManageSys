@@ -219,7 +219,7 @@
       },
       getinfo(event){
         this.$router.push({path: '/user/Info'});
-      },
+      }
     },
     mounted: function () {
       let user = sessionStorage.getItem('user');

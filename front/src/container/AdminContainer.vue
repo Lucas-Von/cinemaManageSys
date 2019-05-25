@@ -1,35 +1,29 @@
 <template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
   <div class="app" >
     <el-container >
-      <el-aside class="app-side app-side-left"
-                :class="isCollapse ? 'app-side-collapsed' : 'app-side-expanded'">
+      <el-aside class="app-side-expanded">
         <div class="app-side-logo">
           <img src="@/assets/1.jpg"
-               :width="isCollapse ? '60' : '60'"
-               :height="isCollapse ? '60' : '60'"
+               :width="60"
+               :height="60"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
-          <!-- 我是样例菜单 -->
+          <el-menu class="el-menu-vertical-demo">
 
-          <el-menu default-active="1-5-1"
-                   class="el-menu-vertical-demo"
-                   @open="handleOpen"
-                   :collapse="isCollapse">
-
-            <el-menu-item index="1">
-                <i class="el-icon-camera"></i>
-                <span slot="title">经理管理</span>
-            </el-menu-item>
-            <el-menu-item index="2">
-              <i class="el-icon-menu"></i>
+            <el-menu-item index="1" @click="toEmployeeManagement">
+              <i class="el-icon-camera"></i>
               <span slot="title">员工管理</span>
             </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-document"></i>
-              <span slot="title">影院总体管理</span>
+            <el-menu-item index="2" @click="toUserManagement">
+              <i class="el-icon-menu"></i>
+              <span slot="title">用户管理</span>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item index="3" @click="toCinemaInfoManagement">
+              <i class="el-icon-document"></i>
+              <span slot="title">影院信息管理</span>
+            </el-menu-item>
+            <el-menu-item index="4" @click="logout">
               <i class="el-icon-setting"></i>
               <span slot="title">登出</span>
             </el-menu-item>
@@ -38,58 +32,10 @@
       </el-aside>
 
       <el-container>
-        <el-header class="app-header">
-          <div style="width: 60px; cursor: pointer;"
-               @click.prevent="toggleSideBar">
-            <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
-            <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
-
-          </div>
-          <!-- 我是样例菜单 -->
-          <el-menu default-active="1"
-                   class="el-menu-demo tab-page"
-                   mode="horizontal"
-                   @select="handleSelect"
-                   active-text-color="#409EFF">
-            <el-menu-item index="1">处理中心</el-menu-item>
-            <el-submenu index="2">
-              <template slot="title">我的工作台</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-              <el-menu-item index="2-3">选项3</el-menu-item>
-              <el-submenu index="2-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="2-4-1">选项1</el-menu-item>
-                <el-menu-item index="2-4-2">选项2</el-menu-item>
-                <el-menu-item index="2-4-3">选项3</el-menu-item>
-              </el-submenu>
-            </el-submenu>
-            <el-menu-item index="3">消息中心</el-menu-item>
-            <el-menu-item index="4">
-              <a href="#">订单管理</a>
-            </el-menu-item>
-          </el-menu>
-
-          <div class="app-header-userinfo">
-            <el-dropdown trigger="hover"
-                         :hide-on-click="false">
-              <span class="el-dropdown-link">
-                {{ username }}
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>我的消息</el-dropdown-item>
-                <el-dropdown-item>设置</el-dropdown-item>
-                <el-dropdown-item divided
-                                  @click.native="logout">退出登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-        </el-header>
 
         <el-main class="app-body">
           <template>
-            <router-view/>
+
           </template>
         </el-main>
       </el-container>
@@ -107,8 +53,14 @@
       }
     },
     methods: {
-      toggleSideBar() {
-        this.isCollapse = !this.isCollapse
+      toEmployeeManagement(){
+        this.$router.push({path: '/admin/EmployeeManagement'});
+      },
+      toUserManagement(){
+        this.$router.push({path: '/admin/UserManagement'});
+      },
+      toCinemaInfoManagement(){
+        this.$router.push({path: '/admin/CinemaInfoManagement'});
       },
       logout: function () {
         this.$confirm('确认退出?', '提示', {})
@@ -117,23 +69,8 @@
             this.$router.push('/login');
           })
           .catch(() => { });
-      },
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
-    },
-    mounted: function () {
-      let user = sessionStorage.getItem('user');
-      if (user) {
-        this.username = user;
       }
-    },
+    }
   }
 </script>
 

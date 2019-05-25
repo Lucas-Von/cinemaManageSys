@@ -59,16 +59,16 @@
 
       <el-container>
         <!--<el-header style="text-align: right; font-size: 12px">-->
-          <!--<el-dropdown>-->
-            <!--<i class="el-icon-setting" style="margin-right: 15px"></i>-->
-            <!--<el-dropdown-menu slot="dropdown">-->
-              <!--<el-dropdown-item>查看</el-dropdown-item>-->
-              <!--<el-dropdown-item>新增</el-dropdown-item>-->
-              <!--<el-dropdown-item>删除</el-dropdown-item>-->
+        <!--<el-dropdown>-->
+        <!--<i class="el-icon-setting" style="margin-right: 15px"></i>-->
+        <!--<el-dropdown-menu slot="dropdown">-->
+        <!--<el-dropdown-item>查看</el-dropdown-item>-->
+        <!--<el-dropdown-item>新增</el-dropdown-item>-->
+        <!--<el-dropdown-item>删除</el-dropdown-item>-->
 
-            <!--</el-dropdown-menu>-->
-          <!--</el-dropdown>-->
-          <!--<span>王小虎</span>-->
+        <!--</el-dropdown-menu>-->
+        <!--</el-dropdown>-->
+        <!--<span>王小虎</span>-->
         <!--</el-header>-->
 
         <el-main class="app-body">
@@ -78,18 +78,18 @@
               :data="tableData"
               style="width: 100%">
               <el-table-column
-              label="日期"
-              width="180">
-              <template slot-scope="scope">
-                <i class="el-icon-time"></i>
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
-              </template>
-            </el-table-column>
+                label="日期"
+                width="180">
+                <template slot-scope="scope">
+                  <i class="el-icon-time"></i>
+                  <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="海报"
                 width="180">
                 <template slot-scope="scope">
-                  <img src="scope.row.picture" class="image">
+                  <img :src=scope.row.picture class="image" height="200px">
                 </template>
               </el-table-column>
 
@@ -218,7 +218,7 @@
         this.$router.push({path: '/user/MyCard'});
       },
       getinfo(event){
-        this.$router.push({path: '/user/Ino'});
+        this.$router.push({path: '/user/Info'});
       },
     },
     mounted: function () {
@@ -249,4 +249,5 @@
     color: #333;
   }
 </style>
+
 

@@ -5,7 +5,7 @@ import AdminContainer from '@/container/AdminContainer'
 import RootContainer from '@/container/RootContainer'
 import SalerContainer from '@/container/SalerContainer'
 import UserContainer from '@/container/UserContainer'
-import UserIno from '@/views/user/UserInfo'
+import UserInfo from '@/views/user/UserInfo'
 import UserMovieList from '@/views/user/UserMovieList'
 import UserMyCard from '@/views/user/UserMyCard'
 import UserMyMovie from '@/views/user/UserMyMovie'
@@ -20,7 +20,7 @@ export default new Router({
       component: AdminContainer
     },
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: Login
     },
@@ -37,7 +37,7 @@ export default new Router({
     {path: '/user/MovieList', name: '全部电影', component: UserMovieList, },
     {path: '/user/MyMovie', name: '我的电影票', component: UserMyMovie, },
     {path: '/user/MyCard', name: '我的会员卡', component: UserMyCard, },
-    {path: '/user/Ino', name: '我的信息', component: UserIno, },
+    {path: '/user/Info', name: '我的信息', component: UserInfo, },
 
     {
       path: '/Saler',

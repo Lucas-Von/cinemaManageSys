@@ -128,7 +128,7 @@
         this.$router.push({path: '/user/MyCard'});
       },
       getinfo(event){
-        this.$router.push({path: '/user/Ino'});
+        this.$router.push({path: '/user/Info'});
       },
     },
     mounted: function () {
@@ -152,4 +152,5 @@
     }
   }
 </style>
+
 

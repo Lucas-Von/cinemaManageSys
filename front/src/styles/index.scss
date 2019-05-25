@@ -3,9 +3,6 @@ html {
 }
 
 body {
-  //background: url(../assets/backgroud.png);
-  //background-repeat: no-repeat;
-  //background-size: cover;
   position: relative;
   top: 0;
   left: 0;
@@ -86,4 +83,19 @@ body {
 
 .inline-block {
   display: inline-block;
+}
+
+.img-box{
+    background-size: cover;
+    background-position: center 0;
+  }
+
+.img-box img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: auto;
 }

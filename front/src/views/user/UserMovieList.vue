@@ -68,8 +68,8 @@
               <el-table-column
                 label="海报"
                 width="180">
-                <template slot-scope="scope">
-                  <img src="scope.row.picture" class="image">
+                <template slot-scope="scope" class="img-box" >
+                  <img :src=scope.row.picture class="image" height="200px">
                 </template>
               </el-table-column>
 
@@ -191,7 +191,7 @@
         this.$router.push({path: '/user/MyCard'});
       },
       getinfo(event){
-        this.$router.push({path: '/user/Ino'});
+        this.$router.push({path: '/user/Info'});
       },
     },
     mounted: function () {
@@ -215,5 +215,3 @@
     }
   }
 </style>
-
-

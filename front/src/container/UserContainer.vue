@@ -58,11 +58,8 @@
       </el-aside>
 
       <el-container>
-
         <el-main class="app-body">
-
           <template>
-
               <el-carousel :interval="4000" type="card" height="450px" width="1800px">
                        <el-carousel-item v-for="item in imagesbox" :key="item.id">
                              <img :src="item.idView" class="image">
@@ -91,11 +88,7 @@
           {id:5,idView:require("@/assets/test6.jpg")}
           ]
       }
-
-
-      }
-    ,
-
+    },
 
     methods: {
       toggleSideBar() {
@@ -128,7 +121,7 @@
         this.$router.push({path: '/user/MyCard'});
       },
       getinfo(event){
-        this.$router.push({path: '/user/Ino'});
+        this.$router.push({path: '/user/Info'});
       },
     },
     mounted: function () {
@@ -137,7 +130,7 @@
         this.username = user;
       }
     },
-    }
+  }
 
 </script>
 

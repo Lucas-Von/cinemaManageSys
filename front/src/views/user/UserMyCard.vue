@@ -61,14 +61,51 @@
 
         <el-main class="app-body">
 
-          <template>
+          <el-col span="12">
+          <el-card class="box-card" >
+            <img  height="320px" width="cover" src="@/assets/VIP.jpg">
 
-            <el-carousel :interval="4000" type="card" height="450px" width="1800px">
-                   <el-carousel-item v-for="item in imagesbox" :key="item.id">
-                         <img :src="item.idView" class="image">
-                   </el-carousel-item>
-            </el-carousel>
+          </el-card>
+          </el-col>
+          <el-col span="12">
+          <el-card class="box-card" >
+            <div slot="header" class="clearfix">
+              <span>{{id}}</span>
+            </div>
+            <div :class="vip ? 'pay' : 'repay'">
+              <span>{{!vip ? '您还不是会员！' : '你已是会员！'}}<br></span>
+              <span>{{profit}}<br></span>
+              <span>{{!vip ? '余额：0' : '余额：'+mon}}<br></span>
+              <span>{{!vip ? '您还不是会员！' : '你已是会员！'}}<br></span>
+              <el-button  @click.native.prevent="deleteRow(vip)" size="small">{{!vip ? '购买会员卡 25/张' : '充值会员卡'}} </el-button>
+            </div>
+          </el-card>
+          </el-col>
+
+          <div>
+          <h2>消费记录</h2>
+          <template>
+            <el-table
+              :data="tableData"
+              style="width: 100%">
+              <el-table-column
+                prop="date"
+                label="日期"
+                width="360"
+              sortable>
+              </el-table-column>
+              <el-table-column
+                prop="cate"
+                label="类型"
+                width="360">
+              </el-table-column>
+              <el-table-column
+                prop="money"
+                label="金额">
+              </el-table-column>
+            </el-table>
           </template>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -82,14 +119,20 @@
       return {
         username: '',
         isCollapse: false,
-        imagesbox:[
-          {id:0,idView:require("@/assets/test1.jpg")},
-          {id:1,idView:require("@/assets/test2.jpg")},
-          {id:2,idView:require("@/assets/test3.jpg")},
-          {id:3,idView:require("@/assets/test4.jpg")},
-          {id:4,idView:require("@/assets/test5.jpg")},
-          {id:5,idView:require("@/assets/test6.jpg")}
-        ]
+        id:'印仁仪',
+        vip:false,
+        profit:'充值优惠：满200送30',
+        mon:200,
+        tableData: [{
+          date: '2016-05-02',
+          cate:'消费',
+          money:'66',
+        },
+          {
+            date: '2016-05-02',
+            cate:'充值',
+            money:'100',
+          }]
       }
 
 
@@ -98,6 +141,26 @@
 
 
     methods: {
+      deleteRow(vip) {
+        this.$confirm('此操作将在影厅出票, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+              type: 'success',
+              message: '出票成功!',
+
+            },
+            vip=true
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消出票'
+          });
+        });
+      },
       toggleSideBar() {
         this.isCollapse = !this.isCollapse
       },
@@ -141,16 +204,30 @@
 
 </script>
 
-<style lang="scss" scoped>
-  .el-carousel__item {
-    width: 500px;
-    display: flex;
-
-    .carousel-image {
-      max-width: 100%;
-      max-height: 100%;
+<style>
+    .text {
+      font-size: 14px;
     }
-  }
+
+    .item {
+      margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+      display: table;
+      content: "";
+    }
+    .clearfix:after {
+      clear: both
+    }
+
+    .box-card {
+      margin-left: 30px;
+      width: 470px;
+      height: 360px;
+    }
+
 </style>
 
 

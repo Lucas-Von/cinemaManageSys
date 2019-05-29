@@ -95,16 +95,23 @@
 
                 <router-link :to="{path:'/detail/'+item.id}">
                   <el-col :span="8" >
-                    <br>
-                    <img  height="320px" width="250px" :src="item.images">
-                    <br>
+
+                    <el-card >
+                      <br>
+                      <img  height="320px" width="250px" :src="item.images">
+                      <br>
+
+                      <div style="padding: 14px;">
+                        <div class="bottom clearfix">
+                          <el-button type="text" class="button">{{item.id}}</el-button>
+                        </div>
+                      </div>
+                    </el-card>
                   </el-col>
                 </router-link>
 
               </div>
-
             </div>
-
           </div>
         </el-main>
       </el-container>
@@ -125,9 +132,9 @@
         loading: true,
         title: '',
         list: [
-          {id:'ffff',title:'fds',images:require("@/assets/test1.jpg")},
-          {id:'ffff',title:'fds',images:require("@/assets/test2.jpg")},
-          {id:'ffff',title:'fds',images:require("@/assets/test3.jpg")},
+          {id:'皮卡丘',title:'fds',images:require("@/assets/test1.jpg")},
+          {id:'皮卡丘',title:'fds',images:require("@/assets/test2.jpg")},
+          {id:'皮卡丘',title:'fds',images:require("@/assets/test3.jpg")},
 
 
         ],

@@ -95,9 +95,18 @@
 
                 <router-link :to="{path:'/detail/'+item.id}">
                   <el-col :span="8" >
-                    <br>
-                  <img  height="320px" width="250px" :src="item.images">
-                    <br>
+
+                    <el-card >
+                      <br>
+                        <img  height="320px" width="250px" :src="item.images">
+                      <br>
+
+                    <div style="padding: 14px;">
+                      <div class="bottom clearfix">
+                        <el-button type="text" class="button">{{item.id}}</el-button>
+                      </div>
+                    </div>
+                    </el-card>
                   </el-col>
                 </router-link>
 
@@ -126,9 +135,9 @@
         title: '',
         list: [
 
-          {id:'ffff',title:'fds',images:require("@/assets/test4.jpg")},
-          {id:'ffff',title:'fds',images:require("@/assets/test5.jpg")},
-          {id:'ffff',title:'fds',images:require("@/assets/test6.jpg")}
+          {id:'皮卡丘',title:'fds',images:require("@/assets/test4.jpg")},
+          {id:'皮卡丘',title:'fds',images:require("@/assets/test5.jpg")},
+          {id:'皮卡丘',title:'fds',images:require("@/assets/test6.jpg")}
 
         ],
         username: '',

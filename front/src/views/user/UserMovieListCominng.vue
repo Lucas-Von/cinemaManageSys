@@ -36,7 +36,7 @@
               <span slot="title">个人信息</span>
             </el-menu-item>
             <el-menu-item index="5" @click="logout">
-              <i class="el-icon-setting"></i>
+              <i class="el-icon-setting" ></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
@@ -61,29 +61,29 @@
 
         <el-main class="app-body">
 
-            <template>
-              <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                  <el-menu
-                    :default-active="activeIndex2"
-                    class="el-menu-demo"
-                    mode="horizontal"
-                    @select="handleSelect"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    active-text-color="#ffd04b"
-                  >
-                    <el-col :span="11" >
+          <template>
+            <nav class="navbar navbar-default">
+              <div class="container-fluid">
+                <el-menu
+                  :default-active="activeIndex2"
+                  class="el-menu-demo"
+                  mode="horizontal"
+                  @select="handleSelect"
+                  background-color="#545c64"
+                  text-color="#fff"
+                  active-text-color="#ffd04b"
+                >
+                  <el-col :span="11" >
                     <el-menu-item index="1" @click="intheather">正在上映</el-menu-item>
-                    </el-col>
-                    <el-col :span="11">
+                  </el-col>
+                  <el-col :span="11">
                     <el-menu-item index="2" @click="coming">即将上映</el-menu-item>
-                    </el-col>
-                  </el-menu>
+                  </el-col>
+                </el-menu>
 
-                </div>
-              </nav>
-            </template>
+              </div>
+            </nav>
+          </template>
 
           <div class="container">
             <div class="canvas" v-show="loading">
@@ -96,7 +96,7 @@
                 <router-link :to="{path:'/detail/'+item.id}">
                   <el-col :span="8" >
                     <br>
-                  <img  height="320px" width="250px" :src="item.images">
+                    <img  height="320px" width="250px" :src="item.images">
                     <br>
                   </el-col>
                 </router-link>
@@ -125,10 +125,10 @@
         loading: true,
         title: '',
         list: [
+          {id:'ffff',title:'fds',images:require("@/assets/test1.jpg")},
+          {id:'ffff',title:'fds',images:require("@/assets/test2.jpg")},
+          {id:'ffff',title:'fds',images:require("@/assets/test3.jpg")},
 
-          {id:'ffff',title:'fds',images:require("@/assets/test4.jpg")},
-          {id:'ffff',title:'fds',images:require("@/assets/test5.jpg")},
-          {id:'ffff',title:'fds',images:require("@/assets/test6.jpg")}
 
         ],
         username: '',
@@ -213,11 +213,11 @@
       getinfo(event){
         this.$router.push({path: '/user/Info'});
       },
-      coming(event){
-        this.$router.push({path: '/user/Coming'});
-      },
       intheather(event){
         this.$router.push({path: '/user/MovieList'});
+      },
+      coming(event){
+        this.$router.push({path: '/user/Coming'});
       },
       loadMovieList(){
         this.loading = true;

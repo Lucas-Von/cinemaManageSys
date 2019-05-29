@@ -36,7 +36,7 @@
               <span slot="title">个人信息</span>
             </el-menu-item>
             <el-menu-item index="5">
-              <i class="el-icon-setting"></i>
+              <i class="el-icon-setting" @click="logout"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>

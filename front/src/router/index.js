@@ -9,6 +9,7 @@ import UserInfo from '@/views/user/UserInfo'
 import UserMovieList from '@/views/user/UserMovieList'
 import UserMyCard from '@/views/user/UserMyCard'
 import UserMyMovie from '@/views/user/UserMyMovie'
+import UserComing from '@/views/user/UserMovieListCominng'
 
 Vue.use(Router)
 
@@ -20,7 +21,7 @@ export default new Router({
       component: AdminContainer
     },
     {
-      path: '/',
+      path: '/login',
       name: 'Login',
       component: Login
     },
@@ -38,7 +39,7 @@ export default new Router({
     {path: '/user/MyMovie', name: '我的电影票', component: UserMyMovie, },
     {path: '/user/MyCard', name: '我的会员卡', component: UserMyCard, },
     {path: '/user/Info', name: '我的信息', component: UserInfo, },
-
+    {path: '/user/Coming', name: '即将上映', component: UserComing, },
     {
       path: '/Saler',
       name: 'SalerContainer',

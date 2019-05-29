@@ -16,6 +16,7 @@
 
           <el-menu default-active="1-5-1"
                    class="el-menu-vertical-demo"
+                   default-openeds="2"
                    @open="handleOpen"
                    :collapse="isCollapse">
 

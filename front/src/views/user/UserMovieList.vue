@@ -61,51 +61,34 @@
 
         <el-main class="app-body">
 
-          <template>
-            <el-table
-              :data="tableData"
-              style="width: 100%">
-              <el-table-column
-                label="海报"
-                width="180">
-                <template slot-scope="scope" class="img-box" >
-                  <img :src=scope.row.picture class="image" height="200px">
-                </template>
-              </el-table-column>
+            <template>
+              <nav class="navbar navbar-default">
+                <div class="container-fluid">
 
-              <el-table-column
-                label="具体详情"
-                width="250">
-                <template slot-scope="scope">
+                  <form class="navbar-form navbar-left" role="search" @submit.prevent="submit">
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="输入电影名称" v-model="searchKey">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                  </form>
+                </div>
+              </nav>
+            </template>
 
-                  <span style="margin-left: 10px">电影名称：{{scope.row.film }}<br></span>
-                  <span style="margin-left: 10px">电影时间：{{scope.row.open}}<br></span>
-                  <span style="margin-left: 10px">影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scope.row.room }}<br></span>
-                  <span style="margin-left: 10px">数&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp量：{{scope.row.num }}<br></span>
-                  <span style="margin-left: 10px">座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{scope.row.seat }}<br></span>
-                  <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.money }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="支付状态"
-                width="180">
-                <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{scope.row.state}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">出票</el-button>
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">退票</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </template>
+          <div class="container">
+            <div class="canvas" v-show="loading">
+              <div class="spinner"></div>
+            </div>
+            <h2>{{title}}</h2>
+            <div class="row">
+              <div class="col-md-2 text-center" v-for="item in list" :key="item.id">
+                <router-link :to="{path:'/detail/'+item.id}">
+                  <img :src="item.images">
+                  <div class="title">{{item.title}}</div>
+                </router-link>
+              </div>
+            </div>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -122,6 +105,17 @@
         address: '上海市普陀区金沙江路 1518 弄'
       };
       return {
+        loading: true,
+        title: '',
+        list: [
+          {id:'ffff',title:'fds',images:require("@/assets/test1.jpg")},
+          {id:'ffff',title:'fds',images:require("@/assets/test2.jpg")},
+          {id:'ffff',title:'fds',images:require("@/assets/test3.jpg")},
+          {id:'ffff',title:'fds',images:require("@/assets/test4.jpg")},
+          {id:'ffff',title:'fds',images:require("@/assets/test5.jpg")},
+          {id:'ffff',title:'fds',images:require("@/assets/test6.jpg")}
+
+        ],
         username: '',
         isCollapse: false,
         imagesbox:[
@@ -161,6 +155,17 @@
     ,
 
     methods: {
+      submit(){
+        if (!this.searchKey) {
+          alert('请输入搜索内容');
+          return;
+        }
+        // 搜索页面跳转
+        this.$router.push({
+          path: '/search/' + this.searchKey,
+        })
+        this.searchKey = "";
+      },
       toggleSideBar() {
         this.isCollapse = !this.isCollapse
       },
@@ -193,7 +198,28 @@
       getinfo(event){
         this.$router.push({path: '/user/Info'});
       },
+      loadMovieList(){
+        this.loading = true;
+        // 请求参数
+        let params = {
+            count: 18
+          },
+          // 请求路径
+          movieUrl = '/api/movie/' + this.movieType;
+        // 如果是搜索进入，新增搜索关键字参数
+        if (this.movieType == 'search') {
+          params['q'] = this.$route.params.searchKey;
+        }
+        this.$http.post(movieUrl, params).then((res) => {
+          console.log(res.data)
+          // 这里不做多校验，可自己加，直接上数据
+          this.list = res.data.subjects;
+          this.title = res.data.title;
+          this.loading = false;
+        })
+      }
     },
+
     mounted: function () {
       let user = sessionStorage.getItem('user');
       if (user) {
@@ -212,6 +238,20 @@
     .carousel-image {
       max-width: 100%;
       max-height: 100%;
+    }
+    img {
+      width: 100%;
+      height: 230px;
+      vertical-align: middle;
+    }
+    .row > div {
+      margin-bottom: 20px;
+    }
+    .title {
+      height: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 </style>

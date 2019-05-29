@@ -60,65 +60,53 @@
       <el-container>
 
         <el-main class="app-body">
-          <el-upload
-            class="upload-demo"
-            drag
-            action="https://jsonplaceholder.typicode.com/posts/"
-            multiple>
-            <i class="el-icon-upload"></i>
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
-
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="活动名称" prop="name">
-              <el-input v-model="ruleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="活动区域" prop="region">
-              <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="活动时间" required>
-              <el-col :span="11">
-                <el-form-item prop="date1">
-                  <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col class="line" :span="2">-</el-col>
-              <el-col :span="11">
-                <el-form-item prop="date2">
-                  <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-                </el-form-item>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="即时配送" prop="delivery">
-              <el-switch v-model="ruleForm.delivery"></el-switch>
-            </el-form-item>
-            <el-form-item label="活动性质" prop="type">
-              <el-checkbox-group v-model="ruleForm.type">
-                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-                <el-checkbox label="地推活动" name="type"></el-checkbox>
-                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-            <el-form-item label="特殊资源" prop="resource">
-              <el-radio-group v-model="ruleForm.resource">
-                <el-radio label="线上品牌商赞助"></el-radio>
-                <el-radio label="线下场地免费"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="活动形式" prop="desc">
-              <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-              <el-button @click="resetForm('ruleForm')">重置</el-button>
-            </el-form-item>
-          </el-form>
-
+          <div class="all-container-padding bg" >
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="基本信息" name="first">
+                <el-form :model="userlist" :rules="rules" ref="EditorUserForms">
+                  <el-form-item label="头像" prop="avatar_url" :label-width="formLabelWidth">
+                    <el-upload class="avatar-uploader" action="//shujiaoke.oss-cn-hangzhou.aliyuncs.com" :before-upload="beforeupload" :data="uploadParm" :show-file-list="false" :on-success="handleUpSuccess">
+                      <img v-if="userlist.avatar_url" :src="userlist.avatar_url" class="avatar">
+                      <i v-else class="el-icon-plus avatar-uploader-icon " style="width:80px;height:80px;"></i>
+                    </el-upload>
+                  </el-form-item>
+                  <el-form-item label="用户名" prop="username" :label-width="formLabelWidth">
+                    <el-col :span="8"> <el-input v-model="userlist.username" disabled ></el-input></el-col>
+                  </el-form-item>
+                  <el-form-item label="电话" prop="phone" :label-width="formLabelWidth">
+                    <el-col :span="8">  <el-input v-model="userlist.phone" placeholder="请输入电话"></el-input></el-col>
+                  </el-form-item>
+                  <el-form-item label="邮箱" prop="email" :label-width="formLabelWidth">
+                    <el-col :span="8">  <el-input v-model="userlist.email" placeholder="请输入邮箱"></el-input></el-col>
+                  </el-form-item>
+                  <el-form-item label="用户角色" prop="full_name" :label-width="formLabelWidth">
+                    <el-col :span="8">
+                      <el-input v-model="userlist.full_name" disabled ></el-input>
+                    </el-col>
+                  </el-form-item>
+                </el-form>
+                <div class="grid-content bg-purple">
+                  <el-button type="primary" @click="EditorUserClick('userlist')" >保存</el-button>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="修改密码" name="second">
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+                  <el-form-item label="原密码" prop="pass" :label-width="formLabelWidth">
+                    <el-col :span="8">  <el-input v-model="ruleForm.pass" placeholder="请输入原密码" type="password"></el-input></el-col>
+                  </el-form-item>
+                  <el-form-item label="新密码" prop="newpass" :label-width="formLabelWidth">
+                    <el-col :span="8"><el-input v-model="ruleForm.newpass" placeholder="请输入新密码" id="newkey" type="password"></el-input></el-col>
+                  </el-form-item>
+                  <el-form-item label="重复新密码" prop="checknewpass" :label-width="formLabelWidth">
+                    <el-col :span="8">  <el-input v-model="ruleForm.checknewpass" placeholder="请再次输入新密码" id='newkey1' type="password"></el-input></el-col>
+                  </el-form-item>
+                </el-form>
+                <div class="grid-content bg-purple">
+                  <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -129,7 +117,33 @@
   export default {
     name: 'Container',
     data() {
+      var validatePass = (rule, value, callback) => {
+        if (value === "") {
+          callback(new Error("请输入密码"));
+        } else {
+          if (this.ruleForm.checknewpass !== "") {
+            this.$refs.ruleForm.validateField("checknewpass");
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        if (value === "") {
+          callback(new Error("请再次输入密码"));
+        } else if (value !== this.ruleForm.newpass) {
+          callback(new Error("两次输入密码不一致!"));
+        } else {
+          callback();
+        }
+      };
       return {
+        uploadParm: {}, //图片的上传
+        ruleForm: {},//修改密码的表单
+        activeName: "first",
+        loading: true,
+        baseUrl: process.env.BASE_API,
+        userlist: {},//用户信息表单
+        formLabelWidth: "150px",
         ruleForm: {
           name: '',
           region: '',
@@ -141,30 +155,46 @@
           desc: ''
         },
         rules: {
-          name: [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          phone: [
+            {
+              required: true,
+              message: "请输入电话号码"
+            },
+            {
+              pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
+              message: "手机格式不对"
+            }
           ],
-          region: [
-            {required: true, message: '请选择活动区域', trigger: 'change'}
+          email: [
+            {
+              required: true,
+              message: "请输入电子邮箱"
+            },
+            {
+              pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/,
+              message: "请输入有效的邮箱"
+            }
           ],
-          date1: [
-            {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
+          pass: [
+            {
+              required: true,
+              trigger: "blur",
+              message: "请输入密码"
+            }
           ],
-          date2: [
-            {type: 'date', required: true, message: '请选择时间', trigger: 'change'}
+          newpass: [
+            {
+              validator: validatePass,
+              trigger: "blur"
+            }
           ],
-          type: [
-            {type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change'}
-          ],
-          resource: [
-            {required: true, message: '请选择活动资源', trigger: 'change'}
-          ],
-          desc: [
-            {required: true, message: '请填写活动形式', trigger: 'blur'}
+          checknewpass: [
+            {
+              validator: validatePass2,
+              trigger: "blur"
+            }
           ]
         },
-
         username: '',
         isCollapse: false,
         imagesbox:[
@@ -181,8 +211,115 @@
     }
     ,
 
-
+    created() {
+      this.getUser();
+      this.upload();
+    },
     methods: {
+      getUser() {
+        postData("接口", this.username).then(response => {
+          if (response.status === 200) {
+            this.userlist = response.data;
+            this.loading = false;
+            console.log(this.userlist, 9696);
+          } else {
+            this.$message({
+              message: "获取信息失败," + response.message,
+              type: "error"
+            });
+          }
+        });
+      },
+      //tab切换
+      handleClick(tab, event) {
+        console.log(tab, event);
+      },
+      //上传参数图片初始化
+      upload() {
+        var currentTimeStamp = new Date().getTime() / 1000;
+        if (
+          this.uploadParams == null ||
+          this.uploadParams.expire + 3 < currentTimeStamp
+        ) {
+          this.$store
+            .dispatch("GetUploadParams")
+            .then(req => {
+              this.uploadParm = req.data;
+            })
+            .catch(err => {
+              this.$message({message: err.message, type: "warning"});
+            });
+        } else {
+          this.uploadParm = this.uploadParams;
+        }
+      },
+      //上传之前
+      beforeupload(file) {
+        this.uploadParm.key = this.uploadParm.dir + guid();
+        // console.log(this.uploadParm)
+      },
+      //图片上传上传成功
+      handleUpSuccess(response, file, fileList) {
+        var newfile = {
+          name: file.name,
+          type: file.raw.type,
+          size: bytesToSize(file.size),
+          url: this.uploadParm.key
+        };
+        postData("file", newfile).then(response => {
+          if (response.status == 200) {
+            this.$message({message: "修改成功", type: "success"});
+            this.userlist.style_file_id = response.data.id;
+            this.userlist.avatar_url = this.baseUrl + response.data.url;
+          } else {
+            this.$message({message: "修改失败", type: "error"});
+          }
+        });
+        console.log(this.userlist);
+      },
+      //修改密码
+      submitForm(ruleForm) {
+        var obj = {
+          username: this.username,
+          oldpwd: this.ruleForm.pass,
+          newpwd: this.ruleForm.newpass
+        };
+        console.log(obj);
+        postData("接口", obj).then(response => {
+          if (response.status == 200) {
+            this.$message({
+              message: "保存成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: "修改失败" + response.message,
+              type: "error"
+            });
+          }
+        });
+      },
+      // 编辑提交的方法
+      EditorUserClick() {
+        this.$refs.EditorUserForms.validate(valid => {
+          if (valid) {
+            console.log(this.userlist);
+            putData("接口", this.userlist).then(response => {
+              if (response.status == 200) {
+                this.$message({
+                  message: "编辑成功",
+                  type: "success"
+                });
+              } else {
+                this.$message({
+                  message: "修改失败" + response.message,
+                  type: "error"
+                });
+              }
+            });
+          }
+        });
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -227,7 +364,33 @@
       },
       getinfo(event){
         this.$router.push({path: '/user/Info'});
+      },handleCommand(val) {
+        if (val === 'edit') {
+          this.handleEdit();
+        } else if (val === 'del') {
+          this.handleDelete();
+        }
       },
+      selectRow(val) {
+        this.formModel = Object.assign({}, val);
+      },
+//点击添加
+      handleAdd(val) {
+        this.dialogStatus = 'create';
+        this.addViewVisible = true;
+      },
+//点击编辑按钮
+      handleEdit(val) {
+        this.dialogStatus = 'update'
+        this.addViewVisible = true;
+        this.$nextTick(function () {
+          this.msgForm = this.formModel;   //表单绑定  :model="msgForm "
+        })
+      },
+//关闭dialog清空表单
+      closeDialog() {
+        this.$refs['msgForm'].resetFields();
+      }
     },
     mounted: function () {
       let user = sessionStorage.getItem('user');

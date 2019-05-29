@@ -1,12 +1,16 @@
-<template>
-  <div class="login-container">
+<template >
+  <div class="login-container" :style ="note">
+
     <el-form :model="ruleForm2" :rules="rules2"
              status-icon
              ref="ruleForm2"
              label-position="left"
              label-width="0px"
-             class="demo-ruleForm login-page">
-      <h3 class="title">系统登录</h3>
+             class="demo-ruleForm login-page"
+    >
+
+      <h2 class="title">系统登录</h2>
+      <br>
       <el-form-item prop="username">
         <el-input type="text"
                   v-model="ruleForm2.username"
@@ -16,6 +20,7 @@
           <template slot="prepend"><span class="fa fa-user fa-lg" style="width: 13px" ><i class="el-icon-user-solid"></i></span></template>
         </el-input>
       </el-form-item>
+      <br>
       <el-form-item prop="password">
         <el-input type="password"
                   v-model="ruleForm2.password"
@@ -30,11 +35,12 @@
         v-model="checked"
         class="rememberme"
       >记住密码</el-checkbox>
+      <br><br>
       <el-form-item style="width:100%;">
         <el-button type="primary" style="width:100%;" @click="handleSubmit" :loading="logining">登录</el-button>
       </el-form-item>
     </el-form>
-  </div>
+    </div>
 </template>
 
 
@@ -42,7 +48,11 @@
   export default {
     data(){
       return {
-
+        note: {
+          backgroundImage: "url(" + require("@/assets/background.jpg") + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        },
         logining: false,
         ruleForm2: {
           username: '用户名',
@@ -164,16 +174,20 @@
   };
 </script>
 
-<style scoped>
+<style scoped >
+
   .login-container {
     width: 100%;
     height: 100%;
+    position:absolute;
   }
   .login-page {
+    height: 380px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    margin: 100px auto;
     width: 350px;
+    margin-top: 100px;
+    margin-left: 400px ;
     padding: 35px 35px 15px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -183,4 +197,6 @@
     margin: 0px 0px 15px;
     text-align: left;
   }
+
+
 </style>

@@ -64,7 +64,7 @@
                         <el-col :span="11">
                           <el-time-picker placeholder="请选择时间" v-model="form.startTime" style="width: 100%;"></el-time-picker>
                         </el-col>
-                        <el-col class="line" :span="2">-</el-col>
+                        <el-col class="line" :span="2">&nbsp&nbsp&nbsp&nbsp&nbsp~</el-col>
                         <el-col :span="11">
                           <el-time-picker placeholder="请选择时间" v-model="form.endTime" style="width: 100%;"></el-time-picker>
                         </el-col>
@@ -142,7 +142,10 @@
         submit: function () {
           this.$confirm("确认提交保存？", "提示", {})
             .then(() => {
-
+              /*
+             TODO
+             push form
+              */
             })
             .catch(() => {})
         }

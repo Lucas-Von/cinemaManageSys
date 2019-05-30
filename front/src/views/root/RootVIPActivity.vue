@@ -163,6 +163,7 @@
 </template>
 
 <script>
+    import {getSchedule, } from "../../api/rootAPI"
     export default {
       name: "RootVIPActivity",
       data(){

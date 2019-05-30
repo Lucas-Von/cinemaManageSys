@@ -10,15 +10,12 @@
                :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
+
         <div >
-          <!-- 我是样例菜单 -->
-
-
           <el-menu default-active="1-5-1"
                    class="el-menu-vertical-demo"
                    @open="handleOpen"
                    :collapse="isCollapse">
-
             <el-menu-item index="1" @click="getMovie">
               <i class="el-icon-camera"></i>
               <span slot="title">全部电影</span>
@@ -45,7 +42,6 @@
              @click.prevent="toggleSideBar">
           <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
           <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
-
         </div>
         <!-- 我是样例菜单 -->
         <el-menu default-active="1"
@@ -53,7 +49,6 @@
                  mode="horizontal"
                  @select="handleSelect"
                  active-text-color="#409EFF">
-
         </el-menu>
       </el-aside>
 

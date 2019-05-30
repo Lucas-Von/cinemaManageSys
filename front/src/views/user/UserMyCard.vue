@@ -86,7 +86,7 @@
           <h2>消费记录</h2>
           <template>
             <el-table
-              :data="tableData"
+              :data="tableData1"
               style="width: 100%">
               <el-table-column
                 prop="date"
@@ -105,6 +105,29 @@
               </el-table-column>
             </el-table>
           </template>
+
+            <h2>充值记录</h2>
+            <template>
+              <el-table
+                :data="tableData2"
+                style="width: 100%">
+                <el-table-column
+                  prop="date"
+                  label="日期"
+                  width="360"
+                  sortable>
+                </el-table-column>
+                <el-table-column
+                  prop="cate"
+                  label="类型"
+                  width="360">
+                </el-table-column>
+                <el-table-column
+                  prop="money"
+                  label="金额">
+                </el-table-column>
+              </el-table>
+            </template>
           </div>
         </el-main>
       </el-container>
@@ -123,12 +146,12 @@
         vip:false,
         profit:'充值优惠：满200送30',
         mon:200,
-        tableData: [{
+        tableData1: [{
           date: '2016-05-02',
           cate:'消费',
           money:'66',
-        },
-          {
+        }],
+        tableData2: [{
             date: '2016-05-02',
             cate:'充值',
             money:'100',

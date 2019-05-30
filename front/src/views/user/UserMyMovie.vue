@@ -60,70 +60,36 @@
       <el-container>
 
         <el-main class="app-body">
+          <template>
+            <nav class="navbar navbar-default">
+              <div class="container-fluid">
+                <el-menu
+                  :default-active="activeIndex2"
+                  class="el-menu-demo"
+                  mode="horizontal"
+                  @select="handleSelect"
+                  background-color="#545c64"
+                  text-color="#fff"
+                  active-text-color="#ffd04b"
+                >
+                  <el-col :span="8" >
+                    <el-menu-item index="1" @click="toUsed">待使用</el-menu-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-menu-item index="2" @click="inUsed">已使用</el-menu-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-menu-item index="2" @click="offUsed">已退票</el-menu-item>
+                  </el-col>
 
-          <!--<template>-->
-            <!--<el-table-->
-              <!--:data="tableData"-->
-              <!--style="width: 100%"-->
-              <!--stripe>-->
-              <!--<el-table-column-->
-                <!--prop="date"-->
-                <!--label="日期"-->
-                <!--width="180"-->
-                <!--sortable>-->
-                <!--<template slot-scope="scope">-->
-                  <!--<i class="el-icon-time"></i>-->
-                  <!--<span style="margin-left: 10px">{{ scope.row.date }}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--label="海报"-->
-                <!--width="180">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<img :src=scope.row.picture class="image" height="200px">-->
-                <!--</template>-->
-              <!--</el-table-column>-->
+                </el-menu>
 
-              <!--<el-table-column-->
-                <!--label="具体详情"-->
-                <!--width="250">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px">电影名称：{{scope.row.film }}<br></span>-->
-                  <!--<span style="margin-left: 10px">开始时间：{{scope.row.open}}<br></span>-->
-                  <!--<span style="margin-left: 10px">结束时间：{{scope.row.finish}}<br></span>-->
-                  <!--<span style="margin-left: 10px">影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scope.row.room }}<br></span>-->
-                  <!--<span style="margin-left: 10px">数&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp量：{{scope.row.num }}<br></span>-->
-                  <!--<span style="margin-left: 10px">座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{scope.row.seat }}<br></span>-->
-                  <!--<span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.money }}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--label="支付状态"-->
-                <!--width="180">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px">{{scope.row.state}}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column label="操作">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<el-button size="mini"  @click="open" id="new_yan" :disabled="scope.row.state=='未完成'">-->
-                  <!--<span v-show="show">出票</span>-->
-                  <!--<span v-show="!show" disabled=false>出票成功</span>-->
-                  <!--</el-button>-->
-                  <!--<br>-->
-                  <!--<br>-->
-                  <!--<br>-->
-                  <!--<el-button-->
-                    <!--size="mini"-->
-                    <!--type="danger"-->
-                    <!--@click="handleDelete(scope.$index, scope.row)"-->
-                    <!--:disabled="scope.row.state=='未完成'">退票</el-button>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-            <!--</el-table>-->
-          <!--</template>-->
+              </div>
+            </nav>
+          </template>
+
           <el-form :model="inServForm"  ref="inServForm" size="small">
-            <el-form-item label="待使用">
+            <el-form-item >
               <template>
                 <el-table border :data="infiledList" style="width: 100%" >
                   <el-table-column prop="fildna" label="日期" style="width:6vw;" sortable>
@@ -154,39 +120,6 @@
                       <el-button @click.native.prevent="deleteRow(scope.$index, infiledList)" size="small"> 退票 </el-button>
                     </template>
                   </el-table-column>
-                </el-table>
-
-              </template>
-            </el-form-item>
-          </el-form>
-
-          <el-form :model="inServForm"  ref="inServForm" size="small">
-            <el-form-item label="已使用">
-              <template>
-                <el-table border :data="outfiledList" style="width: 100%" >
-                  <el-table-column prop="fildna" label="日期" style="width:6vw;" sortable>
-                    <template scope="scope">
-                      <span style="margin-left: 10px">{{ scope.row.date }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="fildna" label="海报" style="width:6vw;" >
-                    <template scope="scope">
-                      <!--<el-input size="mini" v-model="scope.row.fildna" ></el-input>-->
-                      <img :src=scope.row.picture class="image" height="200px">
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="remark" label="具体详情">
-                    <template scope="scope">
-                      <span style="margin-left: 10px">电影名称：{{scope.row.film }}<br></span>
-                      <span style="margin-left: 10px">开始时间：{{scope.row.open}}<br></span>
-                      <span style="margin-left: 10px">结束时间：{{scope.row.finish}}<br></span>
-                      <span style="margin-left: 10px">影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scope.row.room }}<br></span>
-                      <span style="margin-left: 10px">数&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp量：{{scope.row.num }}<br></span>
-                      <span style="margin-left: 10px">座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{scope.row.seat }}<br></span>
-                      <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.money }}</span>
-                    </template>
-                  </el-table-column>
-
                 </el-table>
 
               </template>
@@ -312,11 +245,11 @@
           type: 'warning'
         }).then(() => {
           this.$message({
-            type: 'success',
-            message: '出票成功!',
+              type: 'success',
+              message: '出票成功!',
 
-          },
-          rows.splice(index, 1),
+            },
+            rows.splice(index, 1),
             outfiledList.push( {
               picture:require("@/assets/test1.jpg"),
               date: '2016-05-10',
@@ -400,7 +333,16 @@
       },
       getinfo(event){
         this.$router.push({path: '/user/Info'});
-      }
+      },
+      toUsed(event){
+        this.$router.push({path: '/user/MyMovie'});
+      },
+      inUsed(event){
+        this.$router.push({path: '/user/MyMovieUsed'});
+      },
+      offUsed(event){
+        this.$router.push({path: '/user/MyMovieOff'});
+      },
     },
     mounted: function () {
       let user = sessionStorage.getItem('user');
@@ -430,5 +372,6 @@
     color: #333;
   }
 </style>
+
 
 

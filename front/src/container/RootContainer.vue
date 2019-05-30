@@ -2,15 +2,19 @@
   <div class="app"  >
 
     <el-container  >
-      <el-aside class="app-side-expanded">
+      <el-aside class="app-side app-side-left"
+                :class="isCollapse ? 'app-side-collapsed' : 'app-side-expanded'">
         <div class="app-side-logo">
           <img src="@/assets/1.jpg"
-               width="60"
-               height="60"
+               :width="isCollapse ? '60' : '60'"
+               :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
+
         <div >
-          <el-menu class="el-menu-vertical-demo">
+          <el-menu default-active="1-5-1"
+                   class="el-menu-vertical-demo"
+                   :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
               <i class="el-icon-camera"></i>
               <span slot="title">电影管理</span>
@@ -33,6 +37,17 @@
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+        </div>
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+        </el-menu>
       </el-aside>
 
       <el-container>
@@ -52,6 +67,12 @@
       return {}
     },
     methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      toggleSideBar() {
+        this.isCollapse = !this.isCollapse
+      },
       toMovieManagement(){
         this.$router.push({path: '/root/MovieManagement'});
       },

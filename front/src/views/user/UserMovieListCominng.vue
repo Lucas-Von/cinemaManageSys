@@ -96,14 +96,14 @@
                 <router-link :to="{path:'/detail/'+item.id}">
                   <el-col :span="8" >
 
-                    <el-card >
+                    <el-card class="box-moviecard">
                       <br>
-                      <img  height="320px" width="250px" :src="item.images">
+                      <img  class="movie" height="320px" width="250px" :src="item.images">
                       <br>
 
                       <div style="padding: 14px;">
                         <div class="bottom clearfix">
-                          <el-button type="text" class="button">{{item.id}}</el-button>
+                          <h3 class="text">{{item.id}}</h3>
                         </div>
                       </div>
                     </el-card>
@@ -258,30 +258,23 @@
 
 </script>
 
-<style lang="scss" scoped>
+<style>
 
-  .el-carousel__item {
-    width: 500px;
-    display: flex;
 
-    .carousel-image {
-      max-width: 100%;
-      max-height: 100%;
-    }
-    img {
-      width: 40px;
-      height: 230px;
-      vertical-align: middle;
-    }
-    .row > div {
-      margin-bottom: 20px;
-    }
-    .title {
-      height: 20px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+  .row > div {
+    margin-bottom: 20px;
+  }
 
+
+  .box-moviecard {
+    margin-left: 30px;
+    width: 325px;
+    height: 450px;
+  }
+  .movie{
+    margin-left: 20px;
+  }
+  .text{
+    margin-left: 75px;
   }
 </style>

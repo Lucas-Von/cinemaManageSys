@@ -44,7 +44,7 @@
               <div>
                 <el-row type="flex" justify="end">
                   <el-button type="primary" class="label" @click="showRechargeDialog">添加优惠</el-button>
-                  <el-dialog title="添加优惠" v-model="rechargeDialog">
+                  <el-dialog title="添加充值优惠" :visible.sync="rechargeDialogVisiable">
                     <el-form :model="rechargeForm" :rules="rechargeRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="rechargeForm.name"></el-input>
@@ -59,13 +59,13 @@
                         <el-input v-model="rechargeForm.plusAmount"></el-input>
                       </el-form-item>
                       <el-form-item label="选择时间" required>
-                        <el-col :span="11">
+                        <el-col :span="8">
                           <el-form-item prop="startTime">
                             <el-date-picker type="date" placeholder="开始时间" v-model="rechargeForm.startTime" style="width: 100%;"></el-date-picker>
                           </el-form-item>
                         </el-col>
-                        <el-col :span="2"></el-col>
-                        <el-col :span="11">
+                        <el-col :span="2">&nbsp</el-col>
+                        <el-col :span="8">
                           <el-form-item prop="endTime">
                             <el-date-picker placeholder="结束时间" v-model="rechargeForm.endTime" style="width: 100%;"></el-date-picker>
                           </el-form-item>
@@ -74,7 +74,7 @@
                       <br>
                       <el-form-item>
                         <el-button type="primary" @click="addRecharge(rechargeForm)">保存</el-button>
-                        <el-button @click="closeRechargeDislog">取消</el-button>
+                        <el-button @click="closeRechargeDialog">取消</el-button>
                       </el-form-item>
                     </el-form>
                   </el-dialog>
@@ -86,7 +86,7 @@
                 </el-row>
                 <el-table
                   :data="rechargeData"
-                  stripe=true
+                  :stripe=true
                   style="width: 100%">
                   <el-table-column
                     prop="name"
@@ -104,26 +104,25 @@
                     width="150">
                   </el-table-column>
                   <el-table-column
-                    prop="extraAmount"
+                    prop="plusAmount"
                     label="额外金额"
                     width="100">
                   </el-table-column>
                   <el-table-column
-                    prop="startDate"
+                    prop="startTime"
                     label="开始日期"
                     width="180"
                     sortable>
                   </el-table-column>
                   <el-table-column
-                    prop="endDate"
+                    prop="endTime"
                     label="结束日期"
                     width="180"
                     sortable>
                   </el-table-column>
-                  <el-table-column
-                    label="操作">
+                  <el-table-column label="操作">
                     <el-button type="primary" size="small" @click="">修改优惠</el-button>
-                    <el-button type="danger" size="small" @click="deleteRecharge">删除优惠</el-button>
+                    <el-button type="danger" size="small" @click="deleteRecharge(scope.row.id)">删除优惠</el-button>
                   </el-table-column>
                 </el-table>
               </div>
@@ -131,7 +130,7 @@
               <div>
                 <el-row type="flex" justify="end">
                   <el-button type="primary" class="label" @click="showTicketDialog">添加优惠</el-button>
-                  <el-dialog title="添加优惠" v-model="ticketDialog">
+                  <el-dialog title="添加购票优惠" :visible.sync="ticketDialogVisiable">
                     <el-form :model="ticketForm" :rules="ticketRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="ticketForm.name"></el-input>
@@ -146,13 +145,13 @@
                         <el-input v-model="ticketForm.discount"></el-input>
                       </el-form-item>
                       <el-form-item label="选择时间" required>
-                        <el-col :span="11">
+                        <el-col :span="8">
                           <el-form-item prop="startTime">
                             <el-date-picker type="date" placeholder="开始时间" v-model="ticketForm.startTime" style="width: 100%;"></el-date-picker>
                           </el-form-item>
                         </el-col>
-                        <el-col :span="2"></el-col>
-                        <el-col :span="11">
+                        <el-col :span="2">&nbsp</el-col>
+                        <el-col :span="8">
                           <el-form-item prop="endTime">
                             <el-date-picker placeholder="结束时间" v-model="ticketForm.endTime" style="width: 100%;"></el-date-picker>
                           </el-form-item>
@@ -161,7 +160,7 @@
                       <br>
                       <el-form-item>
                         <el-button type="primary" @click="addTicket(ticketForm)">保存</el-button>
-                        <el-button @click="closeTicketDialog">取消</el-button>
+                        <el-button @click="closeTicketDialog(scope.row.id)">取消</el-button>
                       </el-form-item>
                     </el-form>
                   </el-dialog>
@@ -172,7 +171,7 @@
                 </el-row>
                 <el-table
                   :data="ticketData"
-                  stripe=true
+                  :stripe=true
                   style="width: 100%">
                   <el-table-column
                     prop="name"
@@ -196,13 +195,13 @@
                     sortable>
                   </el-table-column>
                   <el-table-column
-                    prop="startDate"
+                    prop="startTime"
                     label="开始日期"
                     width="180"
                     sortable>
                   </el-table-column>
                   <el-table-column
-                    prop="endDate"
+                    prop="endTime"
                     label="结束日期"
                     width="180"
                     sortable>
@@ -210,13 +209,6 @@
                   <el-table-column
                     label="操作"
                     width="200">
-                    <!--<el-col>-->
-                      <!--<el-button type="danger" size="small" @click="">修改优惠</el-button>-->
-                    <!--</el-col>-->
-                    <!---->
-                    <!--<el-col>-->
-                      <!--<el-button type="danger" size="small" @click="">删除优惠</el-button>-->
-                    <!--</el-col>-->
                     <el-button type="primary" size="small" @click=""><i></i>修改优惠</el-button>
                     <el-button type="danger" size="small" @click="deleteDiscount">删除优惠</el-button>
                   </el-table-column>
@@ -240,8 +232,8 @@
         return{
           rechargeData: getRechargeActivity().content,
           ticketData : getTicketActivity().content,
-          rechargeDialog: false,
-          ticketDialog: false,
+          rechargeDialogVisiable: false,
+          ticketDialogVisiable: false,
           rechargeForm: {
             name: "",
             description: "",
@@ -355,31 +347,43 @@
         },
 
         showRechargeDialog: function () {
-          this.rechargeDialog = true
+          this.rechargeDialogVisiable = true;
         },
 
-        closeRechargeDislog: function () {
-          this.rechargeDialog = false
-          this.$refs[this.rechargeForm].resetFields()
+        closeRechargeDialog: function () {
+          this.rechargeDialogVisiable = false;
+          this.resetRechargeDialog();
+        },
+
+        resetRechargeDialog: function() {
+          this.rechargeForm.name = "";
+          this.rechargeForm.description = "";
+          this.rechargeForm.targetAmount = "";
+          this.rechargeForm.plusAmount = "";
+          this.rechargeForm.startTime = "";
+          this.rechargeForm.endTime = "";
         },
 
         addRecharge: function (params) {
-          this.closeRechargeDislog()
-          let res = addRechargeActivity(params)
+          this.closeRechargeDialog();
+          let res = addRechargeActivity(params);
           if (res.success){
-            alert("添加成功")
+            alert("添加成功");
+            this.closeRechargeDialog();
+            this.rechargeData = getRechargeActivity();
           }
           else {
-            alert(res.message)
+            alert(res.message);
           }
         },
 
         deleteRecharge: function (id) {
           this.$confirm('确认删除该优惠？','提示',{})
             .then(() => {
-              let res = deleteRechargeActivity(id)
+              let res = deleteRechargeActivity(id);
               if (res.success){
-                alert("删除成功")
+                alert("删除成功");
+                this.rechargeData = getRechargeActivity();
               }
               else {
                 alert(res.message)
@@ -389,56 +393,59 @@
         },
 
         updateRecharge: function (params) {
-          let res = updateRechargeActivity(params)
+          let res = updateRechargeActivity(params);
           if (res.success){
-            alert("更新成功")
+            alert("更新成功");
           }
           else {
-            alert(res.message)
+            alert(res.message);
           }
         },
 
         showTicketDialog: function () {
-          this.ticketDialog = true;
+          this.ticketDialogVisiable = true;
         },
 
         closeTicketDialog: function () {
-          this.ticketDialog = false
-          this.$refs[this.ticketDialog].resetFields()
+          this.ticketDialogVisiable = false;
+          this.$refs[this.ticketForm].resetFields();
         },
 
         addTicket: function (params) {
-          this.closeTicketDialog()
-          let res = addTicketActivity(params)
+          this.closeTicketDialog();
+          let res = addTicketActivity(params);
           if (res.success){
-            alert("添加成功")
+            alert("添加成功");
+            this.closeTicketDialog();
+            this.ticketData = getTicketActivity();
           }
           else {
-            alert(res.message)
+            alert(res.message);
           }
         },
 
         deleteDiscount: function (id) {
           this.$confirm('确认删除该优惠？','提示',{})
             .then(() => {
-              let res = deleteTicketActivity(id)
+              let res = deleteTicketActivity(id);
               if (res.success){
-                alert("删除成功")
+                alert("删除成功");
+                this.ticketData = getTicketActivity();
               }
               else {
-                alert(res.message)
+                alert(res.message);
               }
             })
             .catch(() => {})
         },
 
         updateTicket: function (params) {
-          let res = updateTicketActivity(params)
+          let res = updateTicketActivity(params);
           if (res.success){
-            alert("更新成功")
+            alert("更新成功");
           }
           else {
-            alert(res.message)
+            alert(res.message);
           }
         }
       }

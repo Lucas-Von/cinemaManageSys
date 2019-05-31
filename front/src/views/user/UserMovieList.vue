@@ -11,8 +11,6 @@
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
-          <!-- 我是样例菜单 -->
-
 
           <el-menu default-active="1-5-1"
                    class="el-menu-vertical-demo"

@@ -38,7 +38,7 @@
             <div>
               <el-col :span="12">
                 <el-row type="flex" justify="end">
-                  <el-button type="primary" size="small" class="label">添加售票员</el-button>
+                  <!--<el-button type="primary" size="small" class="label" @click="showEmployeeDialog">添加售票员</el-button>-->
                 </el-row>
                 <el-row type="flex">
                   <el-col :span="2"></el-col>
@@ -46,7 +46,7 @@
                 </el-row>
                 <el-table
                   :data="salerData"
-                  stripe=true
+                  :stripe=true
                   height="600"
                   style="width: 90%">
                   <el-table-column
@@ -62,13 +62,33 @@
                   <el-table-column
                     label="操作">
                     <el-button type="primary" size="mini" @click="">修改信息</el-button>
-                    <el-button type="danger" size="mini" @click="deleteEmployee">删除员工</el-button>
+                    <el-button type="danger" size="mini" @click="deleteEmployee(scope.row.id)">删除员工</el-button>
                   </el-table-column>
                 </el-table>
               </el-col>
               <el-col :span="12">
                 <el-row type="flex" justify="end">
-                  <el-button type="primary" size="small" class="label">添加经理</el-button>
+                  <el-button type="primary" size="small" class="label" @click="showEmployeeDialog">添加员工</el-button>
+                  <el-dialog title="添加员工" :visible.sync="employeeDialogVisiable">
+                    <el-form :model="employeeForm" :rules="employeeRules" ref="ruleForm">
+                      <el-form-item label="用户名" prop="username">
+                        <el-input v-model="employeeForm.username"></el-input>
+                      </el-form-item>
+                      <el-form-item label="密码" prop="keyword">
+                        <el-input v-model="employeeForm.keyword"></el-input>
+                      </el-form-item>
+                      <el-form-item label="身份">
+                        <el-select v-model="employeeForm.category" placeholder="请选择身份">
+                          <el-option label="经理" value=1></el-option>
+                          <el-option label="售票员" value=2></el-option>
+                        </el-select>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="addEmployee(employeeForm)">保存</el-button>
+                        <el-button @click="closeEmployeeDialog">取消</el-button>
+                      </el-form-item>
+                    </el-form>
+                  </el-dialog>
                 </el-row>
                 <el-row type="flex">
                   <el-col :span="2"></el-col>
@@ -76,7 +96,7 @@
                 </el-row>
                 <el-table
                   :data="rootData"
-                  stripe=true
+                  :stripe=true
                   height="600"
                   style="width: 90%">
                   <el-table-column
@@ -92,7 +112,7 @@
                   <el-table-column
                     label="操作">
                     <el-button type="primary" size="mini" @click="">修改信息</el-button>
-                    <el-button type="danger" size="mini" @click="deleteEmployee">删除员工</el-button>
+                    <el-button type="danger" size="mini" @click="deleteEmployee(scope.row.id)">删除员工</el-button>
                   </el-table-column>
                 </el-table>
               </el-col>
@@ -105,230 +125,29 @@
 </template>
 
 <script>
+  import {getRoles, addRole, updateRole, deleteRole} from "../../api/adminAPI"
     export default {
       name: "AdminEmployeeManagement",
       data(){
           return{
-            salerData : [
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              },
-              {
-                username : "售票员1",
-                keyword : "密码1"
-              },
-              {
-                username : "售票员2",
-                keyword : "密码2"
-              },
-              {
-                username : "售票员3",
-                keyword : "密码3"
-              }
-            ],
             rootData : [
               {
-                username : "经理1",
-                keyword : "密码1"
-              },
-              {
-                username : "经理2",
-                keyword : "密码2"
-              },
-              {
-                username : "经理3",
-                keyword : "密码3"
-              },
-              {
-                username : "经理1",
-                keyword : "密码1"
-              },
-              {
-                username : "经理2",
-                keyword : "密码2"
-              },
-              {
-                username : "经理3",
-                keyword : "密码3"
-              },
-              {
-                username : "经理1",
-                keyword : "密码1"
-              },
-              {
-                username : "经理2",
-                keyword : "密码2"
-              },
-              {
-                username : "经理3",
-                keyword : "密码3"
-              },
-              {
-                username : "经理1",
-                keyword : "密码1"
-              },
-              {
-                username : "经理2",
-                keyword : "密码2"
-              },
-              {
-                username : "经理3",
-                keyword : "密码3"
-              },
-              {
-                username : "经理1",
-                keyword : "密码1"
-              },
-              {
-                username : "经理2",
-                keyword : "密码2"
-              },
-              {
-                username : "经理3",
-                keyword : "密码3"
-              },
-              {
-                username : "经理1",
-                keyword : "密码1"
-              },
-              {
-                username : "经理2",
-                keyword : "密码2"
-              },
-              {
-                username : "经理3",
-                keyword : "密码3"
-              },
-              {
-                username : "经理1",
-                keyword : "密码1"
-              },
-              {
-                username : "经理2",
-                keyword : "密码2"
-              },
-              {
-                username : "经理3",
-                keyword : "密码3"
+                id: 1,
+                username: "abc",
+                keyword: "123",
+                category: 1
               }
             ],
+            salerData : [],
+            employeeDialogVisiable : false,
+            employeeForm: {
+              username: "",
+              keyword: "",
+              category: ""
+            },
+            employeeRules: {
+
+            }
           }
       },
       methods : {
@@ -349,10 +168,62 @@
             })
             .catch(() => { });
         },
-        deleteEmployee: function () {
+
+        showEmployeeDialog: function() {
+          this.employeeDialogVisiable = true;
+        },
+
+        closeEmployeeDialog: function() {
+          this.employeeDialogVisiable = false;
+          this.resetEmployeeDialog();
+        },
+
+        resetEmployeeDialog: function() {
+          this.employeeForm.username = "";
+          this.employeeForm.keyword = "";
+          this.employeeForm.category = "";
+        },
+
+        getEmployee: function() {
+          let list = getRoles().content;
+          for (item in list){
+            if (item.category === 1){
+              this.rootData.push(item);
+            }
+            else {
+              this.salerData.push(item);
+            }
+          }
+        },
+
+        addEmployee: function(params) {
+          let res = addRole(params.username, params.keyword, params.category);
+          if (res.success){
+            alert("添加成功")
+            this.closeEmployeeDialog();
+            this.getEmployee();
+          }
+          else {
+            alert(res.message);
+          }
+        },
+
+        updateEmployee: function() {
+
+        },
+
+        deleteEmployee: function (id) {
           this.$confirm('确认删除该员工？','提示',{})
             .then(() => {
-
+              alert(id);
+              // let res = deleteRole(id);
+              // if (res.success){
+              //   alert("删除成功");
+              //   this.getEmployee();
+              // }
+              // else {
+              //   alert(res.message);
+              // }
             })
             .catch(() => {})
         }

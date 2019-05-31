@@ -42,7 +42,27 @@
             <div>
               <div>
                 <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label">添加退票策略</el-button>
+                  <el-button type="primary" class="label" @click="showRefundDialog">添加退票策略</el-button>
+                  <el-dialog title="添加退票策略" :visible.sync="refundDialogVisiable">
+                    <el-form :model="refundForm" :rules="refundRules" ref="ruleForm">
+                      <el-form-item label="名称" prop="name">
+                        <el-input v-model="refundForm.name"></el-input>
+                      </el-form-item>
+                      <el-form-item label="描述" prop="description">
+                        <el-input v-model="refundForm.description"></el-input>
+                      </el-form-item>
+                      <el-form-item label="剩余时间" prop="remainingTime">
+                        <el-input v-model="refundForm.remainingTime"></el-input>
+                      </el-form-item>
+                      <el-form-item label="退款比例" prop="percentage">
+                        <el-input   v-model="refundForm.percentage"></el-input>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="addRefund(refundForm)">保存</el-button>
+                        <el-button @click="closeRefundDialog">取消</el-button>
+                      </el-form-item>
+                    </el-form>
+                  </el-dialog>
                 </el-row>
                 <el-row type="flex">
                   <el-col :span="2"></el-col>
@@ -53,7 +73,7 @@
                   <el-col>
                     <el-table
                       :data="refundData"
-                      stripe=true
+                      :stripe=true
                       style="width: 100%">
                       <el-table-column
                         prop="name"
@@ -81,7 +101,7 @@
                         label="操作"
                         width="200">
                         <el-button type="primary" size="small" @click="">修改策略</el-button>
-                        <el-button type="danger" size="small" @click="deleteStrategy">删除策略</el-button>
+                        <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
                       </el-table-column>
                     </el-table>
                   </el-col>
@@ -96,33 +116,41 @@
 </template>
 
 <script>
+  import {getRefundStrategy, addRefundStrategy, updateRefundStrategy, deleteRefundStrategy} from "../../api/rootAPI"
     export default {
       name: "RootRefundStrategy",
       data(){
           return{
-            refundData : [
-              {
-                id : "1",
-                name : "策略1",
-                description : "描述1",
-                remainingTime : 90,
-                percentage : 0.8
+            refundData : getRefundStrategy().content,
+            refundDialogVisiable: false,
+            refundForm: {
+              name: "",
+              description: "",
+              remainingTime: "",
+              percentage: ""
+            },
+            refundRules: {
+              name: {
+                required: true,
+                message: "请输入策略名称",
+                trigger: "blur"
               },
-              {
-                id : "2",
-                name : "策略2",
-                description : "描述2",
-                remainingTime : 60,
-                percentage : 0.6
+              description: {
+                required: true,
+                message: "请输入策略描述",
+                trigger: "blur"
               },
-              {
-                id : "3",
-                name : "策略3",
-                description : "描述3",
-                remainingTime : 30,
-                percentage : 0.5
+              remainingTime: {
+                required: true,
+                message: "请输入剩余时间",
+                trigger: "blur"
               },
-            ]
+              percentage: {
+                required: true,
+                message: "请输入退款比例",
+                trigger: "blur"
+              }
+            }
           }
       },
       methods:{
@@ -146,13 +174,62 @@
             })
             .catch(() => { });
         },
-        deleteStrategy: function () {
+
+        showRefundDialog: function() {
+          this.refundDialogVisiable = true;
+        },
+
+        closeRefundDialog: function() {
+          this.refundDialogVisiable = false;
+          this.resetRefundDialog();
+        },
+
+        resetRefundDialog: function() {
+          this.refundForm.name = "";
+          this.refundForm.description = "";
+          this.refundForm.remainingTime = "";
+          this.refundForm.percentage = "";
+        },
+
+        addRefund: function (params) {
+          let res = addRefundStrategy(params);
+          if (res.success){
+            alert("添加成功");
+            this.closeRefundDialog();
+            this.refundData = getRefundStrategy();
+          }
+          else {
+            alert(res.message)
+          }
+        },
+
+        deleteRefund: function (id) {
           this.$confirm('确认删除该策略？','提示',{})
             .then(() => {
-
+              let res = deleteRefundStrategy(id);
+              if (res.success){
+                alert("删除成功");
+                this.refundData = getRefundStrategy();
+              }
+              else {
+                alert(res.message);
+              }
             })
             .catch(() => {})
+        },
+
+        updateRefund: function (refund) {
+          this.refundDialogVisiable = true;
+
+          let res = updateRefundStrategy(params);
+          if (res.success){
+            alert("修改成功");
+          }
+          else {
+            alert(res.message);
+          }
         }
+
       }
     }
 </script>

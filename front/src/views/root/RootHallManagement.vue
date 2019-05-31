@@ -9,8 +9,6 @@
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
-          <!-- 我是样例菜单 -->
-
           <el-menu default-active="4"
                    class="el-menu-vertical-demo">
 
@@ -44,7 +42,24 @@
             <div>
               <div>
                 <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label">添加影厅</el-button>
+                  <el-button type="primary" class="label" @click="showHallDialog">添加影厅</el-button>
+                  <el-dialog title="添加影厅" v-model="hallDialogVisiable">
+                    <el-form :model="hallForm" :rules="hallRules" ref="ruleForm">
+                      <el-form-item label="名称" prop="name">
+                        <el-input v-model="hallForm.name"></el-input>
+                      </el-form-item>
+                      <el-form-item label="容量" prop="capacity">
+                        <el-input v-model="hallForm.capacity"></el-input>
+                      </el-form-item>
+                      <el-form-item label="行数" prop="row">
+                        <el-input v-model="hallForm.row"></el-input>
+                      </el-form-item>
+                      <el-form-item label="列数" prop="column">
+                        <el-input v-model="hallForm.column"></el-input>
+                      </el-form-item>
+                    </el-form>
+                  </el-dialog>
+
                 </el-row>
                 <el-row type="flex">
                   <el-col :span="2"></el-col>
@@ -55,7 +70,7 @@
                   <el-col>
                     <el-table
                       :data="hallData"
-                      stripe=true
+                      :stripe=true
                       style="width: 100%">
                       <el-table-column
                         prop="name"
@@ -83,8 +98,8 @@
                       <el-table-column
                         label="操作"
                         width="200">
-                        <el-button type="primary" size="small" @click="">修改影厅</el-button>
-                        <el-button type="danger" size="small" @click="deleteHall">删除影厅</el-button>
+                        <el-button type="primary" size="small">修改影厅</el-button>
+                        <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
                       </el-table-column>
                     </el-table>
                   </el-col>
@@ -99,33 +114,45 @@
 </template>
 
 <script>
+  import {getHall, addHall, updateHall, deleteHall} from "../../api/rootAPI"
+
     export default {
       name: "RootHallManagement",
       data(){
         return{
-          hallData : [
-            {
-              id : "1",
-              name : "影厅A",
-              capicity : 0,
-              row : 10,
-              column : 15
+          hallData : getHall().content,
+          hallDialogVisiable: false,
+          hallForm: {
+            name: "",
+            capacity: "",
+            row: "",
+            column: ""
+          },
+          hallRules: {
+            name: {
+              required: true,
+              message: "",
+              trigger: "blur"
             },
-            {
-              id : "2",
-              name : "影厅B",
-              capicity : 0,
-              row : 6,
-              column : 9
+            capacity: {
+              type: "number",
+              required: true,
+              message: "",
+              trigger: "blur"
             },
-            {
-              id : "3",
-              name : "影厅C",
-              capicity : 0,
-              row : 8,
-              column : 12
+            row: {
+              type: "number",
+              required: true,
+              message: "",
+              trigger: "blur"
+            },
+            column: {
+              type: "number",
+              required: true,
+              message: "",
+              trigger: "blur"
             }
-          ]
+          }
         }
       },
       methods:{
@@ -149,10 +176,50 @@
             })
             .catch(() => { });
         },
-        deleteHall: function () {
+
+        showHallDialog: function() {
+          this.hallDialogVisiable = true;
+        },
+
+        closeHallDialog: function() {
+          this.hallDialogVisiable = false;
+          this.resetHallDialog();
+        },
+
+        resetHallDialog: function() {
+          this.hallForm.name = "";
+          this.hallForm.capacity = "";
+          this.hallForm.row= "";
+          this.hallForm.column = "";
+        },
+
+        addHallInfo: function (params) {
+          let res = addHall(params);
+          if (res.success){
+            alert("添加成功");
+            this.closeHallDialog();
+            this.hallData = getHall();
+          }
+          else {
+            alert(res.message);
+          }
+        },
+
+        updateHallInfo: function () {
+
+        },
+
+        deleteHallInfo: function (id) {
           this.$confirm('确认删除该影厅？','提示',{})
             .then(() => {
-
+              let res = deleteHall(id);
+              if (res.success){
+                alert("删除成功");
+                this.hallData = getHall();
+              }
+              else {
+                alert(res.message);
+              }
             })
             .catch(() => {})
         }

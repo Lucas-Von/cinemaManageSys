@@ -1,19 +1,20 @@
-<template>
-  <div class="app" >
-    <el-container >
-      <el-aside class="app-side-expanded">
+<template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
+  <div class="app"  >
+
+    <el-container  >
+      <el-aside class="app-side app-side-left"
+                :class="isCollapse ? 'app-side-collapsed' : 'app-side-expanded'">
         <div class="app-side-logo">
           <img src="@/assets/1.jpg"
-               width="60"
-               height="60"
+               :width="isCollapse ? '60' : '60'"
+               :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
+
         <div >
-          <!-- 我是样例菜单 -->
-
-          <el-menu default-active="2"
-                   class="el-menu-vertical-demo">
-
+          <el-menu default-active="1-5-1"
+                   class="el-menu-vertical-demo"
+                   :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
               <i class="el-icon-camera"></i>
               <span slot="title">电影管理</span>
@@ -36,6 +37,17 @@
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+        </div>
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+        </el-menu>
       </el-aside>
       <el-container>
         <el-main class="app-body" >
@@ -108,6 +120,7 @@
                     label="额外金额"
                     width="100">
                   </el-table-column>
+
                   <el-table-column
                     prop="startTime"
                     label="开始日期"
@@ -223,128 +236,134 @@
 </template>
 
 <script>
-    import {getRechargeActivity, addRechargeActivity, updateRechargeActivity, deleteRechargeActivity,
+  import {getRechargeActivity, addRechargeActivity, updateRechargeActivity, deleteRechargeActivity,
     getTicketActivity, addTicketActivity, updateTicketActivity, deleteTicketActivity} from "../../api/rootAPI"
 
-    export default {
-      name: "RootVIPActivity",
-      data(){
-        return{
-          rechargeData: getRechargeActivity().content,
-          ticketData : getTicketActivity().content,
-          rechargeDialogVisiable: false,
-          ticketDialogVisiable: false,
-          rechargeForm: {
-            name: "",
-            description: "",
-            targetAmount: "",
-            plusAmount: "",
-            startTime: "",
-            endTime: ""
+  export default {
+    name: "RootVIPActivity",
+    data(){
+      return{
+        rechargeData: getRechargeActivity().content,
+        ticketData : getTicketActivity().content,
+        rechargeDialog: false,
+        ticketDialog: false,
+        rechargeForm: {
+          name: "",
+          description: "",
+          targetAmount: "",
+          plusAmount: "",
+          startTime: "",
+          endTime: ""
+        },
+        rechargeRules: {
+          name: {
+            required: true,
+            message: "请输入优惠名称",
+            trigger: "blur"
           },
-          rechargeRules: {
-            name: {
-              required: true,
-              message: "请输入优惠名称",
-              trigger: "blur"
-            },
-            description: {
-              required: true,
-              message: "请输入优惠描述",
-              trigger: "blur"
-            },
-            targetAmount: {
-              type: "number",
-              required: true,
-              message: "请输入目标金额",
-              trigger: "blur"
-            },
-            plusAmount: {
-              type: "number",
-              required: true,
-              message: "请输入优惠金额",
-              trigger: "blur"
-            },
-            startTime : {
-              type: "date",
-              required: true,
-              message: "请输入起始时间",
-              trigger: "change"
-            },
-            endTime : {
-              type: "date",
-              required: true,
-              message: "请输入结束时间",
-              trigger: "change"
-            }
+          description: {
+            required: true,
+            message: "请输入优惠描述",
+            trigger: "blur"
           },
-          ticketForm:{
-            name: "",
-            description: "",
-            targetCount: "",
-            discount: "",
-            startTime: "",
-            endTime: ""
+          targetAmount: {
+            type: "number",
+            required: true,
+            message: "请输入目标金额",
+            trigger: "blur"
           },
-          ticketRules: {
-            name: {
-              required: true,
-              message: "请输入优惠名称",
-              trigger: "blur"
-            },
-            description: {
-              required: true,
-              message: "请输入优惠描述",
-              trigger: "blur"
-            },
-            targetCount: {
-              type: "number",
-              required: true,
-              message: "请输入目标电影票数量",
-              trigger: "blur"
-            },
-            discount: {
-              type: "number",
-              required: true,
-              message: "请输入折扣",
-              trigger: "blur"
-            },
-            startTime : {
-              type: "date",
-              required: true,
-              message: "请输入起始时间",
-              trigger: "change"
-            },
-            endTime : {
-              type: "date",
-              required: true,
-              message: "请输入结束时间",
-              trigger: "change"
-            }
+          plusAmount: {
+            type: "number",
+            required: true,
+            message: "请输入优惠金额",
+            trigger: "blur"
+          },
+          startTime : {
+            type: "date",
+            required: true,
+            message: "请输入起始时间",
+            trigger: "change"
+          },
+          endTime : {
+            type: "date",
+            required: true,
+            message: "请输入结束时间",
+            trigger: "change"
+          }
+        },
+        ticketForm:{
+          name: "",
+          description: "",
+          targetCount: "",
+          discount: "",
+          startTime: "",
+          endTime: ""
+        },
+        ticketRules: {
+          name: {
+            required: true,
+            message: "请输入优惠名称",
+            trigger: "blur"
+          },
+          description: {
+            required: true,
+            message: "请输入优惠描述",
+            trigger: "blur"
+          },
+          targetCount: {
+            type: "number",
+            required: true,
+            message: "请输入目标电影票数量",
+            trigger: "blur"
+          },
+          discount: {
+            type: "number",
+            required: true,
+            message: "请输入折扣",
+            trigger: "blur"
+          },
+          startTime : {
+            type: "date",
+            required: true,
+            message: "请输入起始时间",
+            trigger: "change"
+          },
+          endTime : {
+            type: "date",
+            required: true,
+            message: "请输入结束时间",
+            trigger: "change"
           }
         }
+      }
+    },
+    methods:{
+      toggleSideBar() {
+        this.isCollapse = !this.isCollapse
       },
-      methods:{
-        toMovieManagement(){
-          this.$router.push({path: '/root/MovieManagement'});
-        },
-        toVIPActivity(){
-          this.$router.push({path: '/root/VIPActivity'});
-        },
-        toRefundStrategy(){
-          this.$router.push({path: '/root/RefundStrategy'});
-        },
-        toHallManagement(){
-          this.$router.push({path: '/root/HallManagement'});
-        },
-        logout: function () {
-          this.$confirm('确认退出?', '提示', {})
-            .then(() => {
-              sessionStorage.removeItem('user');
-              this.$router.push('/login');
-            })
-            .catch(() => { });
-        },
+      toMovieManagement(){
+        this.$router.push({path: '/root/MovieManagement'});
+      },
+      toMovieManagement(){
+        this.$router.push({path: '/root/MovieManagement'});
+      },
+      toVIPActivity(){
+        this.$router.push({path: '/root/VIPActivity'});
+      },
+      toRefundStrategy(){
+        this.$router.push({path: '/root/RefundStrategy'});
+      },
+      toHallManagement(){
+        this.$router.push({path: '/root/HallManagement'});
+      },
+      logout: function () {
+        this.$confirm('确认退出?', '提示', {})
+          .then(() => {
+            sessionStorage.removeItem('user');
+            this.$router.push('/login');
+          })
+          .catch(() => { });
+      },
 
         showRechargeDialog: function () {
           this.rechargeDialogVisiable = true;
@@ -451,6 +470,8 @@
       }
     }
 </script>
+
+
 
 <style scoped>
   .label{

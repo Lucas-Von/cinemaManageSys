@@ -1,17 +1,26 @@
-<template>
-  <div class="app" >
-    <el-container >
-      <el-aside class="app-side-expanded">
+<template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
+  <div class="app"  >
+
+    <el-container  >
+      <el-aside class="app-side app-side-left"
+                :class="isCollapse ? 'app-side-collapsed' : 'app-side-expanded'">
         <div class="app-side-logo">
           <img src="@/assets/1.jpg"
-               width="60"
-               height="60"
+               :width="isCollapse ? '60' : '60'"
+               :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
+<<<<<<< HEAD
         <div >
           <el-menu default-active="4"
                    class="el-menu-vertical-demo">
+=======
+>>>>>>> 3a3266aea83d6479938e433e88c4b251069e7ad8
 
+        <div >
+          <el-menu default-active="1-5-1"
+                   class="el-menu-vertical-demo"
+                   :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
               <i class="el-icon-camera"></i>
               <span slot="title">电影管理</span>
@@ -34,6 +43,17 @@
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+        </div>
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+        </el-menu>
       </el-aside>
 
       <el-container>
@@ -120,6 +140,7 @@
       name: "RootHallManagement",
       data(){
         return{
+          isCollapse:false,
           hallData : getHall().content,
           hallDialogVisiable: false,
           hallForm: {
@@ -156,6 +177,9 @@
         }
       },
       methods:{
+        toggleSideBar() {
+          this.isCollapse = !this.isCollapse
+        },
         toMovieManagement(){
           this.$router.push({path: '/root/MovieManagement'});
         },

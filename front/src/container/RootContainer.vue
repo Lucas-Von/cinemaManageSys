@@ -64,7 +64,9 @@
   export default {
     name: "RootContainer",
     data() {
-      return {}
+      return {
+        isCollapse: false,
+      }
     },
     methods: {
       handleSelect(key, keyPath) {

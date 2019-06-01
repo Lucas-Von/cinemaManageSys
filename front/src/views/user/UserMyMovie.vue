@@ -247,8 +247,8 @@
           this.$message({
               type: 'success',
               message: '出票成功!',
-
             },
+
             rows.splice(index, 1),
             outfiledList.push( {
               picture:require("@/assets/test1.jpg"),

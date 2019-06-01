@@ -140,38 +140,6 @@
         ],
         username: '',
         isCollapse: false,
-        imagesbox:[
-          {id:0,idView:require("@/assets/test1.jpg")},
-          {id:1,idView:require("@/assets/test2.jpg")},
-          {id:2,idView:require("@/assets/test3.jpg")},
-          {id:3,idView:require("@/assets/test4.jpg")},
-          {id:4,idView:require("@/assets/test5.jpg")},
-          {id:5,idView:require("@/assets/test6.jpg")},
-        ],
-        tableData: [{
-          picture:require("@/assets/test1.jpg"),
-          date: '2016-05-02',
-          name: '王小虎',
-          state:'已完成',
-          film: '建国大业',
-          room:'一号厅',
-          open:'2019-8-10 12:12',
-          seat:'三排5座 三排4座',
-          money:'66',
-          num:2,
-        },
-          {
-            picture:require("@/assets/test1.jpg"),
-            date: '2016-05-02',
-            name: '王小虎',
-            state:'已完成',
-            film: '建国大业',
-            room:'一号厅',
-            open:'2019-8-10 12:12',
-            seat:'三排5座 三排4座',
-            money:'66',
-            num:2,
-          }]
       }
     }
     ,

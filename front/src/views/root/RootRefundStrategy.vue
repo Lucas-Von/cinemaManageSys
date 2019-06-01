@@ -176,6 +176,7 @@
         },
 
         showRefundDialog: function() {
+          console.log(this.refundData);
           this.refundDialogVisiable = true;
         },
 

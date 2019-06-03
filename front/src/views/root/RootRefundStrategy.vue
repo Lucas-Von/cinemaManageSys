@@ -45,7 +45,6 @@
         <el-menu default-active="1"
                  class="el-menu-demo tab-page"
                  mode="horizontal"
-                 @select="handleSelect"
                  active-text-color="#409EFF">
         </el-menu>
       </el-aside>

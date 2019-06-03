@@ -65,7 +65,6 @@
             <nav class="navbar navbar-default">
               <div class="container-fluid">
                 <el-menu
-                  :default-active="activeIndex2"
                   class="el-menu-demo"
                   mode="horizontal"
                   @select="handleSelect"

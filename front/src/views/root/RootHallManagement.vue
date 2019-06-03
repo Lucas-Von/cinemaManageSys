@@ -10,12 +10,6 @@
                :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
-<<<<<<< HEAD
-        <div >
-          <el-menu default-active="4"
-                   class="el-menu-vertical-demo">
-=======
->>>>>>> 3a3266aea83d6479938e433e88c4b251069e7ad8
 
         <div >
           <el-menu default-active="1-5-1"

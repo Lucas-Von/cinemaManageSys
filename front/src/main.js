@@ -8,8 +8,16 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss'
 import '@/views/user/UserShare.css'
 import '@/views/user/UserShare.js'
+import axios from 'axios'
+Vue.prototype.$ajax = axios
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+axios.defaults.timeout = 5000;
+
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+
+axios.defaults.baseURL = 'http://localhost:8000/';
+
 new Vue({
   el: '#app',
   router,

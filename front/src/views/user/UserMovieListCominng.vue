@@ -65,7 +65,6 @@
             <nav class="navbar navbar-default">
               <div class="container-fluid">
                 <el-menu
-                  :default-active="activeIndex2"
                   class="el-menu-demo"
                   mode="horizontal"
                   @select="handleSelect"
@@ -120,6 +119,9 @@
 </template>
 
 <script>
+  import {
+    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
+  }from "../../api/userAPI"
   export default {
     name: 'Container',
     data() {
@@ -131,12 +133,7 @@
       return {
         loading: true,
         title: '',
-        list: [
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test1.jpg")},
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test2.jpg")},
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test3.jpg")},
-
-        ],
+        list: getMovie().content,
         username: '',
         isCollapse: false,
 

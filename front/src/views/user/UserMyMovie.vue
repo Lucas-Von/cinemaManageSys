@@ -64,7 +64,6 @@
             <nav class="navbar navbar-default">
               <div class="container-fluid">
                 <el-menu
-                  :default-active="activeIndex2"
                   class="el-menu-demo"
                   mode="horizontal"
                   @select="handleSelect"
@@ -88,23 +87,23 @@
             </nav>
           </template>
 
-          <el-form :model="inServForm"  ref="inServForm" size="small">
+          <el-form   ref="inServForm" size="small">
             <el-form-item >
               <template>
                 <el-table border :data="infiledList" style="width: 100%" >
                   <el-table-column prop="fildna" label="日期" style="width:6vw;" sortable>
-                    <template scope="scope">
+                    <template slot-scope="scope">
                       <span style="margin-left: 10px">{{ scope.row.date }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column prop="fildna" label="海报" style="width:6vw;" >
-                    <template scope="scope">
+                    <template slot-scope="scope">
                       <!--<el-input size="mini" v-model="scope.row.fildna" ></el-input>-->
                       <img :src=scope.row.picture class="image" height="200px">
                     </template>
                   </el-table-column>
                   <el-table-column prop="remark" label="具体详情">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                       <span style="margin-left: 10px">电影名称：{{scope.row.film }}<br></span>
                       <span style="margin-left: 10px">开始时间：{{scope.row.open}}<br></span>
                       <span style="margin-left: 10px">结束时间：{{scope.row.finish}}<br></span>

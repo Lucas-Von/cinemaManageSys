@@ -11,7 +11,6 @@
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
-
           <el-menu default-active="1-5-1"
                    class="el-menu-vertical-demo"
                    @open="handleOpen"
@@ -63,7 +62,6 @@
               <nav class="navbar navbar-default">
                 <div class="container-fluid">
                   <el-menu
-                    :default-active="activeIndex2"
                     class="el-menu-demo"
                     mode="horizontal"
                     @select="handleSelect"
@@ -72,7 +70,7 @@
                     active-text-color="#ffd04b"
                   >
                     <el-col :span="11" >
-                    <el-menu-item index="1" @click="intheather">正在上映</el-menu-item>
+                    <el-menu-item index="1" @click="sds">正在上映</el-menu-item>
                     </el-col>
                     <el-col :span="11">
                     <el-menu-item index="2" @click="coming">即将上映</el-menu-item>
@@ -84,24 +82,25 @@
             </template>
 
           <div class="container">
+
             <div class="canvas" v-show="loading">
               <div class="spinner"></div>
             </div>
             <div class="row">
 
-              <div class="col-md-2 text-center" v-for="item in list" :key="item.id">
+              <div class="col-md-2 text-center" v-for="item in result" :key="item.name">
 
-                <router-link :to="{path:'/detail/'+item.id}">
+                <router-link :to="{path:'/detail/'+item.name}">
                   <el-col :span="8" >
 
                     <el-card class="box-moviecard">
                       <br>
-                        <img class="movie" height="320px" width="250px" :src="item.images">
+                        <img class="movie" height="320px" width="250px" :src="item.poster_url">
                       <br>
 
                     <div style="padding: 14px;">
                       <div class="bottom clearfix">
-                        <h3 class="text">{{item.id}}</h3>
+                        <h3 class="text">{{item.name}}</h3>
                       </div>
                     </div>
                     </el-card>
@@ -120,31 +119,31 @@
 </template>
 
 <script>
+  import {
+    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
+  }from "../../api/userAPI"
   export default {
     name: 'Container',
     data() {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      };
       return {
+
         loading: true,
         title: '',
-        list: [
-
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test4.jpg")},
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test5.jpg")},
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test6.jpg")}
-
-        ],
+        result:[],
         username: '',
         isCollapse: false,
       }
+
     }
     ,
 
     methods: {
+      sds(){
+        getMovie().then((res)=>{
+          this.result=res.data.content;
+          console.log(this.result)
+        },(error) => console.log('promise catch err'));
+      },
       submit(){
         if (!this.searchKey) {
           alert('请输入搜索内容');
@@ -239,9 +238,6 @@
       width: 325px;
       height: 450px;
     }
-  .movie{
-    margin-left: 20px;
-  }
   .text{
     margin-left: 75px;
   }

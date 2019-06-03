@@ -45,7 +45,6 @@
         <el-menu default-active="1"
                  class="el-menu-demo tab-page"
                  mode="horizontal"
-                 @select="handleSelect"
                  active-text-color="#409EFF">
         </el-menu>
       </el-aside>
@@ -243,9 +242,11 @@
     name: "RootVIPActivity",
     data(){
       return{
+        isCollapse:false,
         rechargeData: getRechargeActivity().content,
         ticketData : getTicketActivity().content,
-        rechargeDialog: false,
+        ticketDialogVisiable:false,
+        rechargeDialogVisiable:false,
         ticketDialog: false,
         rechargeForm: {
           name: "",

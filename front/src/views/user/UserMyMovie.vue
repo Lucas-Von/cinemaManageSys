@@ -98,7 +98,6 @@
                   </el-table-column>
                   <el-table-column prop="fildna" label="海报" style="width:6vw;" >
                     <template slot-scope="scope">
-                      <!--<el-input size="mini" v-model="scope.row.fildna" ></el-input>-->
                       <img :src=scope.row.picture class="image" height="200px">
                     </template>
                   </el-table-column>

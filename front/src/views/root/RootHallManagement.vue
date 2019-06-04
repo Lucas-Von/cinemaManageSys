@@ -12,7 +12,7 @@
         </div>
 
         <div >
-          <el-menu default-active="1-5-1"
+          <el-menu default-active="4"
                    class="el-menu-vertical-demo"
                    :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
@@ -45,7 +45,6 @@
         <el-menu default-active="1"
                  class="el-menu-demo tab-page"
                  mode="horizontal"
-                 @select="handleSelect"
                  active-text-color="#409EFF">
         </el-menu>
       </el-aside>
@@ -56,20 +55,24 @@
             <div>
               <div>
                 <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label" @click="showHallDialog">添加影厅</el-button>
-                  <el-dialog title="添加影厅" v-model="hallDialogVisiable">
+                  <el-button type="primary" class="label" @click="addHallInfo">添加影厅</el-button>
+                  <el-dialog title="添加影厅" :visible.sync="hallDialogVisiable">
                     <el-form :model="hallForm" :rules="hallRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="hallForm.name"></el-input>
                       </el-form-item>
-                      <el-form-item label="容量" prop="capacity">
-                        <el-input v-model="hallForm.capacity"></el-input>
+                      <el-form-item label="容量" prop="size">
+                        <el-input v-model="hallForm.size"></el-input>
                       </el-form-item>
-                      <el-form-item label="行数" prop="row">
-                        <el-input v-model="hallForm.row"></el-input>
+                      <el-form-item label="行数" prop="hallRow">
+                        <el-input v-model="hallForm.hallRow"></el-input>
                       </el-form-item>
-                      <el-form-item label="列数" prop="column">
-                        <el-input v-model="hallForm.column"></el-input>
+                      <el-form-item label="列数" prop="hallCol">
+                        <el-input v-model="hallForm.hallCol"></el-input>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="submitHallInfo(hallForm)">保存</el-button>
+                        <el-button @click="closeHallDialog">取消</el-button>
                       </el-form-item>
                     </el-form>
                   </el-dialog>
@@ -98,13 +101,13 @@
                         sortable>
                       </el-table-column>
                       <el-table-column
-                        prop="row"
+                        prop="hallRow"
                         label="行数"
                         width="150"
                         sortable>
                       </el-table-column>
                       <el-table-column
-                        prop="column"
+                        prop="hallCol"
                         label="列数"
                         width="150"
                         sortable>
@@ -112,8 +115,10 @@
                       <el-table-column
                         label="操作"
                         width="200">
-                        <el-button type="primary" size="small">修改影厅</el-button>
-                        <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
+                        <template slot-scope="scope">
+                          <el-button type="primary" size="small" @click="updateHallInfo(scope.row)">修改影厅</el-button>
+                          <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
+                        </template>
                       </el-table-column>
                     </el-table>
                   </el-col>
@@ -129,44 +134,55 @@
 
 <script>
   import {getHall, addHall, updateHall, deleteHall} from "../../api/rootAPI"
+  import {isInteger} from "../../api/util"
 
     export default {
       name: "RootHallManagement",
       data(){
         return{
           isCollapse:false,
-          hallData : getHall().content,
+          hallData : [],
           hallDialogVisiable: false,
           hallForm: {
+            id: "",
             name: "",
-            capacity: "",
-            row: "",
-            column: ""
+            size: "",
+            hallRow: "",
+            hallCol: ""
           },
           hallRules: {
             name: {
               required: true,
-              message: "",
+              message: "请输入名称",
               trigger: "blur"
             },
-            capacity: {
-              type: "number",
+            size: [{
               required: true,
-              message: "",
+              message: "请输入容量",
               trigger: "blur"
             },
-            row: {
-              type: "number",
+              {
+                validator: isInteger,
+                trigger: "blur"
+              }],
+            hallRow: [{
               required: true,
-              message: "",
+              message: "请输入行数",
               trigger: "blur"
             },
-            column: {
-              type: "number",
+              {
+                validator: isInteger,
+                trigger: "blur"
+              }],
+            hallCol: [{
               required: true,
-              message: "",
+              message: "请输入列数",
               trigger: "blur"
-            }
+            },
+              {
+                validator: isInteger,
+                trigger: "blur"
+              }]
           }
         }
       },
@@ -195,9 +211,7 @@
             .catch(() => { });
         },
 
-        showHallDialog: function() {
-          this.hallDialogVisiable = true;
-        },
+        /*--------------------------------------------------*/
 
         closeHallDialog: function() {
           this.hallDialogVisiable = false;
@@ -206,41 +220,130 @@
 
         resetHallDialog: function() {
           this.hallForm.name = "";
-          this.hallForm.capacity = "";
-          this.hallForm.row= "";
-          this.hallForm.column = "";
+          this.hallForm.size = "";
+          this.hallForm.hallRow= "";
+          this.hallForm.hallCol = "";
         },
 
-        addHallInfo: function (params) {
-          let res = addHall(params);
-          if (res.success){
-            alert("添加成功");
-            this.closeHallDialog();
-            this.hallData = getHall();
+        getHallInfo: function() {
+          getHall().then(res => {
+            this.hallData = res.content;
+          })
+        },
+
+        addHallInfo: function () {
+          this.hallDialogVisiable = true;
+        },
+
+        updateHallInfo: function (item) {
+          this.hallDialogVisiable = true;
+          this.hallForm.id = item.id;
+          this.hallForm.name = item.name;
+          this.hallForm.hallRow = item.hallRow;
+          this.hallForm.hallCol = item.hallCol;
+          this.hallForm.size = item.size;
+        },
+
+        submitHallInfo: function(params){
+          if (params.name === ""){
+            this.$message({
+              type: 'error',
+              message: '请输入名称'
+            });
+            return;
+          }
+
+          if (params.size === ""){
+            this.$message({
+              type: 'error',
+              message: '请输入容量'
+            });
+            return;
+          }
+          if (params.hallRow === ""){
+            this.$message({
+              type: 'error',
+              message: '请输入行数'
+            });
+            return;
+          }
+          if (params.hallCol === ""){
+            this.$message({
+              type: 'error',
+              message: '请输入列数'
+            });
+            return;
+          }
+          if (params.id === ""){
+            this.submitAddHallInfo(params);
           }
           else {
-            alert(res.message);
+            this.submitUpdateHallInfo(params);
           }
         },
 
-        updateHallInfo: function () {
+        submitAddHallInfo: function(params) {
+          addHall(params).then(res => {
+            this.getHallInfo();
+            if (res.success){
+              this.$message({
+                type: 'success',
+                message: '添加成功!'
+              });
+              this.closeHallDialog();
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
+        },
 
+        submitUpdateHallInfo: function(params) {
+          updateHall(params).then(res => {
+            this.getHallInfo();
+            if (res.success){
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+              this.closeHallDialog();
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
         },
 
         deleteHallInfo: function (id) {
           this.$confirm('确认删除该影厅？','提示',{})
             .then(() => {
-              let res = deleteHall(id);
-              if (res.success){
-                alert("删除成功");
-                this.hallData = getHall();
-              }
-              else {
-                alert(res.message);
-              }
+              deleteHall(id).then(res => {
+                this.getHallInfo();
+                if (res.success){
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  });
+                }
+                else {
+                  this.$message({
+                    type: 'error',
+                    message: res.message
+                  });
+                }
+                })
             })
             .catch(() => {})
         }
+      },
+      mounted: function () {
+        this.getHallInfo();
       }
     }
 </script>

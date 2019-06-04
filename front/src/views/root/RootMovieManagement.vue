@@ -12,7 +12,7 @@
         </div>
 
         <div >
-          <el-menu default-active="1-5-1"
+          <el-menu default-active="1"
                    class="el-menu-vertical-demo"
                    :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
@@ -45,7 +45,6 @@
         <el-menu default-active="1"
                  class="el-menu-demo tab-page"
                  mode="horizontal"
-                 @select="handleSelect"
                  active-text-color="#409EFF">
         </el-menu>
       </el-aside>

@@ -12,7 +12,7 @@
         </div>
 
         <div >
-          <el-menu default-active="1-5-1"
+          <el-menu default-active="3-"
                    class="el-menu-vertical-demo"
                    :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
@@ -42,7 +42,7 @@
           <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
           <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
         </div>
-        <el-menu default-active="1"
+        <el-menu default-active="3"
                  class="el-menu-demo tab-page"
                  mode="horizontal"
                  active-text-color="#409EFF">
@@ -55,8 +55,8 @@
             <div>
               <div>
                 <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label" @click="showRefundDialog">添加退票策略</el-button>
-                  <el-dialog title="添加退票策略" :visible.sync="refundDialogVisiable">
+                  <el-button type="primary" class="label" @click="addRefund">添加退票策略</el-button>
+                  <el-dialog title="添加/修改 退票策略" :visible.sync="refundDialogVisiable">
                     <el-form :model="refundForm" :rules="refundRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="refundForm.name"></el-input>
@@ -71,7 +71,7 @@
                         <el-input   v-model="refundForm.percentage"></el-input>
                       </el-form-item>
                       <el-form-item>
-                        <el-button type="primary" @click="addRefund(refundForm)">保存</el-button>
+                        <el-button type="primary" @click="submitRefund(refundForm)">保存</el-button>
                         <el-button @click="closeRefundDialog">取消</el-button>
                       </el-form-item>
                     </el-form>
@@ -113,8 +113,10 @@
                       <el-table-column
                         label="操作"
                         width="200">
-                        <el-button type="primary" size="small" @click="">修改策略</el-button>
-                        <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
+                        <template slot-scope="scope">
+                          <el-button type="primary" size="small" @click="updateRefund(scope.row)">修改策略</el-button>
+                          <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
+                        </template>
                       </el-table-column>
                     </el-table>
                   </el-col>
@@ -130,14 +132,17 @@
 
 <script>
   import {getRefundStrategy, addRefundStrategy, updateRefundStrategy, deleteRefundStrategy} from "../../api/rootAPI"
+  import {isDecimal, isDecimalLessThanOne} from "../../api/util"
+
     export default {
       name: "RootRefundStrategy",
       data(){
           return{
-              isCollapse:false,
-            refundData : getRefundStrategy().content,
+            isCollapse:false,
+            refundData : [],
             refundDialogVisiable: false,
             refundForm: {
+              id: "",
               name: "",
               description: "",
               remainingTime: "",
@@ -149,21 +154,23 @@
                 message: "请输入策略名称",
                 trigger: "blur"
               },
-              description: {
-                required: true,
-                message: "请输入策略描述",
-                trigger: "blur"
-              },
-              remainingTime: {
+              remainingTime: [{
                 required: true,
                 message: "请输入剩余时间",
                 trigger: "blur"
-              },
-              percentage: {
+              },{
+                validator: isDecimal,
+                trigger: "blur"
+              }],
+              percentage: [{
                 required: true,
                 message: "请输入退款比例",
                 trigger: "blur"
-              }
+              },
+                {
+                  validator: isDecimalLessThanOne,
+                  trigger: "blur"
+                }]
             }
           }
       },
@@ -192,10 +199,7 @@
             .catch(() => { });
         },
 
-        showRefundDialog: function() {
-          console.log(this.refundData);
-          this.refundDialogVisiable = true;
-        },
+        /*--------------------------------------------------*/
 
         closeRefundDialog: function() {
           this.refundDialogVisiable = false;
@@ -209,45 +213,119 @@
           this.refundForm.percentage = "";
         },
 
-        addRefund: function (params) {
-          let res = addRefundStrategy(params);
-          if (res.success){
-            alert("添加成功");
-            this.closeRefundDialog();
-            this.refundData = getRefundStrategy();
+        getRefund: function() {
+          getRefundStrategy().then(res => {
+            this.refundData = res.content;
+          })
+        },
+
+        addRefund: function() {
+          this.refundDialogVisiable = true;
+        },
+
+        updateRefund: function(item) {
+          this.refundDialogVisiable = true;
+          this.refundForm.id = item.id;
+          this.refundForm.name = item.name;
+          this.refundForm.description = item.refundForm;
+          this.refundForm.remainingTime = item.remainingTime;
+          this.refundForm.percentage = item.percentage;
+        },
+
+        submitRefund: function (params) {
+          console.log(params);
+          if (params.name === ""){
+            this.$message({
+              type: 'error',
+              message: '请输入名称'
+            });
+            return;
+          }
+          if (params.remainingTime === ""){
+            this.$message({
+              type: 'error',
+              message: '请输入剩余时间'
+            });
+            return;
+          }
+          if (params.percentage === ""){
+            this.$message({
+              type: 'error',
+              message: '请输入退款比例'
+            });
+            return;
+          }
+          if (params.id === ""){
+            this.submitAddRefund(params);
           }
           else {
-            alert(res.message)
+            this.submitUpdateRefund(params);
           }
+        },
+
+        submitAddRefund: function(params) {
+          addRefundStrategy(params).then(res => {
+            this.getRefund();
+            if (res.success){
+              this.$message({
+                type: 'success',
+                message: '添加成功!'
+              });
+              this.closeRefundDialog();
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
+        },
+
+        submitUpdateRefund: function(params) {
+          updateRefundStrategy(params).then(res => {
+            this.getRefund();
+            if (res.success){
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+              this.closeRefundDialog();
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
         },
 
         deleteRefund: function (id) {
           this.$confirm('确认删除该策略？','提示',{})
             .then(() => {
-              let res = deleteRefundStrategy(id);
-              if (res.success){
-                alert("删除成功");
-                this.refundData = getRefundStrategy();
-              }
-              else {
-                alert(res.message);
-              }
+              deleteRefundStrategy(id).then(res => {
+                this.getRefund();
+                if (res.success){
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  });
+                }
+                else {
+                  this.$message({
+                    type: 'error',
+                    message: res.message
+                  });
+                }
+              })
             })
             .catch(() => {})
         },
 
-        updateRefund: function (refund) {
-          this.refundDialogVisiable = true;
-
-          let res = updateRefundStrategy(params);
-          if (res.success){
-            alert("修改成功");
-          }
-          else {
-            alert(res.message);
-          }
-        }
-
+      },
+      mounted: function () {
+        this.getRefund();
       }
     }
 </script>

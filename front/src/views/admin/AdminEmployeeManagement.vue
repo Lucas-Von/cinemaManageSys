@@ -51,10 +51,10 @@
         <el-main class="app-body">
           <template>
             <div>
+              <el-row type="flex" justify="end">
+                <el-button type="primary" size="small" class="label" @click="showEmployeeDialog">添加售票员</el-button>
+              </el-row>
               <el-col :span="12">
-                <el-row type="flex" justify="end">
-                  <!--<el-button type="primary" size="small" class="label" @click="showEmployeeDialog">添加售票员</el-button>-->
-                </el-row>
                 <el-row type="flex">
                   <el-col :span="2"></el-col>
                   <el-col :span="6">售票员</el-col>
@@ -83,7 +83,6 @@
               </el-col>
               <el-col :span="12">
                 <el-row type="flex" justify="end">
-                  <el-button type="primary" size="small" class="label" @click="showEmployeeDialog">添加员工</el-button>
                   <el-dialog title="添加员工" :visible.sync="employeeDialogVisiable">
                     <el-form :model="employeeForm" :rules="employeeRules" ref="ruleForm">
                       <el-form-item label="用户名" prop="username">
@@ -145,14 +144,7 @@
       name: "AdminEmployeeManagement",
       data(){
           return{
-            rootData : [
-              {
-                id: 1,
-                username: "abc",
-                keyword: "123",
-                category: 1
-              }
-            ],
+            rootData : [],
             salerData : [],
             employeeDialogVisiable : false,
             employeeForm: {
@@ -190,9 +182,7 @@
             .catch(() => { });
         },
 
-        showEmployeeDialog: function() {
-          this.employeeDialogVisiable = true;
-        },
+        /*--------------------------------------------------*/
 
         closeEmployeeDialog: function() {
           this.employeeDialogVisiable = false;
@@ -206,31 +196,57 @@
         },
 
         getEmployee: function() {
-          let list = getRoles().content;
-          for (item in list){
-            if (item.category === 1){
-              this.rootData.push(item);
+          this.rootData = [];
+          this.salerData = [];
+          getRoles().then(res => {
+            for (let employee in res.content){
+              if (employee.category === 1){
+                this.rootData.push(employee);
+              }
+              else {
+                this.salerData.push(employee);
+              }
             }
-            else {
-              this.salerData.push(item);
-            }
-          }
+          })
         },
 
         addEmployee: function(params) {
-          let res = addRole(params.username, params.keyword, params.category);
-          if (res.success){
-            alert("添加成功")
-            this.closeEmployeeDialog();
+          addRole(params.username, params.keyword, params.category).then(res => {
             this.getEmployee();
-          }
-          else {
-            alert(res.message);
-          }
+            if (res.success){
+              this.$message({
+                type: 'success',
+                message: '添加成功!'
+              });
+              this.closeEmployeeDialog();
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
+
         },
 
-        updateEmployee: function() {
-
+        updateEmployee: function(params) {
+          updateRole(params.id, params.category).then(res => {
+            this.getEmployee();
+            if (res.success){
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+              this.closeEmployeeDialog();
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
         },
 
         deleteEmployee: function (id) {

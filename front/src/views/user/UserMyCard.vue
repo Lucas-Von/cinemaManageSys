@@ -71,6 +71,7 @@
           <el-card class="box-card" >
             <div slot="header" class="clearfix">
               <span>{{id}}</span>
+              <el-divider></el-divider>
             </div>
             <div :class="vip ? 'pay' : 'repay'">
               <span>{{!vip ? '您还不是会员！' : '你已是会员！'}}<br></span>

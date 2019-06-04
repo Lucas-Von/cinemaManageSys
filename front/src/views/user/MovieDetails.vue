@@ -35,8 +35,8 @@
               <i class="el-icon-setting"></i>
               <span slot="title">个人信息</span>
             </el-menu-item>
-            <el-menu-item index="5" @click="logout">
-              <i class="el-icon-setting" ></i>
+            <el-menu-item index="5">
+              <i class="el-icon-setting" @click="logout"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
@@ -60,59 +60,87 @@
       <el-container>
 
         <el-main class="app-body">
-
-          <template>
-            <nav class="navbar navbar-default">
-              <div class="container-fluid">
-                <el-menu
-                  class="el-menu-demo"
-                  mode="horizontal"
-                  @select="handleSelect"
-                  background-color="#545c64"
-                  text-color="#fff"
-                  active-text-color="#ffd04b"
-                >
-                  <el-col :span="11" >
-                    <el-menu-item index="1" @click="intheather">正在上映</el-menu-item>
-                  </el-col>
-                  <el-col :span="11">
-                    <el-menu-item index="2" @click="coming">即将上映</el-menu-item>
-                  </el-col>
-                </el-menu>
-
-              </div>
-            </nav>
-          </template>
-
-          <div class="container">
-            <div class="canvas" v-show="loading">
-              <div class="spinner"></div>
-            </div>
-            <div class="row">
-
-              <div class="col-md-2 text-center" v-for="item in result" :key="item.name">
-                <div v-show="item.status==1">
-                  <router-link :to="{path:'/detail/'+item.id}">
-                    <el-col :span="8" >
-
-                      <el-card class="box-moviecard">
-                        <span>{{item.id}}</span>
-                        <br>
-                        <img class="movie" height="320px" width="250px" :src="item.posterUrl">
-                        <br>
-
-                        <div style="padding: 14px;">
-                          <div class="bottom clearfix">
-                            <h3 class="text">{{item.name}}</h3>
-                          </div>
-                        </div>
-                      </el-card>
-                    </el-col>
-                  </router-link>
-                </div>
-              </div>
-            </div>
+          <el-steps :active="1" finish-status="success" simple>
+            <el-step title="电影详情" ></el-step>
+            <el-step title="选座" ></el-step>
+            <el-step title="支付" ></el-step>
+          </el-steps>
+          <div class="details">
+          <img  height="350px" width="250px" :src="ids.posterUrl" style="float:left" >
+            <span><h1>{{ids.name}}</h1></span><br>
+            <span >简介：{{ids.description}}</span><br><br>
+            <span>上映：{{ids.startDate.substring(0,10)}}</span><br>
+            <span>地区：{{ids.country}}</span><br>
+            <span>类型：{{ids.type}}</span><br>
+            <span>语言：{{ids.language}}</span><br>
+            <span>导演：{{ids.director}}</span><br>
+            <span>主演：{{ids.starring}}</span><br>
+            <span>编剧：{{ids.screenWriter}}</span>
           </div>
+
+          <div>
+            <el-tabs style="margin-top: 50px">
+            <el-tab-pane
+              v-for="item in result"
+              :label="item.date.substring(0,10)"
+              :key="item.date"
+              >
+              <span v-if="!item.scheduleItemList.length>0">今日暂无排片</span>
+              <span v-if="item.scheduleItemList.length>0">
+              <template>
+                    <el-table
+                      :data="item.scheduleItemList"
+                      style="width: 100%"
+                      max-height="250">
+                      <el-table-column
+                        prop="startTime"
+                        label="放映开始时间"
+                        width="250">
+                        <template slot-scope="scope">
+                        <span style="margin-left: 10px">{{ scope.row.startTime.substring(11,19)}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="endTime"
+                        label="放映结束时间"
+                        width="250">
+                        <template slot-scope="scope">
+                        <span style="margin-left: 10px">{{ scope.row.endTime.substring(11,19)}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="province"
+                        label="放映厅"
+                        width="200">
+                        <template slot-scope="scope">
+                        <span style="margin-left: 10px">{{ scope.row.hallName}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="city"
+                        label="票价"
+                        width="200">
+                         <template slot-scope="scope">
+                        <span style="margin-left: 10px">{{ scope.row.fare}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column fixed="right" label="操作" width="150">
+                    <template slot-scope="scope">
+                      <router-link :to="{path:'/user/SelectSeats/id',query:{id:scope.row}}">
+                      <el-button  size="small" > 选座</el-button>
+                      </router-link>
+
+                    </template>
+                  </el-table-column>
+                    </el-table>
+                  </template>
+              </span>
+
+            </el-tab-pane>
+          </el-tabs>
+          </div>
+
+
         </el-main>
       </el-container>
     </el-container>
@@ -124,37 +152,23 @@
     getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
   }from "../../api/userAPI"
   export default {
-    name: 'Container',
-    data() {
-      return {
-
-        loading: true,
-        title: '',
+    name: "MovieDetails",
+    data(){
+      return{
+        isCollapse:false,
         result:[],
-        username: '',
-        isCollapse: false,
-      }
-
-    }
-    ,
-
+        ids:'',
+        name:''
+      }},
     methods: {
-      sds(){
-        getMovie().then((res)=>{
+
+      movieSh(){
+        getMovieSchedule(this.ids.id).then((res)=>{
           this.result=res.data.content;
-          console.log(res.data)
+
+          console.log(this.result.scheduleItemList)
+
         },(error) => console.log('promise catch err'));
-      },
-      submit(){
-        if (!this.searchKey) {
-          alert('请输入搜索内容');
-          return;
-        }
-        // 搜索页面跳转
-        this.$router.push({
-          path: '/search/' + this.searchKey,
-        })
-        this.searchKey = "";
       },
       toggleSideBar() {
         this.isCollapse = !this.isCollapse
@@ -188,11 +202,11 @@
       getinfo(event){
         this.$router.push({path: '/user/Info'});
       },
-      intheather(event){
-        this.$router.push({path: '/user/MovieList'});
-      },
       coming(event){
         this.$router.push({path: '/user/Coming'});
+      },
+      intheather(event){
+        this.$router.push({path: '/user/MovieList'});
       },
       loadMovieList(){
         this.loading = true;
@@ -212,38 +226,30 @@
           this.list = res.data.subjects;
           this.title = res.data.title;
           this.loading = false;
+
         })
       }
     },
+    create(){
 
-    mounted: function () {
-      let user = sessionStorage.getItem('user');
-      if (user) {
-        this.username = user;
-      }
-      this.sds();
     },
+    mounted() {
+      let ids=this.$route.query.id;
+      console.log(this.$route.query.id)
+      this.ids=ids
+      this.movieSh(this.ids)
+    }
   }
 
 </script>
 
-<style>
-
-
-  .row > div {
-    margin-bottom: 20px;
+<style scoped>
+  img{
+    margin-right: 20px
   }
 
-
-  .box-moviecard {
-    margin-left: 30px;
-    width: 325px;
-    height: 450px;
-  }
-  .movie{
-    margin-left: 20px;
-  }
-  .text{
-    margin-left: 75px;
-  }
 </style>
+
+
+
+

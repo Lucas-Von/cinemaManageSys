@@ -1,5 +1,5 @@
 <template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
-  <div class="app"  >
+  <div class="app" >
 
     <el-container  >
       <el-aside class="app-side app-side-left"
@@ -70,7 +70,7 @@
                     active-text-color="#ffd04b"
                   >
                     <el-col :span="11" >
-                    <el-menu-item index="1" @click="sds">正在上映</el-menu-item>
+                    <el-menu-item index="1" @click="intheather">正在上映</el-menu-item>
                     </el-col>
                     <el-col :span="11">
                     <el-menu-item index="2" @click="coming">即将上映</el-menu-item>
@@ -89,15 +89,15 @@
             <div class="row">
 
               <div class="col-md-2 text-center" v-for="item in result" :key="item.name">
-
-                <router-link :to="{path:'/detail/'+item.name}">
+                <div v-show="item.status==0">
                   <el-col :span="8" >
 
                     <el-card class="box-moviecard">
                       <br>
-                        <img class="movie" height="320px" width="250px" :src="item.poster_url">
+                      <router-link :to="{path:'/user/MovieDetails/id',query:{id:item}}">
+                        <img class="movie" height="320px" width="250px" :src="item.posterUrl" >
                       <br>
-
+                      </router-link>
                     <div style="padding: 14px;">
                       <div class="bottom clearfix">
                         <h3 class="text">{{item.name}}</h3>
@@ -105,8 +105,8 @@
                     </div>
                     </el-card>
                   </el-col>
-                </router-link>
-
+                <!--</router-link>-->
+              </div>
               </div>
 
             </div>
@@ -138,10 +138,10 @@
     ,
 
     methods: {
+
       sds(){
         getMovie().then((res)=>{
           this.result=res.data.content;
-          console.log(this.result)
         },(error) => console.log('promise catch err'));
       },
       submit(){
@@ -206,7 +206,6 @@
           params['q'] = this.$route.params.searchKey;
         }
         this.$http.post(movieUrl, params).then((res) => {
-          console.log(res.data)
           // 这里不做多校验，可自己加，直接上数据
           this.list = res.data.subjects;
           this.title = res.data.title;
@@ -220,6 +219,7 @@
       if (user) {
         this.username = user;
       }
+      this.sds()
     },
   }
 

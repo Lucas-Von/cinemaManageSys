@@ -30,7 +30,7 @@ export const getMovieSchedule =(movieId) => {
 
 //查看特定场次的座位信息
 export const getOccupiedSeat =(scheduleId) => {
-  return axios.get('/get/occupiedSeats?scheduleId=' + scheduleId)
+  return axios.get('/ticket/get/occupiedSeats?scheduleId=' + scheduleId)
 }
 
 //查看会员卡信息

@@ -168,6 +168,7 @@
 
   mounted(){
     this.getCookie()
+    this.sds()
   }
     }
 

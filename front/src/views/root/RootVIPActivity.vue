@@ -395,6 +395,7 @@
 
       /*--------------------------------------------------*/
 
+
       closeRechargeDialog: function () {
           this.rechargeDialogVisiable = false;
           this.resetRechargeDialog();

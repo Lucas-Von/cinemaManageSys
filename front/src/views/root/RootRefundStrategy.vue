@@ -113,10 +113,15 @@
                       <el-table-column
                         label="操作"
                         width="200">
+<<<<<<< Updated upstream
                         <template slot-scope="scope">
                           <el-button type="primary" size="small" @click="updateRefund(scope.row)">修改策略</el-button>
                           <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
                         </template>
+=======
+                        <el-button type="primary" size="small" @click="updateRefund(scope.row)">修改策略</el-button>
+                        <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
+>>>>>>> Stashed changes
                       </el-table-column>
                     </el-table>
                   </el-col>
@@ -200,6 +205,18 @@
         },
 
         /*--------------------------------------------------*/
+        addRefund: function() {
+          this.refundDialogVisiable = true;
+        },
+
+        updateRefund: function(item) {
+          this.refundDialogVisiable = true;
+          this.refundForm.id = item.id;
+          this.refundForm.name = item.name;
+          this.refundForm.description = item.refundForm;
+          this.refundForm.remainingTime = item.remainingTime;
+          this.refundForm.percentage = item.percentage;
+        },
 
         closeRefundDialog: function() {
           this.refundDialogVisiable = false;
@@ -217,19 +234,6 @@
           getRefundStrategy().then(res => {
             this.refundData = res.content;
           })
-        },
-
-        addRefund: function() {
-          this.refundDialogVisiable = true;
-        },
-
-        updateRefund: function(item) {
-          this.refundDialogVisiable = true;
-          this.refundForm.id = item.id;
-          this.refundForm.name = item.name;
-          this.refundForm.description = item.refundForm;
-          this.refundForm.remainingTime = item.remainingTime;
-          this.refundForm.percentage = item.percentage;
         },
 
         submitRefund: function (params) {

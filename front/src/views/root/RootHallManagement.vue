@@ -10,6 +10,10 @@
                :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
         <div >
           <el-menu default-active="4"
@@ -74,6 +78,10 @@
                         <el-button type="primary" @click="submitHallInfo(hallForm)">保存</el-button>
                         <el-button @click="closeHallDialog">取消</el-button>
                       </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="submitHallInfo(hallForm)">保存</el-button>
+                        <el-button @click="closeHallDialog">取消</el-button>
+                      </el-form-item>
                     </el-form>
                   </el-dialog>
 
@@ -115,10 +123,15 @@
                       <el-table-column
                         label="操作"
                         width="200">
+<<<<<<< Updated upstream
                         <template slot-scope="scope">
                           <el-button type="primary" size="small" @click="updateHallInfo(scope.row)">修改影厅</el-button>
                           <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
                         </template>
+=======
+                        <el-button type="primary" size="small" @click="updateHallInfo(scope.row)">修改影厅</el-button>
+                        <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
+>>>>>>> Stashed changes
                       </el-table-column>
                     </el-table>
                   </el-col>
@@ -319,7 +332,6 @@
             }
           })
         },
-
         deleteHallInfo: function (id) {
           this.$confirm('确认删除该影厅？','提示',{})
             .then(() => {

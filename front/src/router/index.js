@@ -19,7 +19,9 @@ import UserMyMovie from '@/views/user/UserMyMovie'
 import UserMyMovieUsed from '@/views/user/UserMyMovieUsed'
 import UserMyMovieOff from '@/views/user/UserMyMovieOff'
 import UserComing from '@/views/user/UserMovieListCominng'
-
+import MovieDetails from '@/views/user/MovieDetails'
+import SelectSeats from '@/views/user/SelectSeats'
+import Moviecharge from '@/views/user/Moviecharge'
 Vue.use(Router)
 
 export default new Router({
@@ -70,6 +72,11 @@ export default new Router({
       component: SalerContainer},
     {path: '/saler', name: 'SalerContainer', component: SalerContainer
     },
-
+    {path: '/user/MovieDetails/:id', name: 'MovieDetails', component: MovieDetails,
+    },
+    {path: '/user/SelectSeats/:id', name: 'SelectSeats', component: SelectSeats,
+    },
+    {path: '/user/Moviecharge/:id', name: 'Moviecharge', component: Moviecharge,
+    },
   ]
 })

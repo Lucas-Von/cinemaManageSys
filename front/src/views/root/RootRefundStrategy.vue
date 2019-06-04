@@ -12,7 +12,7 @@
         </div>
 
         <div >
-          <el-menu default-active="3-"
+          <el-menu default-active="3"
                    class="el-menu-vertical-demo"
                    :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
@@ -56,7 +56,7 @@
               <div>
                 <el-row type="flex" justify="end">
                   <el-button type="primary" class="label" @click="addRefund">添加退票策略</el-button>
-                  <el-dialog title="添加/修改 退票策略" :visible.sync="refundDialogVisiable">
+                  <el-dialog title="添加/修改 退票策略" :visible.sync="refundDialogVisiable" :before-close="closeRefundDialog">
                     <el-form :model="refundForm" :rules="refundRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="refundForm.name"></el-input>
@@ -113,15 +113,10 @@
                       <el-table-column
                         label="操作"
                         width="200">
-<<<<<<< Updated upstream
                         <template slot-scope="scope">
                           <el-button type="primary" size="small" @click="updateRefund(scope.row)">修改策略</el-button>
                           <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
                         </template>
-=======
-                        <el-button type="primary" size="small" @click="updateRefund(scope.row)">修改策略</el-button>
-                        <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
->>>>>>> Stashed changes
                       </el-table-column>
                     </el-table>
                   </el-col>

@@ -320,11 +320,6 @@
             message: "请输入优惠名称",
             trigger: "blur"
           },
-          description: {
-            required: true,
-            message: "请输入优惠描述",
-            trigger: "blur"
-          },
           targetCount: [{
             required: true,
             message: "请输入目标电影票数量",
@@ -432,6 +427,7 @@
       },
 
       submitRecharge: function(params) {
+        console.log(params);
         if (params.name === ""){
           this.$message({
             type: 'error',
@@ -460,7 +456,7 @@
           });
           return;
         }
-        if (params.targetAmount < params.plusAmount){
+        if (parseInt(params.targetAmount) < parseInt(params.plusAmount)){
           this.$message({
             type: 'error',
             message: '请检查金额'

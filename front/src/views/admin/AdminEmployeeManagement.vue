@@ -12,7 +12,7 @@
         </div>
 
         <div >
-          <el-menu default-active="1-5-1"
+          <el-menu default-active="1"
                    class="el-menu-vertical-demo"
                    :collapse="isCollapse">
             <el-menu-item index="1" @click="toEmployeeManagement">
@@ -52,7 +52,30 @@
           <template>
             <div>
               <el-row type="flex" justify="end">
-                <el-button type="primary" size="small" class="label" @click="showEmployeeDialog">添加售票员</el-button>
+                <el-button type="primary" size="small" class="label" @click="addEmployee">添加员工</el-button>
+                <el-dialog title="添加员工" :visible.sync="addEmployeeDialogVisiable">
+                  <el-form :model="addEmployeeForm" :rules="addEmployeeRules" ref="ruleForm">
+                    <el-form-item label="用户名" prop="username">
+                      <el-input v-model="addEmployeeForm.username"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                      <el-input v-model="addEmployeeForm.password" show-password></el-input>
+                    </el-form-item>
+                    <el-form-item label="重复密码" prop="passwordRepeat">
+                      <el-input v-model="addEmployeeForm.passwordRepeat" show-password></el-input>
+                    </el-form-item>
+                    <el-form-item label="身份">
+                      <el-select v-model="addEmployeeForm.category" placeholder="请选择身份">
+                        <el-option label="经理" value=1></el-option>
+                        <el-option label="售票员" value=2></el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="submitAddEmployee(addEmployeeForm)">保存</el-button>
+                      <el-button @click="closeAddEmployeeDialog">取消</el-button>
+                    </el-form-item>
+                  </el-form>
+                </el-dialog>
               </el-row>
               <el-col :span="12">
                 <el-row type="flex">
@@ -70,40 +93,37 @@
                     width="150">
                   </el-table-column>
                   <el-table-column
-                    prop="keyword"
+                    prop="password"
                     label="密码"
                     width="200">
                   </el-table-column>
                   <el-table-column
                     label="操作">
-                    <el-button type="primary" size="mini" @click="">修改信息</el-button>
-                    <el-button type="danger" size="mini" @click="deleteEmployee(scope.row.id)">删除员工</el-button>
+                    <template slot-scope="scope">
+                      <el-button type="primary" size="mini" @click="updateEmployee(scope.row)">修改信息</el-button>
+                      <el-dialog title="修改员工信息" :visible.sync="updateEmployeeDialogVisiable">
+                        <el-form :model="updateEmployeeForm">
+                          <el-form-item label="用户名" prop="username">
+                            <el-input v-model="updateEmployeeForm.username" :disabled="true"></el-input>
+                          </el-form-item>
+                          <el-form-item label="身份">
+                            <el-select v-model="updateEmployeeForm.category" placeholder="请选择身份">
+                              <el-option label="经理" value=1></el-option>
+                              <el-option label="售票员" value=2></el-option>
+                            </el-select>
+                          </el-form-item>
+                          <el-form-item>
+                            <el-button type="primary" @click="submitUpdateEmployee(updateEmployeeForm)">保存</el-button>
+                            <el-button @click="closeUpdateEmployeeDialog">取消</el-button>
+                          </el-form-item>
+                        </el-form>
+                      </el-dialog>
+                      <el-button type="danger" size="mini" @click="deleteEmployee(scope.row.id)">删除员工</el-button>
+                    </template>
                   </el-table-column>
                 </el-table>
               </el-col>
               <el-col :span="12">
-                <el-row type="flex" justify="end">
-                  <el-dialog title="添加员工" :visible.sync="employeeDialogVisiable">
-                    <el-form :model="employeeForm" :rules="employeeRules" ref="ruleForm">
-                      <el-form-item label="用户名" prop="username">
-                        <el-input v-model="employeeForm.username"></el-input>
-                      </el-form-item>
-                      <el-form-item label="密码" prop="keyword">
-                        <el-input v-model="employeeForm.keyword"></el-input>
-                      </el-form-item>
-                      <el-form-item label="身份">
-                        <el-select v-model="employeeForm.category" placeholder="请选择身份">
-                          <el-option label="经理" value=1></el-option>
-                          <el-option label="售票员" value=2></el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item>
-                        <el-button type="primary" @click="addEmployee(employeeForm)">保存</el-button>
-                        <el-button @click="closeEmployeeDialog">取消</el-button>
-                      </el-form-item>
-                    </el-form>
-                  </el-dialog>
-                </el-row>
                 <el-row type="flex">
                   <el-col :span="2"></el-col>
                   <el-col :span="6">经理</el-col>
@@ -119,14 +139,16 @@
                     width="150">
                   </el-table-column>
                   <el-table-column
-                    prop="keyword"
+                    prop="password"
                     label="密码"
                     width="200">
                   </el-table-column>
                   <el-table-column
                     label="操作">
-                    <el-button type="primary" size="mini" @click="">修改信息</el-button>
-                    <el-button type="danger" size="mini" @click="deleteEmployee(scope.row.id)">删除员工</el-button>
+                    <template slot-scope="scope">
+                      <el-button type="primary" size="mini" @click="updateEmployee(scope.row)">修改信息</el-button>
+                      <el-button type="danger" size="mini" @click="deleteEmployee(scope.row.id)">删除员工</el-button>
+                    </template>
                   </el-table-column>
                 </el-table>
               </el-col>
@@ -144,15 +166,24 @@
       name: "AdminEmployeeManagement",
       data(){
           return{
+            isCollapse: false,
             rootData : [],
             salerData : [],
-            employeeDialogVisiable : false,
-            employeeForm: {
+            addEmployeeDialogVisiable : false,
+            updateEmployeeDialogVisiable : false,
+            addEmployeeForm: {
+              id: "",
               username: "",
-              keyword: "",
+              password: "",
+              passwordRepeat: "",
               category: ""
             },
-            employeeRules: {
+            updateEmployeeForm:{
+              id: "",
+              username: "",
+              category: ""
+            },
+            addEmployeeRules: {
 
             }
           }
@@ -184,41 +215,78 @@
 
         /*--------------------------------------------------*/
 
-        closeEmployeeDialog: function() {
-          this.employeeDialogVisiable = false;
-          this.resetEmployeeDialog();
+        closeAddEmployeeDialog: function() {
+          this.addEmployeeDialogVisiable = false;
+          this.resetAddEmployeeDialog();
         },
 
-        resetEmployeeDialog: function() {
-          this.employeeForm.username = "";
-          this.employeeForm.keyword = "";
-          this.employeeForm.category = "";
+        closeUpdateEmployeeDialog: function() {
+          this.updateEmployeeDialogVisiable = false;
+          this.resetUpdateEmployeeDialog();
+        },
+
+        resetAddEmployeeDialog: function() {
+          this.addEmployeeForm.id = "";
+          this.addEmployeeForm.username = "";
+          this.addEmployeeForm.password = "";
+          this.addEmployeeForm.passwordRepeat = "";
+          this.addEmployeeForm.category = "";
+        },
+
+        resetUpdateEmployeeDialog: function() {
+          this.updateEmployeeForm.id = "";
+          this.updateEmployeeForm.username = "";
+          this.updateEmployeeForm.category = "";
         },
 
         getEmployee: function() {
           this.rootData = [];
           this.salerData = [];
           getRoles().then(res => {
-            for (let employee in res.content){
-              if (employee.category === 1){
-                this.rootData.push(employee);
-              }
-              else {
-                this.salerData.push(employee);
-              }
+            for (let i = 0; i < res.content.length; i ++){
+              let employee = res.content[i];
+                if (employee.category === 1){
+                  this.rootData.push(employee);
+                }
+                else if (employee.category === 2) {
+                  this.salerData.push(employee);
+                }
             }
           })
         },
 
-        addEmployee: function(params) {
-          addRole(params.username, params.keyword, params.category).then(res => {
+        addEmployee: function() {
+          this.addEmployeeDialogVisiable = true;
+        },
+
+        updateEmployee: function(params) {
+          this.updateEmployeeDialogVisiable = true;
+          this.updateEmployeeForm.id = params.id;
+          this.updateEmployeeForm.username = params.username;
+          if (params.category === 1){
+            this.updateEmployeeForm.category = "经理";
+          }
+          else {
+            this.updateEmployeeForm.category = "售票员";
+          }
+        },
+
+        submitAddEmployee: function(params) {
+          if (params.password !== params.passwordRepeat) {
+            this.$message({
+              type: 'error',
+              message: '密码不一致'
+            });
+            return;
+          }
+          addRole(params).then(res => {
             this.getEmployee();
             if (res.success){
               this.$message({
                 type: 'success',
                 message: '添加成功!'
               });
-              this.closeEmployeeDialog();
+              this.closeAddEmployeeDialog();
             }
             else {
               this.$message({
@@ -227,18 +295,24 @@
               });
             }
           })
-
         },
 
-        updateEmployee: function(params) {
-          updateRole(params.id, params.category).then(res => {
-            this.getEmployee();
+        submitUpdateEmployee: function(params) {
+          console.log(params);
+          let sign;
+          if (params.category === "经理"){
+            sign = 1;
+          }
+          else {
+            sign = 2;
+          }
+          updateRole(params.id, sign).then(res => {
             if (res.success){
               this.$message({
                 type: 'success',
                 message: '修改成功!'
               });
-              this.closeEmployeeDialog();
+              this.closeUpdateEmployeeDialog();
             }
             else {
               this.$message({
@@ -249,21 +323,31 @@
           })
         },
 
+
         deleteEmployee: function (id) {
           this.$confirm('确认删除该员工？','提示',{})
             .then(() => {
-              alert(id);
-              // let res = deleteRole(id);
-              // if (res.success){
-              //   alert("删除成功");
-              //   this.getEmployee();
-              // }
-              // else {
-              //   alert(res.message);
-              // }
+              deleteRole(id).then(res => {
+                this.getEmployee();
+                if (res.success){
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  });
+                }
+                else {
+                  this.$message({
+                    type: 'error',
+                    message: res.message
+                  });
+                }
+              })
             })
             .catch(() => {})
         }
+      },
+      mounted: function () {
+        this.getEmployee();
       }
     }
 </script>

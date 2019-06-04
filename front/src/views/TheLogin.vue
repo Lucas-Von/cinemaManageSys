@@ -1,43 +1,32 @@
 <template >
   <div class="login-container" :style ="note">
 
-    <el-form :model="ruleForm2" :rules="rules2"
+    <el-form :model="loginForm" :rules="loginRules"
              status-icon
-             ref="ruleForm2"
+             ref="loginForm"
              label-position="left"
              label-width="0px"
-             class="demo-ruleForm login-page"
-    >
+             class="demo-ruleForm login-page">
 
-      <h2 class="title">系统登录</h2>
+      <h2 class="title">登录</h2>
       <br>
       <el-form-item prop="username">
-        <el-input type="text"
-                  v-model="ruleForm2.username"
-                  auto-complete="off"
-                  placeholder="用户名"
-        >
+        <el-input v-model="loginForm.username" placeholder="用户名">
           <template slot="prepend"><span class="fa fa-user fa-lg" style="width: 13px" ><i class="el-icon-user-solid"></i></span></template>
         </el-input>
       </el-form-item>
       <br>
       <el-form-item prop="password">
-        <el-input type="password"
-                  v-model="ruleForm2.password"
-                  auto-complete="off"
-                  placeholder="密码"
-                  show-password
-        >
+        <el-input v-model="loginForm.password" placeholder="密码" show-password>
           <template slot="prepend"><span class="fa fa-lock fa-lg" style="width: 13px"><i class="el-icon-key"></i></span></template>
         </el-input>
       </el-form-item>
-      <el-checkbox
-        v-model="checked"
-        class="rememberme"
-      >记住密码</el-checkbox>
+      <el-checkbox v-model="checked">
+        记住密码
+      </el-checkbox>
       <br><br>
       <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;" @click="handleSubmit" :loading="logining">登录</el-button>
+        <el-button type="primary" style="width:100%;" @click="submit(loginForm)" :loading="logining">登录</el-button>
       </el-form-item>
     </el-form>
     </div>
@@ -45,6 +34,7 @@
 
 
 <script>
+  import {login} from "../api/loginAPI"
   export default {
     data(){
       return {
@@ -54,125 +44,109 @@
           backgroundSize: "cover",
         },
         logining: false,
-        ruleForm2: {
-          username: '用户名',
-          password: '密码',
-          pwdType: 'password',
-          eyeType: 'fa fa-eye-slash fa-lg',
+        loginForm: {
+          username: '',
+          password: '',
         },
-        rules2: {
-          username: [{required: true, message: 'please enter your account', trigger: 'blur'}],
-          password: [{required: true, message: 'enter your password', trigger: 'blur'}]
+        loginRules: {
+          username: {
+            required: true,
+            message: '请输入用户名',
+            trigger: 'blur'},
+          password: {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur'}
         },
         checked: false
       }
     },
     methods: {
-      handleSubmit(event){
-        this.$refs.ruleForm2.validate((valid) => {
+      submit(params){
+        this.$refs.loginForm.validate((valid) => {
           if(valid){
             this.logining = true;
-            if(this.ruleForm2.username === 'admin' &&
-              this.ruleForm2.password === '123456'){
+            login(params).then(res => {
+              console.log(res);
               this.logining = false;
-              sessionStorage.setItem('user', this.ruleForm2.username);
-              this.$router.push({path: '/admin'});
-              if(this.rememberme){
-                this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
-              }else{
-                this.deleteCookie()
-              }
-            }else {
-              if (this.ruleForm2.username === 'root' &&
-                this.ruleForm2.password === '123456') {
-                this.logining = false;
-                sessionStorage.setItem('user', this.ruleForm2.username);
-                this.$router.push({path: '/root'});
-                if (this.rememberme) {
-                  this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
-                } else {
+              if (res.success){
+                this.$message({
+                  type: 'success',
+                  message: '登录成功!'
+                });
+
+                if(this.rememberme){
+                  this.setCookie(this.loginForm.username, this.loginForm.password, 7)
+                }else{
                   this.deleteCookie()
                 }
-              } else {
-                if (this.ruleForm2.username === 'user' &&
-                  this.ruleForm2.password === '123456') {
-                  this.logining = false;
-                  sessionStorage.setItem('user', this.ruleForm2.username);
-                  this.$router.push({path: '/user'});
-                  if (this.rememberme) {
-                    this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
-                  } else {
-                    this.deleteCookie()
-                  }
-                } else {
-                  if (this.ruleForm2.username === 'saler' &&
-                    this.ruleForm2.password === '123456') {
-                    this.logining = false;
-                    sessionStorage.setItem('user', this.ruleForm2.username);
-                    this.$router.push({path: '/saler'});
-                    if (this.rememberme) {
-                      this.setCookie(this.ruleForm2.username, this.ruleForm2.password, 7)
-                    } else {
-                      this.deleteCookie()
-                    }
-                  } else {
 
-                    this.logining = false;
-                    this.$alert('username or password wrong!', 'info', {
-                      confirmButtonText: 'ok'
-                    })
-                  }
+                let user = res.content;
+                sessionStorage.setItem('userId', user.id);
+
+                switch (user.category) {
+                  case 0:
+                    this.$router.push({path: '/user'});
+                    break;
+                  case 1:
+                    this.$router.push({path: '/root'});
+                    break;
+                  case 2:
+                    this.$router.push({path: '/saler'});
+                    break;
+                  case 3:
+                    this.$router.push({path: '/admin'});
+                    break;
+                  default:
+                    this.$message({
+                      type: 'error',
+                      message: '数据异常'
+                    });
                 }
               }
-            }
+              else {
+                this.$message({
+                  type: 'error',
+                  message: res.message
+                });
+              }
+            })
           }else{
             console.log('error submit!');
             return false;
           }
         })
       },
-      showPassword() {
-        if (this.pwdType === 'password') {
-          this.pwdType = '';
-          this.eyeType = 'fa fa-eye fa-lg'
-        } else {
-          this.pwdType = 'password';
-          this.eyeType = 'fa fa-eye-slash fa-lg'
-        }
-      },
       setCookie(name, pass, days){
-        let expire = new Date()
-        expire.setDate(expire.getDate() + days)
-        document.cookie = `C-username=${name};expires=${expire}`
-        document.cookie = `C-password=${pass};expires=${expire}`
+        let expire = new Date();
+        expire.setDate(expire.getDate() + days);
+        document.cookie = `C-username=${name};expires=${expire}`;
+        document.cookie = `C-password=${pass};expires=${expire}`;
       },
+
       getCookie(){
         if(document.cookie.length){
-          let arr = document.cookie.split('; ')
+          let arr = document.cookie.split('; ');
           for(let i=0; i<arr.length; i++){
-            let arr2 = arr[i].split('=')
+            let arr2 = arr[i].split('=');
             if(arr2[0] === 'C-username'){
-              this.ruleForm2.username = arr2[1]
+              this.loginForm.username = arr2[1];
             }else if(arr2[0] === 'C-password'){
-              this.ruleForm2.password = arr2[1]
-              this.rememberme = true
+              this.loginForm.password = arr2[1];
+              this.rememberme = true;
             }
           }
         }
       },
-// 修改为空，天数为-1
+
       deleteCookie(){
         this.setCookie('', '', -1);
       },
-
-
-  mounted(){
-    this.getCookie()
-    this.sds()
-  }
+  },
+    mounted(){
+      this.getCookie();
     }
-
-  };
+  }
 </script>
 
 <style scoped >

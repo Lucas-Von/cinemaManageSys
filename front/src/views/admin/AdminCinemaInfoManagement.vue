@@ -110,6 +110,7 @@
         name: "AdminCinemaInfoManagement",
       data() {
         return{
+          isCollapse: false,
           form : {
             name : "",
             address : "",

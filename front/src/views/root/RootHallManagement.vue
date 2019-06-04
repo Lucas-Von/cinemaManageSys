@@ -10,10 +10,6 @@
                :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
         <div >
           <el-menu default-active="4"
@@ -60,7 +56,7 @@
               <div>
                 <el-row type="flex" justify="end">
                   <el-button type="primary" class="label" @click="addHallInfo">添加影厅</el-button>
-                  <el-dialog title="添加影厅" :visible.sync="hallDialogVisiable">
+                  <el-dialog title="添加影厅" :visible.sync="hallDialogVisiable" :before-close="closeHallDialog">
                     <el-form :model="hallForm" :rules="hallRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="hallForm.name"></el-input>
@@ -73,10 +69,6 @@
                       </el-form-item>
                       <el-form-item label="列数" prop="hallCol">
                         <el-input v-model="hallForm.hallCol"></el-input>
-                      </el-form-item>
-                      <el-form-item>
-                        <el-button type="primary" @click="submitHallInfo(hallForm)">保存</el-button>
-                        <el-button @click="closeHallDialog">取消</el-button>
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary" @click="submitHallInfo(hallForm)">保存</el-button>
@@ -103,7 +95,7 @@
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="capicity"
+                        prop="size"
                         label="容量"
                         width="150"
                         sortable>
@@ -123,15 +115,10 @@
                       <el-table-column
                         label="操作"
                         width="200">
-<<<<<<< Updated upstream
                         <template slot-scope="scope">
                           <el-button type="primary" size="small" @click="updateHallInfo(scope.row)">修改影厅</el-button>
                           <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
                         </template>
-=======
-                        <el-button type="primary" size="small" @click="updateHallInfo(scope.row)">修改影厅</el-button>
-                        <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
->>>>>>> Stashed changes
                       </el-table-column>
                     </el-table>
                   </el-col>

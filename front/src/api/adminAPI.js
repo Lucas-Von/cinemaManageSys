@@ -8,24 +8,24 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production'
 
 //获取员工列表
 export const getRoles = () => {
-  return axios.get('/role/getAll')
+  return axios.get('/role/getAll').then(res => res.data)
 }
 
 
 
 //添加员工
-export const addRole =(username, password, category) => {
-  return axios.post('/role/add?username=' + username + '&password=' + password + '&category=' + category)
+export const addRole =(params) => {
+  return axios.post('/role/add', params).then(res => res.data)
 }
 
 //删除员工
 export const deleteRole = (userId) => {
-  return axios.post('/role/delete?userId=' + userId)
+  return axios.post('/role/delete?userId=' + userId).then(res => res.data)
 }
 
 //修改员工信息
 export const updateRole = (id, category) => {
-  return axios.post('/role/update?id=' + id + '&category=' + category)
+  return axios.post('/role/update?id=' + id + '&category=' + category).then(res => res.data)
 }
 
 //获取用户信息

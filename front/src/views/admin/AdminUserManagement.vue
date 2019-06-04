@@ -64,7 +64,7 @@
                 <el-col>
                   <el-table
                     :data="userData"
-                    stripe=true
+                    :stripe=true
                     height="600"
                     style="width: 80%">
                     <el-table-column
@@ -73,7 +73,7 @@
                       width="200">
                     </el-table-column>
                     <el-table-column
-                      prop="keyword"
+                      prop="password"
                       label="密码"
                       width="300">
                     </el-table-column>
@@ -100,20 +100,8 @@
       name: "AdminUserManagement",
       data() {
         return{
-          userData : [
-            {
-              username : "用户1",
-              keyword : "密码1"
-            },
-            {
-              username : "用户2",
-              keyword : "密码2"
-            },
-            {
-              username : "用户3",
-              keyword : "密码3"
-            }
-          ]
+          isCollapse: false,
+          userData : []
         }
       },
       methods : {

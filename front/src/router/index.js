@@ -16,7 +16,6 @@ import UserInfo from '@/views/user/UserInfo'
 import UserMovieList from '@/views/user/UserMovieList'
 import UserMyCard from '@/views/user/UserMyCard'
 import UserMyMovie from '@/views/user/UserMyMovie'
-import UserMyMovieUsed from '@/views/user/UserMyMovieUsed'
 import UserMyMovieOff from '@/views/user/UserMyMovieOff'
 import UserComing from '@/views/user/UserMovieListCominng'
 import MovieDetails from '@/views/user/MovieDetails'
@@ -60,7 +59,6 @@ export default new Router({
     {path: '/user',  name: 'UserContainer',  component: UserContainer,},
     {path: '/user/MovieList', name: '全部电影', component: UserMovieList, },
     {path: '/user/MyMovie', name: '我的电影票', component: UserMyMovie, },
-    {path: '/user/MyMovieUsed', name: '我的已使用电影票', component: UserMyMovieUsed, },
     {path: '/user/MyMovieOff', name: '我的已退票电影票', component: UserMyMovieOff, },
     {path: '/user/MyCard', name: '我的会员卡', component: UserMyCard, },
     {path: '/user/Info', name: '我的信息', component: UserInfo, },

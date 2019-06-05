@@ -11,6 +11,14 @@ export const getMovie =() => {
   return axios.get('/movie/all/exclude/off')
 }
 
+//获得优惠政策
+export const getActicity =() => {
+  return axios.get('/activity/get')
+}
+//获得会员卡充值政策
+export const getcardActicity =() => {
+  return axios.get('/vip/rechargeActivity/getAll')
+}
 //查看电影详情
 export const getMovieDetail =(id, userId) => {
   return axios.get('/movie/' + id + '/' + userId)
@@ -67,3 +75,4 @@ export const getRechargeRecord =(vipId) => {
 export const getConsumptionRecord =(userId) => {
   return axios.get('/record/consumption/getAll?userId=' + userId)
 }
+

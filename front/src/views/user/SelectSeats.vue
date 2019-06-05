@@ -142,13 +142,7 @@
       },
     methods: {
 
-      comp(){
-        for(let se in init){
-          let k=init[se]
-          this.ticket={rowIndex:((k-k%this.seats[0].length)/(this.seats[0].length))+1,columnIndex:k%this.seats[0].length+1,scheduleId:this.sh.id}
-          this.ticketALL=this.ticketALL.concat(this.ticket)
-        }
-      },
+
 
       changeState(k){
 
@@ -156,6 +150,7 @@
 
         if (index > -1) {
           this.init.splice(index, 1);
+          this.ticketALL.splice(index, 1);
         }else{
           this.ticket={rowIndex:((k-k%this.seats[0].length)/(this.seats[0].length))+1,columnIndex:k%this.seats[0].length+1,scheduleId:this.sh.id}
           this.init=this.init.concat(k)

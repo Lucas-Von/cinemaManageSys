@@ -75,7 +75,8 @@
             <span>语言：{{ids.language}}</span><br>
             <span>导演：{{ids.director}}</span><br>
             <span>主演：{{ids.starring}}</span><br>
-            <span>编剧：{{ids.screenWriter}}</span>
+            <span>编剧：{{ids.screenWriter}}</span><br>
+            <el-button><li class="el-icon-star-on" ></li></el-button>
           </div>
 
           <div>
@@ -164,6 +165,7 @@
 
       movieSh(){
         getMovieSchedule(this.ids.id).then((res)=>{
+          console.log(this.ids.id)
           this.result=res.data.content;
 
           console.log(this.result.scheduleItemList)
@@ -247,6 +249,7 @@
   img{
     margin-right: 20px
   }
+
 
 </style>
 

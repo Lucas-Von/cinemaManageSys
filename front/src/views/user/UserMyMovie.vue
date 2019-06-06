@@ -145,7 +145,10 @@
     },
     methods: {
       sds(){
+
         getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
+          console.log("fgdsaf")
+          console.log(res)
           console.log(res.data.content)
           for(let y in res.data.content){
             if(res.data.content[y].state==1){

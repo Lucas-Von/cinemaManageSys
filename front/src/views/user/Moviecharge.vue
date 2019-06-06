@@ -67,79 +67,46 @@
             <el-step title="选座" ></el-step>
             <el-step title="支付" ></el-step>
           </el-steps>
-          <!--<template>-->
-            <!--<el-table-->
-              <!--:data="scheduleItem"-->
-              <!--style="width: 100%">-->
-              <!--<el-table-column-->
-                <!--prop="date"-->
-                <!--label="海报"-->
-                <!--width="150">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px"><img :src="img"></span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="date"-->
-                <!--label="日期"-->
-                <!--width="150">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px">{{ scope.row.startTime.substring(0,10)}}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="startTime"-->
-                <!--label="放映开始时间"-->
-                <!--width="150">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px">{{ scope.row.startTime.substring(11,19)}}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="endTime"-->
-                <!--label="放映结束时间"-->
-                <!--width="150">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px">{{ scope.row.endTime.substring(11,19)}}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="province"-->
-                <!--label="放映厅"-->
-                <!--width="200">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px">{{ scope.row.hallName}}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="city"-->
-                <!--label="票价"-->
-                <!--width="200">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span style="margin-left: 10px">{{ scope.row.fare}}</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
 
-            <!--</el-table>-->
-          <!--</template>-->
-          <div v-for="(item,index) in scheduleItem">
+          <div v-for="(item,index) in ids">
             <el-col :span="6">
           <el-card  style="width: 210px;height: 350px;margin-top: 10px" >
-            <span><h1>{{item.movieName}}</h1></span>
+            <span><h1>{{scheduleItem.movieName}}</h1></span>
             <span><img :src="img" width="100px" height="120px"></span><br>
-            <span>影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{item.hallName}}</span><br>
-            <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{item.startTime.substring(0,10)}}</span><br>
-            <span>开始时间：{{item.startTime.substring(11,19)}}</span><br>
-            <span>结束时间：{{item.endTime.substring(11,19)}}</span><br>
-            <span>座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{ids[index].rowIndex}}排{{ids[index].columnIndex}}座</span>
+            <span>影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scheduleItem.hallName}}</span><br>
+            <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{scheduleItem.startTime.substring(0,10)}}</span><br>
+            <span>开始时间：{{scheduleItem.startTime.substring(11,19)}}</span><br>
+            <span>结束时间：{{scheduleItem.endTime.substring(11,19)}}</span><br>
+            <span>座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{item.rowIndex}}排{{item.columnIndex}}座</span>
           </el-card>
             </el-col>
           </div>
-          <el-col :span="6">
-            <span><h1>原&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.length*scheduleItem[0].fare}}</h1></span>
-            <span><h1>优惠政策：{{scheduleItem.length*scheduleItem[0].fare}}</h1></span>
+          <el-col :span="6" style="margin-left: 40px">
+            <span><h1>原&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length}}</h1></span><br>
+            <span><h1>优惠政策：{{coupon}}</h1></span><br>
+            <span><el-col :span="12" ><el-button style="width: 200px;margin-left: 40px;margin-top: 10px" @click="ComonBuy">普通支付</el-button></el-col>
+
+            </span><br><br><br><br><br><br><br><br>
+            <span >
+              <div v-if="vip">
+               <el-col :span="12" ><el-button style="width: 200px;margin-left: 40px;margin-top: 10px" @click="VipBuy">会员支付</el-button></el-col>
+
+          </div>
+            </span><br><br><br><br><br>
 
           </el-col>
+          <el-form v-show="false" :model="seat">
+            <el-form-item label="会员卡号" prop="scheduleId" >
+              <span v-text="seat.scheduleId">{{seat.scheduleId}}"</span>
+            </el-form-item>
+
+            <el-form-item label="充值金额" prop="userId">
+              <span v-text="seat.userId">{{seat.userId}}"</span>
+            </el-form-item>
+            <el-form-item label="充值金额" prop="sit">
+              <span v-text="seat.sit">{{seat.sit}}"</span>
+            </el-form-item>
+          </el-form>
         </el-main>
       </el-container>
     </el-container>
@@ -149,7 +116,7 @@
 
 <script>
   import {
-    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,getActicity
+    getMovie,getVIP,getOccupiedSeat,lockSeats,getCoupon,getCommonBuy,getTicketByUserId,getVipBuy
   }from "../../api/userAPI"
     export default {
         name: "Moviecharge",
@@ -158,13 +125,100 @@
           scheduleItem:[],
           isCollapse:false,
           ids:[],
+          total:'',
+          vip:'',
+          vipid:'',
+          ticketid:[],
           img:'',
           detail:[],
           movieid:'',
-          activity:[]
+          coupon:[],
+          lock:[],
+          sit:{
+            columnIndex:'',
+            rowIndex:'',
+          },
+          seat:{
+            scheduleId:'',
+            userId:'',
+            seats:''
+          },
         }
       },
       methods: {
+        VipBuy(){
+          this.$confirm('确认购买?', '提示', {})
+            .then(() => {
+              getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
+                for(let k in res.data.content){
+                  if(k>=res.data.content.length-this.ids.length){
+
+                    console.log(res.data.content[k])
+                    this.ticketid=this.ticketid.concat(Number(res.data.content[k].id))
+                  }
+                }
+                console.log(this.ticketid)
+                this.VipBuy2()
+
+              },(error) => console.log('promise catch err'));
+            })
+            .catch(() => { });
+
+        },
+
+        VipBuy2(){
+          getVipBuy(this.ticketid,0).then((res)=>{
+            console.log("fsadds")
+            console.log(res)
+            this.total=res.data.content.total
+
+          },(error) => console.log('promise catch err'));
+        },
+          ComonBuy(){
+            this.$confirm('确认购买?', '提示', {})
+              .then(() => {
+                getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
+                  for(let k in res.data.content){
+                    if(k>=res.data.content.length-this.ids.length){
+
+                      console.log(res.data.content[k])
+                      this.ticketid=this.ticketid.concat(Number(res.data.content[k].id))
+                    }
+                  }
+                  console.log(this.ticketid)
+                  this.ComonBuy2()
+
+                },(error) => console.log('promise catch err'));
+              })
+              .catch(() => { });
+
+
+
+
+          },
+
+
+        ComonBuy2(){
+            getCommonBuy(this.ticketid,0).then((res)=>{
+              console.log("fsadds")
+                console.log(res)
+              this.total=res.data.content.total
+
+              },(error) => console.log('promise catch err'));
+        },
+          judegeVip(){
+            getVIP(sessionStorage.getItem('userId')).then((res)=>{
+              if(res.data.content==null){
+                this.vip=false
+              }else{
+                this.vip=true
+                this.vipid=res.data.content.id
+                console.log(this.vipid)
+              }
+              console.log(res)
+
+            },(error) => console.log('promise catch err'));
+          },
         sds(){
           getMovie().then((res)=>{
             this.detail=res.data.content;
@@ -173,32 +227,54 @@
 
               if(this.detail[img].id==this.movieid){
                 this.img=this.detail[img].posterUrl
-                console.log("dfsds")
               }
             }
             console.log(this.detail)
           },(error) => console.log('promise catch err'));
         },
         acti(){
-          getActicity().then((res)=>{
-            this.activity=res.data.content;
-            console.log(this.activity)
+          getCoupon(sessionStorage.getItem('userId')).then((res)=>{
+            console.log("vfdf")
+            this.coupon=res.data.content
+            console.log(res)
 
           },(error) => console.log('promise catch err'));
         },
         movieSh() {
-          for (let k in this.ids){
-            getOccupiedSeat(this.ids[k].scheduleId).then((res) => {
-              this.scheduleItem=this.scheduleItem.concat(res.data.content.scheduleItem)
 
-              console.log(this.scheduleItem)
-              this.movieid=this.scheduleItem[0].movieId
+            getOccupiedSeat(this.ids[0].scheduleId).then((res) => {
+              this.movieid = res.data.content.scheduleItem.movieId
+              this.scheduleItem=res.data.content.scheduleItem
+              console.log(this.scheduleItem.startTime)
+              let arrayObj = [this.ids.length]
+              for (let k in this.ids) {
 
-            }, (error) => console.log('promise catch err'));
-          }
-
+                this.sit={
+                  columnIndex:this.ids[k].columnIndex,
+                    rowIndex:this.ids[k].rowIndex,
+                },
+                arrayObj[k]=this.sit
+              }
+              console.log(arrayObj)
+              this.seats=arrayObj
+              console.log("dsagfds")
+              console.log(this.seats)
+              this.locks()
+              },(error) => console.log('promise catch err'));
         },
+        locks(){
+          this.seat.scheduleId=this.ids[0].scheduleId
+          this.seat.userId=Number(sessionStorage.getItem('userId'))
+          this.seat.seats=this.seats
 
+          console.log("dsagfds")
+          console.log(this.seat.seats)
+
+          lockSeats(this.seat)(res => {
+            console.log("hhhhhh")
+
+          },(error) => console.log('promise catch err'));
+        },
         toggleSideBar() {
           this.isCollapse = !this.isCollapse
         },
@@ -245,10 +321,12 @@
       mounted() {
         let ids=this.$route.query.id;
         this.ids=ids
-        console.log(ids[0])
+        console.log("dfsa")
+        console.log(ids)
         this.movieSh()
         this.sds()
         this.acti()
+        this.judegeVip()
       }
     }
 

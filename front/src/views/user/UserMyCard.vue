@@ -76,18 +76,17 @@
                 <el-divider></el-divider>
               </div>
               <span style="margin: 80px">会员卡号:{{vipme.id}}</span><br><br><br><br>
-              <span style="margin: 80px">会员开始时间:{{vipme.joinDate.substring(0,10)}}&nbsp&nbsp&nbsp{{vipme.joinDate.substring(11,19)}}</span><br><br><br><br>
-              <span style="margin: 80px">余额{{vipme.balance}}</span><br><br>
+              <span style="margin: 80px">余&nbsp&nbsp&nbsp&nbsp&nbsp额：{{vipme.balance}}</span><br><br>
               <span style="margin: 80px">
 
               <el-button type="primary" class="label" @click="chargecard">充值会员卡</el-button>
                   <el-dialog title="充值会员卡" :visible.sync="chargevipDialogVisiable" :before-close="closeRechargeDialog">
-                      <el-form :model="chargevip">
-                        <el-form-item label="会员卡号" prop="name" >
+                      <el-form :model="chargevip" :rules="rule">
+                        <el-form-item label="会员卡号" prop="vipId" >
                           <el-input v-model="chargevip.vipId"></el-input>
                       </el-form-item>
 
-                        <el-form-item label="充值金额" prop="name">
+                        <el-form-item label="充值金额" prop="amount">
                         <el-input v-model="chargevip.amount"></el-input>
                       </el-form-item>
                       <el-form-item>
@@ -179,6 +178,7 @@
   import {
     getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,getTicketByUserId,getConsumptionRecord,getVIP,getRechargeRecord,addVIP,chargeVIP,getcardActicity
   }from "../../api/userAPI"
+  import {isInteger, isDecimalLessThanOne} from "../../api/util"
   export default {
 
     name: 'Container',
@@ -197,11 +197,26 @@
           vipId:'',
           amount:'',
         },
+        rule:{
+        vipId:{
+          require:true,
+          message: "请输入会员卡号",
+          trigger: "blur"
+        },
+      amount:[{
+        require: true,
+        message: "请输入充值金额",
+        trigger: "blur"
+      },{
+
+          validator: isInteger,
+          trigger: "blur"
+      }
+        ]
+      },
 
         tableData2: []
       }
-
-
     }
     ,
 
@@ -230,7 +245,7 @@
         this.rechaegecard(this.chargevip);
       },
       rechaegecard(m){
-        console.log(m)
+
         chargeVIP(m).then(res => {
           if (res.data.success){
             this.$message({
@@ -257,6 +272,7 @@
               message: '添加成功!'
             });
             this.closeRechargeDialog();
+            this.sds()
           }
           else {
             this.$message({

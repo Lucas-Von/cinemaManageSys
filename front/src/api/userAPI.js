@@ -11,10 +11,10 @@ export const getMovie =() => {
   return axios.get('/movie/all/exclude/off')
 }
 
-//获得优惠政策
-export const getActicity =() => {
-  return axios.get('/activity/get')
-}
+
+
+
+
 //获得会员卡充值政策
 export const getcardActicity =() => {
   return axios.get('/vip/rechargeActivity/getAll')
@@ -24,10 +24,25 @@ export const getMovieDetail =(id, userId) => {
   return axios.get('/movie/' + id + '/' + userId)
 }
 
+//普通购买
+export const getCommonBuy =(ticketId, couponId) => {
+  return axios.post('/ticket/buy?ticketId=' + ticketId+'&couponId='+couponId)
+}
+export const getVipBuy =(ticketId, couponId) => {
+  return axios.post('/ticket/vip/buy?ticketId=' + ticketId+'&couponId='+couponId)
+}
+
+//获得优惠券
+export const getCoupon =(userId) => {
+  return axios.get('/coupon/' + userId+'/get')
+}
+
 //标记电影为想看
 export const markMovie =(movieId, userId) => {
   return axios.post('/movie/' + movieId + '/like?userId=' + userId)
 }
+
+
 
 //搜索电影
 
@@ -54,6 +69,10 @@ export const addVIP =(userId) => {
 //充值会员卡
 export const chargeVIP =(params) => {
   return axios.post('/vip/charge', params)
+}
+
+export const lockSeats =(params) => {
+  return axios.post('/ticket/lockSeat',params)
 }
 
 //查看电影票

@@ -137,7 +137,8 @@
         imgUr2:require("@/assets/seatLock.png"),
         img:'',
         ticket:'',
-        ticketALL:[]
+        ticketALL:[],
+
       }
       },
     methods: {

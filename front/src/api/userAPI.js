@@ -23,7 +23,16 @@ export const getcardActicity =() => {
 export const getMovieDetail =(id, userId) => {
   return axios.get('/movie/' + id + '/' + userId)
 }
+export const outMovie =(salesId) => {
+  return axios.post('/ticket/out/?salesId='+salesId)
+}
+export const refundMovie =(salesId) => {
+  return axios.post('/ticket/refund/?salesId='+salesId)
+}
 
+export const getMovieSchedule =(movieId) => {
+  return axios.get('/schedule/search/audience?movieId=' + movieId)
+}
 //普通购买
 export const getCommonBuy =(ticketId, couponId) => {
   return axios.post('/ticket/buy?ticketId=' + ticketId+'&couponId='+couponId)
@@ -47,9 +56,7 @@ export const markMovie =(movieId, userId) => {
 //搜索电影
 
 //查看排片信息
-export const getMovieSchedule =(movieId) => {
-  return axios.get('/schedule/search/audience?movieId=' + movieId)
-}
+
 
 //查看特定场次的座位信息
 export const getOccupiedSeat =(scheduleId) => {

@@ -77,7 +77,9 @@
             <el-row style="margin: 10px" >
               <div v-for="(item2,index2) in item" >
                 <el-col :span="1.8">
-                  <el-button style="width: 70px;height: 50px"  v-show="txt[Number(index1*10)+Number(index2)]==0||1" @click="changeState(Number(index1*10)+Number(index2))"><img :src="!isInArray(init,txt[Number(index1*10)+Number(index2)].id+1)? imgUrl : imgUr2"></el-button>
+                  <el-button style="width: 70px;height: 50px"  v-if="txt[Number(index1*10)+Number(index2)].value==1" disabled><img :src=" imgUr2"></el-button>
+
+                  <el-button style="width: 70px;height: 50px" v-if="txt[Number(index1*10)+Number(index2)].value==0"  @click="changeState(Number(index1*10)+Number(index2))"><img :src="(txt[Number(index1*10)+Number(index2)].value==1)||isInArray(init,txt[Number(index1*10)+Number(index2)].id+1)? imgUr3 : imgUrl"></el-button>
                 </el-col>
               </div>
             </el-row>
@@ -135,6 +137,7 @@
         index2:'',
         imgUrl:require("@/assets/seatChoose.png"),
         imgUr2:require("@/assets/seatLock.png"),
+        imgUr3:require("@/assets/seat.png"),
         img:'',
         ticket:'',
         ticketALL:[],
@@ -177,7 +180,7 @@
           this.seats=this.result.seats
           this.sh=this.result.scheduleItem
           console.log(this.result.scheduleItem)
-          console.log(this.result.seats)
+          console.log(this.result)
           for(let index in this.result.seats) {
             for(let index2 in this.result.seats[index]) {
               this.txt=this.txt.concat({id:Number(index*10)+Number(index2),value:this.result.seats[index][index2]})

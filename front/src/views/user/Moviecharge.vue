@@ -171,12 +171,13 @@
             console.log("fsadds")
             console.log(res)
             this.total=res.data.content.total
+            alert("购票成功")
+            this.$router.push({path: '/user/MyMovie'});
 
           },(error) => console.log('promise catch err'));
         },
           ComonBuy(){
-            this.$confirm('确认购买?', '提示', {})
-              .then(() => {
+            this.$confirm('确认购买?', '提示', {}).then(() => {
                 getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
                   for(let k in res.data.content){
                     if(k>=res.data.content.length-this.ids.length){
@@ -189,7 +190,9 @@
                   this.ComonBuy2()
 
                 },(error) => console.log('promise catch err'));
-              })
+              }
+
+              )
               .catch(() => { });
 
 
@@ -203,6 +206,8 @@
               console.log("fsadds")
                 console.log(res)
               this.total=res.data.content.total
+              alert("购票成功")
+              this.$router.push({path: '/user/MyMovie'});
 
               },(error) => console.log('promise catch err'));
         },

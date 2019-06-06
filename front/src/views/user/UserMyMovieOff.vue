@@ -113,10 +113,11 @@
                   </el-table-column>
                   <el-table-column fixed="right" label="状态">
                     <template slot-scope="scope">
-                      <span v-show="scope.row.state==1">未付款</span>
-                      <span v-show="scope.row.state==2">已支付</span>
-                      <span v-show="scope.row.state==3">已退票</span>
-                      <span v-show="scope.row.state==4">已出票</span>
+                      <span v-show="scope.row.state==0">未付款</span>
+                      <span v-show="scope.row.state==1">已支付</span>
+                      <span v-show="scope.row.state==2">已失效</span>
+                      <span v-show="scope.row.state==4">已退票</span>
+                      <span v-show="scope.row.state==3">已出票</span>
                     </template>
                   </el-table-column>
                 </el-table>

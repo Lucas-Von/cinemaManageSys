@@ -112,8 +112,8 @@
                   </el-table-column>
                   <el-table-column fixed="right" label="操作">
                     <template slot-scope="scope">
-                      <el-button @click.native.prevent="deleteRow(scope.$index, infiledList,outfiledList)" size="small"> 出票 </el-button>
-                      <el-button @click.native.prevent="deleteRow(scope.$index, infiledList)" size="small"> 退票 </el-button>
+                      <el-button @click.native.prevent="outRow(scope.row.id)" size="small"> 出票 </el-button>
+                      <el-button @click.native.prevent="reRow(scope.row.id)" size="small"> 退票 </el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -129,7 +129,7 @@
 
 <script>
   import {
-    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,getTicketByUserId,getConsumptionRecord
+    outMovie,getConsumptionRecord,refundMovie
   }from "../../api/userAPI"
   export default {
 
@@ -147,7 +147,7 @@
       sds(){
 
         getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
-          console.log("fgdsaf")
+
           console.log(res)
           console.log(res.data.content)
           for(let y in res.data.content){
@@ -158,7 +158,7 @@
           console.log(this.infiledList)
         },(error) => console.log('promise catch err'));
       },
-      deleteRow(index, rows,outfiledList) {
+      reRow(salesId) {
         this.$confirm('此操作将在影厅出票, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -167,20 +167,38 @@
           this.$message({
               type: 'success',
               message: '出票成功!',
-            },
 
-            rows.splice(index, 1),
-            outfiledList.push( {
-              picture:require("@/assets/test1.jpg"),
-              date: '2016-05-10',
-              name: '王小虎',
-              state:'已完成',
-              film: '建国大业',
-              room:'一号厅',
-              open:'2019-8-10 12:12',
-              seat:'三排5座 三排4座',
-              money:'66',
-              num:2,
+            },
+            refundMovie(salesId).then((res)=>{
+
+              console.log(res)
+              console.log(res.data.content)
+              this.$router.push({path: '/user/MyMovie'});
+            })
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消出票'
+          });
+        });
+      },
+      outRow(salesId) {
+        this.$confirm('此操作退票, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+              type: 'success',
+              message: '退票成功!',
+
+            },
+            outMovie(salesId).then((res)=>{
+
+              console.log(res)
+              console.log(res.data.content)
+              this.$router.push({path: '/user/MyMovie'});
             })
           );
         }).catch(() => {
@@ -219,26 +237,7 @@
           this.orderuse=false
         }
       },
-      open() {
 
-        this.$confirm('此操作将在影厅出票, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '出票成功!',
-
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消出票'
-          });
-        });
-        this.show = false;
-      },
       handleDelete(index, row) {
         console.log(index, row);
       },

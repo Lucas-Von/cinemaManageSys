@@ -12,7 +12,8 @@
         <div >
           <!-- 我是样例菜单 -->
 
-          <el-menu class="el-menu-vertical-demo"
+          <el-menu default-active="2"
+                   class="el-menu-vertical-demo"
                    @open="handleOpen"
                    :collapse="isCollapse">
 
@@ -32,8 +33,8 @@
               <i class="el-icon-setting" @click="toActivityPublishment"></i>
               <span slot="title">优惠劵发布策略</span>
             </el-menu-item>
-            <el-menu-item index="5" @click="logout">
-              <i class="el-icon-setting"></i>
+            <el-menu-item index="5">
+              <i class="el-icon-setting" @click="logout"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
@@ -41,11 +42,8 @@
       </el-aside>
 
       <el-container>
-
         <el-main class="app-body">
-          <template>
-            <router-view/>
-          </template>
+
         </el-main>
       </el-container>
     </el-container>
@@ -53,58 +51,38 @@
 </template>
 
 <script>
-  export default {
-    name: 'Container',
-    data() {
-      return {
-        username: '',
-        isCollapse: false
+    export default {
+        name: "SalerScheduleManagement",
+      data() {
+        return{
+
+        }
+      },
+      methods: {
+        toActivityPublishment: function() {
+          this.$router.push({path: '/saler/ActivityPublishment'});
+        },
+        toMovie: function() {
+          this.$router.push({path: '/saler/Movie'});
+        },
+        toScheduleManagement: function() {
+          this.$router.push({path: '/saler/ScheduleManagement'});
+        },
+        toStatistics: function() {
+          this.$router.push({path: '/saler/Statistics'});
+        },
+        logout: function () {
+          this.$confirm('确认退出?', '提示', {})
+            .then(() => {
+              sessionStorage.removeItem('user');
+              this.$router.push('/login');
+            })
+            .catch(() => { });
+        }
       }
-    },
-    methods: {
-      toggleSideBar() {
-        this.isCollapse = !this.isCollapse
-      },
-      toActivityPublishment: function() {
-        this.$router.push({path: '/saler/ActivityPublishment'});
-      },
-      toMovie: function() {
-        this.$router.push({path: '/saler/Movie'});
-      },
-      toScheduleManagement: function() {
-        this.$router.push({path: '/saler/ScheduleManagement'});
-      },
-      toStatistics: function() {
-        this.$router.push({path: '/saler/Statistics'});
-      },
-      logout: function () {
-        this.$confirm('确认退出?', '提示', {})
-          .then(() => {
-            sessionStorage.removeItem('user');
-            this.$router.push('/login');
-          })
-          .catch(() => { });
-      },
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
-    },
-    mounted: function () {
-      let user = sessionStorage.getItem('user');
-      if (user) {
-        this.username = user;
-      }
-    },
-  }
+    }
 </script>
 
-<style>
+<style scoped>
+
 </style>
-
-

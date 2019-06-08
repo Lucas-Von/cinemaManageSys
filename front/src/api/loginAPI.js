@@ -9,4 +9,9 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production'
 //登陆
 export const login = (params) => {
   return axios.post('/login', params).then(res => res.data)
-}
+};
+
+//注册
+export const register = (params) => {
+  return axios.post('/register', params).then(res => res.data)
+};

@@ -147,7 +147,7 @@
                 <el-row type="flex" justify="end">
                   <el-button type="primary" class="label" @click="addTicket">添加优惠</el-button>
                   <el-dialog title="添加购票优惠" :visible.sync="ticketDialogVisiable" :before-close="closeTicketDialog">
-                    <el-form :model="ticketForm" :rules="ticketRules" ref="ruleForm">
+                    <el-form :model="ticketForm" :rules="ticketRules" ref="ticketForm">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="ticketForm.name"></el-input>
                       </el-form-item>

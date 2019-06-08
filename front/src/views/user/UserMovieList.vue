@@ -82,7 +82,6 @@
             </template>
 
           <div class="container">
-
             <div class="canvas" v-show="loading">
               <div class="spinner"></div>
             </div>
@@ -126,7 +125,6 @@
     name: 'Container',
     data() {
       return {
-
         loading: true,
         title: '',
         result:[],

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/views/TheLogin'
+import Login from '@/views/Login'
+import Register from '@/views/Register'
 import AdminContainer from '@/container/AdminContainer'
 import AdminEmployeeManagement from '@/views/admin/AdminEmployeeManagement'
 import AdminUserManagement from '@/views/admin/AdminUserManagement'
@@ -11,6 +12,11 @@ import RootVIPActivity from '@/views/root/RootVIPActivity'
 import RootRefundStrategy from '@/views/root/RootRefundStrategy'
 import RootHallManagement from '@/views/root/RootHallManagement'
 import SalerContainer from '@/container/SalerContainer'
+import SalerActivityPulishment from '@/views/saler/SalerActivityPublishment'
+import SalerMovie from '@/views/saler/SalerMovie'
+import SalerMovieDetails from '@/views/saler/SalerMovieDetails'
+import SalerStatistics from '@/views/saler/SalerStatistics'
+import SalerScheduleManagement from '@/views/saler/SalerScheduleManagement'
 import UserContainer from '@/container/UserContainer'
 import UserInfo from '@/views/user/UserInfo'
 import UserMovieList from '@/views/user/UserMovieList'
@@ -26,26 +32,11 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/admin',
-      name: 'AdminContainer',
-      component: AdminContainer
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/root',
-      name: 'RootContainer',
-      component: RootContainer
-    },
-    {
-      path: '/user',
-      name: 'UserContainer',
-      component: UserContainer,
-    },
+    {path: '/admin', name: 'AdminContainer', component: AdminContainer},
+    {path: '/login', name: 'Login', component: Login},
+    {path: '/register', name: 'Register', component: Register},
+    {path: '/root', name: 'RootContainer', component: RootContainer},
+    {path: '/user', name: 'UserContainer', component: UserContainer,},
     {path: '/', name: 'Login', component: Login},
     {path: '/login', name: 'Login', component: Login},
     {path: '/admin', name: 'AdminContainer', component: AdminContainer},
@@ -64,19 +55,15 @@ export default new Router({
     {path: '/user/MyMovieOff', name: '我的已退票电影票', component: UserMyMovieOff, },
     {path: '/user/MyCard', name: '我的会员卡', component: UserMyCard, },
     {path: '/user/Info', name: '我的信息', component: UserInfo, },
-
     {path: '/user/Coming', name: '即将上映', component: UserComing, },
-    {
-      path: '/Saler',
-      name: 'SalerContainer',
-      component: SalerContainer},
-    {path: '/saler', name: 'SalerContainer', component: SalerContainer
-    },
-    {path: '/user/MovieDetails/:id', name: 'MovieDetails', component: MovieDetails,
-    },
-    {path: '/user/SelectSeats/:id', name: 'SelectSeats', component: SelectSeats,
-    },
-    {path: '/user/Moviecharge/:id', name: 'Moviecharge', component: Moviecharge,
-    },
+    {path: '/saler', name: 'SalerContainer', component: SalerContainer},
+    {path: '/saler/ActivityPublishment', name: 'SalerActivityPublishment', component: SalerActivityPulishment},
+    {path: '/saler/Movie', name: 'SalerMovie', component: SalerMovie},
+    {path: '/saler/MovieDetails', name: 'SalerMovieDetails', component: SalerMovieDetails},
+    {path: '/saler/Statistics', name: 'SalerStatistics', component: SalerStatistics},
+    {path: '/saler/ScheduleManagement', name: 'SalerScheduleManagement', component: SalerScheduleManagement},
+    {path: '/user/MovieDetails/:id', name: 'MovieDetails', component: MovieDetails,},
+    {path: '/user/SelectSeats/:id', name: 'SelectSeats', component: SelectSeats,},
+    {path: '/user/Moviecharge/:id', name: 'Moviecharge', component: Moviecharge,},
   ]
 })

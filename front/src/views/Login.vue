@@ -26,7 +26,8 @@
       </el-checkbox>
       <br><br>
       <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;" @click="submit(loginForm)" :loading="logining">登录</el-button>
+        <el-button type="primary" style="width:60%;" @click="submit(loginForm)" :loading="logining">登录</el-button>
+        <el-button style="width:30%;" @click="toRegister" >注册</el-button>
       </el-form-item>
     </el-form>
     </div>
@@ -62,12 +63,15 @@
       }
     },
     methods: {
+      toRegister: function() {
+        this.$router.push({path: '/register'});
+      },
+
       submit(params){
         this.$refs.loginForm.validate((valid) => {
           if(valid){
             this.logining = true;
             login(params).then(res => {
-              console.log(res);
               this.logining = false;
               if (res.success){
                 this.$message({
@@ -75,7 +79,7 @@
                   message: '登录成功!'
                 });
 
-                if(this.rememberme){
+                if(this.checked){
                   this.setCookie(this.loginForm.username, this.loginForm.password, 7)
                 }else{
                   this.deleteCookie()
@@ -133,7 +137,7 @@
               this.loginForm.username = arr2[1];
             }else if(arr2[0] === 'C-password'){
               this.loginForm.password = arr2[1];
-              this.rememberme = true;
+              this.checked = true;
             }
           }
         }
@@ -168,7 +172,7 @@
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
   }
-  label.el-checkbox.rememberme {
+  label.el-checkbox.checked {
     margin: 0px 0px 15px;
     text-align: left;
   }

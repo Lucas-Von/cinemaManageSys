@@ -235,9 +235,9 @@
     },
     mounted() {
       let ids=this.$route.query.id;
-      console.log(this.$route.query.id)
-      this.ids=ids
-      this.movieSh(this.ids)
+      console.log(this.$route.query.id);
+      this.ids=ids;
+      this.movieSh(this.ids);
     }
   }
 

@@ -53,6 +53,15 @@ export const markMovie =(movieId, userId) => {
 
 
 
+export const LikeMovie =(id, userId) => {
+  return axios.get('/movie/' + id + '/' + userId)
+}
+
+export const easeMovie =(movieId, userId) => {
+  return axios.post('/movie/' + movieId + '/unlike?userId=' + userId)
+}
+
+
 //搜索电影
 
 //查看排片信息
@@ -87,6 +96,16 @@ export const getTicketByUserId =(userId) => {
   return axios.get('/ticket/get/' + userId)
 }
 
+
+export const getLockTicketByUserId =(userId) => {
+  return axios.get('/ticket/get/lockedTickets?userId=' + userId)
+}
+
+
+
+export const checkTicketByUserId =(userId) => {
+  return axios.get('/ticket/checkLocked?userId=' + userId)
+}
 //退票
 export const refundTicket =(salesId) => {
   return axios.post('/ticket/refund?salesId=' + salesId)

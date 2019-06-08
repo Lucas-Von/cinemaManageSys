@@ -71,11 +71,14 @@
                   text-color="#fff"
                   active-text-color="#ffd04b"
                 >
-                  <el-col :span="12" >
+                  <el-col :span="8" >
                     <el-menu-item index="1" @click="toUsed">待使用</el-menu-item>
                   </el-col>
+                  <el-col :span="8" >
+                    <el-menu-item index="1" @click="toCharge">去支付</el-menu-item>
+                  </el-col>
 
-                  <el-col :span="12">
+                  <el-col :span="8">
                     <el-menu-item index="2" @click="offUsed">购买记录</el-menu-item>
                   </el-col>
 
@@ -159,14 +162,14 @@
         },(error) => console.log('promise catch err'));
       },
       reRow(salesId) {
-        this.$confirm('此操作将在影厅出票, 是否继续?', '提示', {
+        this.$confirm('此操作将退票, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$message({
               type: 'success',
-              message: '出票成功!',
+              message: '退票成功!',
 
             },
             refundMovie(salesId).then((res)=>{
@@ -179,27 +182,26 @@
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消出票'
+            message: '已取消退票'
           });
         });
       },
+      out(k){
+        outMovie(k).then((res)=>{
+          this.$router.push({path: '/user/MyMovie'});
+        })
+      },
       outRow(salesId) {
-        this.$confirm('此操作退票, 是否继续?', '提示', {
+        this.$confirm('此操作将在影院出票，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$message({
               type: 'success',
-              message: '退票成功!',
-
+              message: '出票成功!',
             },
-            outMovie(salesId).then((res)=>{
-
-              console.log(res)
-              console.log(res.data.content)
-              this.$router.push({path: '/user/MyMovie'});
-            })
+            this.out(salesId)
           );
         }).catch(() => {
           this.$message({
@@ -255,6 +257,9 @@
       },
       toUsed(event){
         this.$router.push({path: '/user/MyMovie'});
+      },
+      toCharge(event){
+        this.$router.push({path: '/user/MyMovieBuy'});
       },
 
       offUsed(event){

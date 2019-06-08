@@ -82,7 +82,6 @@
                     <el-menu-item index="2" @click="offUsed">购买记录</el-menu-item>
                   </el-col>
 
-
                 </el-menu>
 
               </div>
@@ -92,12 +91,8 @@
           <el-form   ref="inServForm" size="small">
             <el-form-item >
               <template>
-                <el-table border :data="infiledList" style="width: 100%" >
-                  <el-table-column prop="fildna" label="日期" style="width:6vw;" sortable>
-                    <template slot-scope="scope">
-                      <span style="margin-left: 10px">{{scope.row.time.substring(0,10)}}&nbsp&nbsp&nbsp{{scope.row.time.substring(11,19)}}</span>
-                    </template>
-                  </el-table-column>
+                <el-table border :data="infiledList" style="width: 100%" v-if="infiledList.length>0">
+
                   <el-table-column prop="fildna" label="海报" style="width:6vw;" >
                     <template slot-scope="scope">
                       <img :src=scope.row.posterUrl class="image" height="200px">
@@ -114,17 +109,13 @@
                       <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.totalPrice }}<br></span>
                     </template>
                   </el-table-column>
-                  <el-table-column fixed="right" label="状态">
-                    <template slot-scope="scope">
-                      <span v-show="scope.row.state==0">未付款</span>
-                      <span v-show="scope.row.state==1">已支付</span>
-                      <span v-show="scope.row.state==2">已失效</span>
-                      <span v-show="scope.row.state==4">已退票</span>
-                      <span v-show="scope.row.state==3">已出票</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column fixed="right" label="操作">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<el-button @click.native.prevent="outRow(scope.row.id)" size="small"> 取消锁座 </el-button>-->
+                      <!--<el-button @click.native.prevent="reRow(scope.row.id)" size="small"> 去支付 </el-button>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                 </el-table>
-
               </template>
             </el-form-item>
           </el-form>
@@ -136,29 +127,33 @@
 
 <script>
   import {
-    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,getTicketByUserId,getConsumptionRecord
+    outMovie,refundMovie,getLockTicketByUserId
   }from "../../api/userAPI"
   export default {
+
     name: 'Container',
-      data() {
-        return {
-          show:true,
-          isDisabled:false,
-          username: '',
-          isCollapse: false,
-          infiledList:[],
-        }
+    data() {
+      return {
+        show:true,
+        isDisabled:false,
+        username: '',
+        isCollapse: false,
+        infiledList:[],
+        tickets:[]
+      }
+    },
+    methods: {
+      sds(){
+
+        getLockTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
+          console.log(res.data.content)
+          this.infiledList=this.infiledList.concat(res.data.content)
+
+          console.log(this.infiledList)
+        },(error) => console.log('promise catch err'));
       },
-      methods: {
-        sds(){
-          getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
-            console.log(res.data.content)
-            this.infiledList=res.data.content
-            console.log(this.infiledList)
-          },(error) => console.log('promise catch err'));
-        },
-      deleteRow(index, rows,outfiledList) {
-        this.$confirm('此操作将在影厅出票, 是否继续?', '提示', {
+      reRow(salesId) {
+        this.$confirm('此操作将退票, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -168,18 +163,36 @@
               message: '出票成功!',
 
             },
-            rows.splice(index, 1),
-            outfiledList.push( {
-              picture:require("@/assets/test1.jpg"),
-              date: '2016-05-10',
-              name: '王小虎',
-              state:'已完成',
-              film: '建国大业',
-              room:'一号厅',
-              open:'2019-8-10 12:12',
-              seat:'三排5座 三排4座',
-              money:'66',
-              num:2,
+            refundMovie(salesId).then((res)=>{
+
+              console.log(res)
+              console.log(res.data.content)
+              this.$router.push({path: '/user/MyMovie'});
+            })
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消出票'
+          });
+        });
+      },
+      outRow(salesId) {
+        this.$confirm('此操作将在影院出票，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+              type: 'success',
+              message: '退票成功!',
+
+            },
+            outMovie(salesId).then((res)=>{
+
+              console.log(res)
+              console.log(res.data.content)
+              this.$router.push({path: '/user/MyMovie'});
             })
           );
         }).catch(() => {
@@ -218,26 +231,7 @@
           this.orderuse=false
         }
       },
-      open() {
 
-        this.$confirm('此操作将在影厅出票, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '出票成功!',
-
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消出票'
-          });
-        });
-        this.show = false;
-      },
       handleDelete(index, row) {
         console.log(index, row);
       },
@@ -256,10 +250,9 @@
       toUsed(event){
         this.$router.push({path: '/user/MyMovie'});
       },
-        toCharge(event){
-          this.$router.push({path: '/user/MyMovieBuy'});
-        },
-
+      toCharge(event){
+        this.$router.push({path: '/user/MyMovieBuy'});
+      },
       offUsed(event){
         this.$router.push({path: '/user/MyMovieOff'});
       },
@@ -293,5 +286,6 @@
     color: #333;
   }
 </style>
+
 
 

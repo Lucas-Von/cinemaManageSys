@@ -77,15 +77,14 @@
             <el-row style="margin: 10px" >
               <div v-for="(item2,index2) in item" >
                 <el-col :span="1.8">
-                  <el-button style="width: 70px;height: 50px"  v-if="txt[Number(index1*10)+Number(index2)].value==1" disabled><img :src=" imgUr2"></el-button>
-
-                  <el-button style="width: 70px;height: 50px" v-if="txt[Number(index1*10)+Number(index2)].value==0"  @click="changeState(Number(index1*10)+Number(index2))"><img :src="(txt[Number(index1*10)+Number(index2)].value==1)||isInArray(init,txt[Number(index1*10)+Number(index2)].id+1)? imgUr3 : imgUrl"></el-button>
+                  <el-button style="width: 70px;height: 50px" v-if="txt[Number(index1*seats[0].length)+Number(index2)].value==1" disabled><img :src=" imgUr2"></el-button>
+                  <el-button style="width: 70px;height: 50px" v-if="txt[Number(index1*seats[0].length)+Number(index2)].value==0"  @click="changeState(Number(index1*seats[0].length)+Number(index2)+1)"><img :src="isInArray(init,txt[Number(index1*seats[0].length)+Number(index2)].id+1)? imgUr3 : imgUrl"></el-button>
                 </el-col>
               </div>
             </el-row>
           </div>
             <div v-for="se in init">
-              <span style="margin: 250px">已选座位：{{((se-se%seats[0].length)/(seats[0].length))+1}}排{{se%seats[0].length+1}}座</span>
+              <span style="margin: 250px">已选座位：{{((se-col(se))/(seats[0].length))+1}}排{{col(se)}}座</span>
             </div>
           </el-col>
 
@@ -99,7 +98,7 @@
             <span>结束时间：{{ids.endTime.substring(11,19)}}</span><br>
 
             <div v-for="se in init">
-              <span>已选座位：{{((se-se%seats[0].length)/(seats[0].length))+1}}排{{se%seats[0].length+1}}座</span>
+              <span>已选座位：{{((se-col(se))/(seats[0].length))+1}}排{{col(se)}}座</span>
             </div>
             <span>票&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{ids.fare*init.length}}</span><br>
             <router-link :to="{path:'/user/Moviecharge/id',query:{id:ticketALL}}">
@@ -129,10 +128,11 @@
         result:[],
         detail:[],
         ids:[],
-        seats:[],
+        seats:'',
         sh:[],
+
         name:'',
-        txt:[[]],
+        txt:[{}],
         index1:'',
         index2:'',
         imgUrl:require("@/assets/seatChoose.png"),
@@ -145,7 +145,13 @@
       }
       },
     methods: {
-
+      col(k){
+        if(k%this.seats[0].length==0){
+          return this.seats[0].length
+        }else{
+          return k%this.seats[0].length
+        }
+      },
 
 
       changeState(k){
@@ -174,18 +180,26 @@
                 return false;
               },
       movieSh(){
+        console.log(this.ids.id)
         getOccupiedSeat(this.ids.id).then((res)=>{
+          console.log(this.ids.id)
           var n=0
+          console.log("fdsgaf")
+          console.log(res)
           this.result=res.data.content;
           this.seats=this.result.seats
+          console.log(this.seats)
           this.sh=this.result.scheduleItem
+          let hh=[this.seats.length*this.seats[0].length]
           console.log(this.result.scheduleItem)
-          console.log(this.result)
+          console.log(this.seats)
           for(let index in this.result.seats) {
             for(let index2 in this.result.seats[index]) {
-              this.txt=this.txt.concat({id:Number(index*10)+Number(index2),value:this.result.seats[index][index2]})
+              hh[Number(index*this.seats[0].length)+Number(index2)]={id:Number(index*this.seats[0].length)+Number(index2),value:this.result.seats[index][index2]}
             };
           };
+          this.txt=hh
+          console.log(hh)
           console.log(this.txt)
           console.log(this.result.seats.length)
         },(error) => console.log('promise catch err'));

@@ -77,19 +77,37 @@
             <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{scheduleItem.startTime.substring(0,10)}}</span><br>
             <span>开始时间：{{scheduleItem.startTime.substring(11,19)}}</span><br>
             <span>结束时间：{{scheduleItem.endTime.substring(11,19)}}</span><br>
-            <span>座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{item.rowIndex}}排{{item.columnIndex}}座</span>
+            <span>座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{item.rowIndex}}排{{item.columnIndex-1}}座</span>
           </el-card>
             </el-col>
           </div>
           <el-col :span="6" style="margin-left: 40px">
             <span><h1>原&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length}}</h1></span><br>
-            <span><h1>优惠政策：{{coupon}}</h1></span><br>
-            <span><el-col :span="12" ><el-button style="width: 200px;margin-left: 40px;margin-top: 10px" @click="ComonBuy">普通支付</el-button></el-col>
+            <span>
+              <el-col :span="8">
+              <h1>优惠券：</h1></el-col>
+              <el-col :span="16">
+              <template>
+                  <el-select v-model="name" placeholder="请选择" style="margin-top: 10px">
+                    <el-option
+                      v-for="item in coupon"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.name">
+                    </el-option>
+                  </el-select>
+                </template></el-col></span>
+            <br><br><br><br>
+            <span><h1>现&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length}}</h1></span><br>
 
-            </span><br><br><br><br><br><br><br><br>
+            <span>
+
+              <el-col :span="12" ><el-button style="width: 200px;margin-left: 0px;margin-top: 5px" @click="ComonBuy">普通支付</el-button></el-col>
+
+            </span><br><br><br><br>
             <span >
               <div v-if="vip">
-               <el-col :span="12" ><el-button style="width: 200px;margin-left: 40px;margin-top: 10px" @click="VipBuy">会员支付</el-button></el-col>
+               <el-col :span="12" ><el-button style="width: 200px;margin-left: 0px;margin-top: 5px" @click="VipBuy">会员支付</el-button></el-col>
 
           </div>
             </span><br><br><br><br><br>
@@ -134,6 +152,7 @@
           movieid:'',
           coupon:[],
           lock:[],
+          name:'',
           sit:{
             columnIndex:'',
             rowIndex:'',
@@ -150,6 +169,7 @@
           this.$confirm('确认购买?', '提示', {})
             .then(() => {
               getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
+
                 for(let k in res.data.content){
                   if(k>=res.data.content.length-this.ids.length){
 
@@ -178,10 +198,11 @@
         },
           ComonBuy(){
             this.$confirm('确认购买?', '提示', {}).then(() => {
+                console.log("ggggg")
                 getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
+                  console.log(res)
                   for(let k in res.data.content){
                     if(k>=res.data.content.length-this.ids.length){
-
                       console.log(res.data.content[k])
                       this.ticketid=this.ticketid.concat(Number(res.data.content[k].id))
                     }
@@ -239,7 +260,7 @@
         },
         acti(){
           getCoupon(sessionStorage.getItem('userId')).then((res)=>{
-            console.log("vfdf")
+            console.log("fssfdsaffds")
             this.coupon=res.data.content
             console.log(res)
 
@@ -255,8 +276,8 @@
               for (let k in this.ids) {
 
                 this.sit={
-                  columnIndex:this.ids[k].columnIndex,
-                    rowIndex:this.ids[k].rowIndex,
+                  columnIndex:this.ids[k].columnIndex-2,
+                    rowIndex:this.ids[k].rowIndex-1,
                 },
                 arrayObj[k]=this.sit
               }

@@ -132,6 +132,8 @@
         result:[],
         username: '',
         isCollapse: false,
+        imgList:[],
+
       }
 
     }

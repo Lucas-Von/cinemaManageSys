@@ -67,7 +67,15 @@
           </el-steps>
           <div class="details">
           <img  height="350px" width="250px" :src="ids.posterUrl" style="float:left" >
-            <span><h1>{{ids.name}}</h1></span><br>
+            <span>
+              <el-col :span="3">
+              <h1>{{ids.name}}</h1>
+              </el-col>
+              <el-col :span="3" style="margin-top: 10px">
+                <el-button v-if="like==0" @click="MarkMovie"><li class="el-icon-star-on" style="color:gainsboro;" ></li></el-button>
+                <el-button v-if="like==1" @click="EaseMovie"><li class="el-icon-star-on" style="color:red;"></li></el-button>
+              </el-col>
+            </span><br><br><br><br>
             <span >简介：{{ids.description}}</span><br><br>
             <span>上映：{{ids.startDate.substring(0,10)}}</span><br>
             <span>地区：{{ids.country}}</span><br>
@@ -75,7 +83,8 @@
             <span>语言：{{ids.language}}</span><br>
             <span>导演：{{ids.director}}</span><br>
             <span>主演：{{ids.starring}}</span><br>
-            <span>编剧：{{ids.screenWriter}}</span>
+            <span>编剧：{{ids.screenWriter}}</span><br>
+
           </div>
 
           <div>
@@ -149,7 +158,7 @@
 
 <script>
   import {
-    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
+    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,LikeMovie,easeMovie
   }from "../../api/userAPI"
   export default {
     name: "MovieDetails",
@@ -158,12 +167,33 @@
         isCollapse:false,
         result:[],
         ids:'',
+        like:'',
         name:''
       }},
     methods: {
+      likeMivie(){
+        LikeMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
+          console.log("fdsfdv")
+          console.log(res)
+          this.like=res.data.content.islike
 
+        },(error) => console.log('promise catch err'));
+      },
+      MarkMovie(){
+        markMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
+          console.log("fdsfdv")
+
+        },(error) => console.log('promise catch err'));
+      },
+      EaseMovie(){
+        easeMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
+          console.log("fdsfdv")
+
+        },(error) => console.log('promise catch err'));
+      },
       movieSh(){
         getMovieSchedule(this.ids.id).then((res)=>{
+          console.log(this.ids.id)
           this.result=res.data.content;
 
           console.log(this.result.scheduleItemList)
@@ -235,9 +265,10 @@
     },
     mounted() {
       let ids=this.$route.query.id;
-      console.log(this.$route.query.id);
-      this.ids=ids;
-      this.movieSh(this.ids);
+      console.log(this.$route.query.id)
+      this.ids=ids
+      this.movieSh(this.ids)
+      this.likeMivie()
     }
   }
 
@@ -247,6 +278,8 @@
   img{
     margin-right: 20px
   }
+
+
 
 </style>
 

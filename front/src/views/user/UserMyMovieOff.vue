@@ -74,12 +74,14 @@
                   <el-col :span="8" >
                     <el-menu-item index="1" @click="toUsed">待使用</el-menu-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-menu-item index="2" @click="inUsed">已使用</el-menu-item>
+                  <el-col :span="8" >
+                    <el-menu-item index="1" @click="toCharge">去支付</el-menu-item>
                   </el-col>
+
                   <el-col :span="8">
-                    <el-menu-item index="2" @click="offUsed">已退票</el-menu-item>
+                    <el-menu-item index="2" @click="offUsed">购买记录</el-menu-item>
                   </el-col>
+
 
                 </el-menu>
 
@@ -90,30 +92,37 @@
           <el-form   ref="inServForm" size="small">
             <el-form-item >
               <template>
-                <el-table border :data="outfiledList" style="width: 100%" >
+                <el-table border :data="infiledList" style="width: 100%" >
                   <el-table-column prop="fildna" label="日期" style="width:6vw;" sortable>
                     <template slot-scope="scope">
-                      <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                      <span style="margin-left: 10px">{{scope.row.time.substring(0,10)}}&nbsp&nbsp&nbsp{{scope.row.time.substring(11,19)}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column prop="fildna" label="海报" style="width:6vw;" >
                     <template slot-scope="scope">
-                      <!--<el-input size="mini" v-model="scope.row.fildna" ></el-input>-->
-                      <img :src=scope.row.picture class="image" height="200px">
+                      <img :src=scope.row.posterUrl class="image" height="200px">
                     </template>
                   </el-table-column>
                   <el-table-column prop="remark" label="具体详情">
                     <template slot-scope="scope">
-                      <span style="margin-left: 10px">电影名称：{{scope.row.film }}<br></span>
-                      <span style="margin-left: 10px">开始时间：{{scope.row.open}}<br></span>
-                      <span style="margin-left: 10px">结束时间：{{scope.row.finish}}<br></span>
-                      <span style="margin-left: 10px">影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scope.row.room }}<br></span>
-                      <span style="margin-left: 10px">数&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp量：{{scope.row.num }}<br></span>
-                      <span style="margin-left: 10px">座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{scope.row.seat }}<br></span>
-                      <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.money }}</span>
+                      <span style="margin-left: 10px">电影名称：{{scope.row.name }}<br></span>
+                      <span style="margin-left: 10px">开始时间：{{scope.row.startTime.substring(0,10)}}&nbsp&nbsp&nbsp{{scope.row.startTime.substring(11,19)}}<br></span>
+                      <span style="margin-left: 10px">结束时间：{{scope.row.endTime.substring(0,10)}}&nbsp&nbsp&nbsp{{scope.row.endTime.substring(11,19)}}<br></span>
+                      <span style="margin-left: 10px">影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scope.row.hallName }}<br></span>
+                      <span style="margin-left: 10px">票&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp数：{{scope.row.count }}<br></span>
+                      <span style="margin-left: 10px">座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{scope.row.seats }}<br></span>
+                      <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.totalPrice }}<br></span>
                     </template>
                   </el-table-column>
-
+                  <el-table-column fixed="right" label="状态">
+                    <template slot-scope="scope">
+                      <span v-show="scope.row.state==0">未付款</span>
+                      <span v-show="scope.row.state==1">已支付</span>
+                      <span v-show="scope.row.state==2">已失效</span>
+                      <span v-show="scope.row.state==4">已退票</span>
+                      <span v-show="scope.row.state==3">已出票</span>
+                    </template>
+                  </el-table-column>
                 </el-table>
 
               </template>
@@ -126,112 +135,28 @@
 </template>
 
 <script>
+  import {
+    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,getTicketByUserId,getConsumptionRecord
+  }from "../../api/userAPI"
   export default {
     name: 'Container',
-    data() {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      };
-      return {
-        show:true,
-        isDisabled:false,
-        username: '',
-        isCollapse: false,
-        infiledList:[
-          {
-            picture:require("@/assets/test1.jpg"),
-            date: '2016-05-02',
-            name: '王小虎',
-            state:'未完成',
-            film: '建国大业',
-            room:'一号厅',
-            open:'2019-8-10 12:12',
-            finish:'2019-8-10 14:14',
-            seat:'三排5座 三排4座',
-            money:'66',
-            num:2,
-          },
-          {
-            picture:require("@/assets/test1.jpg"),
-            date: '2016-05-10',
-            name: '王小虎',
-            state:'已完成',
-            film: '建国大业',
-            room:'一号厅',
-            open:'2019-8-10 12:12',
-            seat:'三排5座 三排4座',
-            money:'66',
-            num:2,
-          },
-          {
-            picture:require("@/assets/test1.jpg"),
-            date: '2016-05-02',
-            name: '王小虎',
-            state:'未完成',
-            film: '建国大业',
-            room:'一号厅',
-            open:'2019-8-10 12:12',
-            finish:'2019-8-10 14:14',
-            seat:'三排5座 三排4座',
-            money:'66',
-            num:2,
-          }
-
-        ],
-        outfiledList:[
-          {
-            picture:require("@/assets/test1.jpg"),
-            date: '2016-05-02',
-            name: '王小虎',
-            state:'未完成',
-            film: '建国大业',
-            room:'一号厅',
-            open:'2019-8-10 12:12',
-            finish:'2019-8-10 14:14',
-            seat:'三排5座 三排4座',
-            money:'66',
-            num:2,
-          }
-
-        ],
-        imagesbox:[
-          {id:0,idView:require("@/assets/test1.jpg")},
-          {id:1,idView:require("@/assets/test2.jpg")},
-          {id:2,idView:require("@/assets/test3.jpg")},
-          {id:3,idView:require("@/assets/test4.jpg")},
-          {id:4,idView:require("@/assets/test5.jpg")},
-          {id:5,idView:require("@/assets/test6.jpg")}
-        ],
-        tableData: [{
-          picture:require("@/assets/test1.jpg"),
-          date: '2016-05-02',
-          name: '王小虎',
-          state:'未完成',
-          film: '建国大业',
-          room:'一号厅',
-          open:'2019-8-10 12:12',
-          finish:'2019-8-10 14:14',
-          seat:'三排5座 三排4座',
-          money:'66',
-          num:2,
+      data() {
+        return {
+          show:true,
+          isDisabled:false,
+          username: '',
+          isCollapse: false,
+          infiledList:[],
+        }
+      },
+      methods: {
+        sds(){
+          getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
+            console.log(res.data.content)
+            this.infiledList=res.data.content
+            console.log(this.infiledList)
+          },(error) => console.log('promise catch err'));
         },
-          {
-            picture:require("@/assets/test1.jpg"),
-            date: '2016-05-10',
-            name: '王小虎',
-            state:'已完成',
-            film: '建国大业',
-            room:'一号厅',
-            open:'2019-8-10 12:12',
-            seat:'三排5座 三排4座',
-            money:'66',
-            num:2,
-          }]
-      }
-    },
-    methods: {
       deleteRow(index, rows,outfiledList) {
         this.$confirm('此操作将在影厅出票, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -331,9 +256,10 @@
       toUsed(event){
         this.$router.push({path: '/user/MyMovie'});
       },
-      inUsed(event){
-        this.$router.push({path: '/user/MyMovieUsed'});
-      },
+        toCharge(event){
+          this.$router.push({path: '/user/MyMovieBuy'});
+        },
+
       offUsed(event){
         this.$router.push({path: '/user/MyMovieOff'});
       },
@@ -343,6 +269,7 @@
       if (user) {
         this.username = user;
       }
+      this.sds()
     },
   }
 

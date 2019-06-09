@@ -63,7 +63,7 @@ export const getAudiencePrice =() => {
 
 //获取某日各电影的上座率
 export const getPlacingRate =(date) => {
-  return axios.get('statistics/PlacingRate?date=', date).then(res => res.data)
+  return axios.get('statistics/PlacingRate?date=' + date).then(res => res.data)
 };
 
 //获取最受欢迎电影

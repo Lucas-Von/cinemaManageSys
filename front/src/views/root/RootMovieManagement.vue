@@ -52,25 +52,22 @@
       <el-container>
         <el-main class="app-body" >
           <template>
-            <el-row class="add-schedule" type="flex" justify="end">
-              <el-col :span="6">
-                <div>
-                  <el-button type="primary" @click="addSchedule">添加排片</el-button>
-                </div>
+            <el-row>
+              <el-col :span="3">
+                选择电影
               </el-col>
-            </el-row>
-            <el-row type="flex">
-              <el-col :span="2"></el-col>
-              <el-col :span="8" class="hall-select">
-                请选择影厅：
-                <el-select v-model="value" placeholder="请选择">
+              <el-col :span="4">
+                <el-select v-model="movieId" placeholder="请选择">
                   <el-option
-                    v-for="item in options"
+                    v-for="item in movieList"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
                   </el-option>
                 </el-select>
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary" @click="search">查询</el-button>
               </el-col>
             </el-row>
           </template>
@@ -90,29 +87,17 @@
 
 
 <script>
+  import {getMovie, getMovieLikeCount, getMovieLikeByDate} from "../../api/rootAPI"
+
     export default {
       name: "RootMovieManagement",
       data() {
         return{
           isCollapse:false,
-          // dialogFormVisible : false,
-          options: [{
-            value: '0',
-            label: '影厅A'
-          }, {
-            value: '1',
-            label: '影厅B'
-          }, {
-            value: '2',
-            label: '影厅C'
-          }, {
-            value: '3',
-            label: '影厅D'
-          }, {
-            value: '4',
-            label: '影厅E'
-          }],
-          value: ''
+          movieId: "",
+          movieList: [],
+          movieLikeCount: [],
+          movieLikeData: []
         }
       },
       methods: {
@@ -141,7 +126,77 @@
               this.$router.push('/login');
             })
             .catch(() => { });
+        },
+
+        /*--------------------------------------------------*/
+
+        getMovie: function () {
+          getMovie().then(res => {
+            if (res.success){
+              let list = res.content;
+              this.movieList = [];
+              for (let i = 0; i < list.length; i ++){
+                this.movieList.push({
+                  value: list[i].id,
+                  label: list[i].name
+                })
+              }
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
+        },
+
+        getMovieLike: function (movieId) {
+          getMovieLikeByDate(movieId).then(res => {
+            if (res.success){
+              this.movieLikeData = res.content;
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
+        },
+
+        getMovieLikeCount: function (movieId) {
+          getMovieLikeCount(movieId).then(res => {
+            if (res.success){
+              this.movieLikeCount = res.content;
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
+        },
+
+        /*--------------------------------------------------*/
+
+        search: function () {
+          if (this.movieId === ""){
+            this.$message({
+              type: 'error',
+              message: '请选择电影'
+            });
+            return;
+          }
+          else {
+            this.getMovieLike(this.movieId);
+            this.getMovieLikeCount(this.movieId);
+          }
         }
+      },
+      mounted: function () {
+        this.getMovie();
       }
     }
 </script>

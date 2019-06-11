@@ -52,7 +52,6 @@ export default new Router({
     {path: '/user/MovieList', name: '全部电影', component: UserMovieList, },
     {path: '/user/MyMovie', name: '我的电影票', component: UserMyMovie, },
     {path: '/user/MyMovieBuy', name: '我的锁座电影票', component: UserMyMovieBuy, },
-
     {path: '/user/MyMovieOff', name: '我的已退票电影票', component: UserMyMovieOff, },
     {path: '/user/MyCard', name: '我的会员卡', component: UserMyCard, },
     {path: '/user/Info', name: '我的信息', component: UserInfo, },
@@ -60,7 +59,7 @@ export default new Router({
     {path: '/saler', name: 'SalerContainer', component: SalerContainer},
     {path: '/saler/ActivityPublishment', name: 'SalerActivityPublishment', component: SalerActivityPulishment},
     {path: '/saler/Movie', name: 'SalerMovie', component: SalerMovie},
-    {path: '/saler/MovieDetails', name: 'SalerMovieDetails', component: SalerMovieDetails},
+    {path: '/saler/MovieDetails/:id', name: 'SalerMovieDetails', component: SalerMovieDetails},
     {path: '/saler/Statistics', name: 'SalerStatistics', component: SalerStatistics},
     {path: '/saler/ScheduleManagement', name: 'SalerScheduleManagement', component: SalerScheduleManagement},
     {path: '/user/MovieDetails/:id', name: 'MovieDetails', component: MovieDetails,},

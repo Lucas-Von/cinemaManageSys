@@ -10,50 +10,34 @@
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
-          <!-- 我是样例菜单 -->
-
 
           <el-menu default-active="1"
                    class="el-menu-vertical-demo"
                    @open="handleOpen"
                    :collapse="isCollapse">
 
-            <el-menu-item index="1" @click="getMovie">
+            <el-menu-item index="1" @click="toMovie">
               <i class="el-icon-camera"></i>
               <span slot="title">全部电影</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="getmymovie">
+            <el-menu-item index="2" @click="toScheduleManagement">
               <i class="el-icon-menu"></i>
-              <span slot="title">我的电影票</span>
+              <span slot="title">排片管理</span>
             </el-menu-item>
-            <el-menu-item index="3" @click="getmycard">
-              <i class="el-icon-document"></i>
-              <span slot="title">我的会员卡</span>
+            <el-menu-item index="3">
+              <i class="el-icon-document" @click="toStatistics"></i>
+              <span slot="title">影院统计</span>
             </el-menu-item>
-            <el-menu-item index="4" @click="getinfo">
+            <el-menu-item index="4">
+              <i class="el-icon-setting" @click="toActivityPublishment"></i>
+              <span slot="title">优惠劵发布策略</span>
+            </el-menu-item>
+            <el-menu-item index="5" @click="logout">
               <i class="el-icon-setting"></i>
-              <span slot="title">个人信息</span>
-            </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting" @click="logout"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
         </div>
-        <div style="width: 60px; cursor: pointer;"
-             @click.prevent="toggleSideBar">
-          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
-          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
-
-        </div>
-        <!-- 我是样例菜单 -->
-        <el-menu default-active="1"
-                 class="el-menu-demo tab-page"
-                 mode="horizontal"
-                 @select="handleSelect"
-                 active-text-color="#409EFF">
-
-        </el-menu>
       </el-aside>
       <el-container>
         <el-main class="app-body">
@@ -105,6 +89,9 @@
                   </el-form-item>
                 </el-form>
               </el-dialog>
+            </el-col>
+            <el-col :span="1">
+              &nbsp
             </el-col>
             <el-col :span="2">
               <el-button type="danger" @click="deleteMovie">下架电影</el-button>
@@ -193,34 +180,34 @@
                       <el-table-column
                         prop="movieName"
                         label="影片名称"
-                        width="250">
+                        width="150">
                       </el-table-column>
                       <el-table-column
                         prop="hallName"
                         label="影厅名称"
-                        width="250">
+                        width="150">
                       </el-table-column>
                       <el-table-column
                         prop="startTime"
                         label="开始时间"
                         :formatter = "startTimeFormat"
-                        width="250">
+                        width="200">
                       </el-table-column>
                       <el-table-column
                         prop="endTime"
                         label="结束时间"
                         :formatter = "endTimeFormat"
-                        width="250">
-                      </el-table-column>
-                      <el-table-column
-                        prop="city"
-                        label="票价"
                         width="200">
                       </el-table-column>
-                      <el-table-column fixed="right" label="操作" width="150">
+                      <el-table-column
+                        prop="fare"
+                        label="票价"
+                        width="150">
+                      </el-table-column>
+                      <el-table-column fixed="right" label="操作" width="200">
                         <template slot-scope="scope">
-                          <el-button type="primary" @click="updateSchedule(scope.row)">修改排片</el-button>
-                          <el-button type="danger" @click="deleteSchedule(scope.row.id)">删除排片</el-button>
+                          <el-button type="primary" size="small" @click="updateSchedule(scope.row)">修改排片</el-button>
+                          <el-button type="danger" size="small" @click="deleteSchedule(scope.row.id)">删除排片</el-button>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -357,6 +344,28 @@
           }
       },
       methods:{
+        toActivityPublishment: function() {
+          this.$router.push({path: '/saler/ActivityPublishment'});
+        },
+        toMovie: function() {
+          this.$router.push({path: '/saler/Movie'});
+        },
+        toScheduleManagement: function() {
+          this.$router.push({path: '/saler/ScheduleManagement'});
+        },
+        toStatistics: function() {
+          this.$router.push({path: '/saler/Statistics'});
+        },
+        logout: function () {
+          this.$confirm('确认退出?', '提示', {})
+            .then(() => {
+              sessionStorage.removeItem('user');
+              this.$router.push('/login');
+            })
+            .catch(() => { });
+        },
+
+        /*--------------------------------------------------*/
 
         startTimeFormat: function(row) {
           return row.startTime.substring(11, 19);
@@ -369,7 +378,7 @@
         /*--------------------------------------------------*/
 
         getDetail: function (movieId) {
-          let userId = sessionStorage.getItem("user");
+          let userId = sessionStorage.getItem("userId");
             getMovieDetails(movieId, userId).then(res => {
               if (res.success){
                 this.movieDetail = res.content;
@@ -386,7 +395,10 @@
 
         getSchedule: function(movieId) {
           getScheduleByMovieId(movieId).then(res => {
-            this.scheduleList = res.content;
+            let list = res.content;
+            for (let i = 0; i < 7 && i < list.length; i++) {
+              this.scheduleList.push(list[i]);
+            }
           })
         },
 
@@ -455,7 +467,7 @@
           this.$confirm('确认下架?', '提示', {})
             .then(() => {
               let params = {
-                movieIdList: [this.$route.query.id]
+                movieIdList: [this.$route.query.id.id]
               };
               deleteMovie(params).then(res => {
                 if (res.success){
@@ -507,9 +519,9 @@
         },
 
         submitSchedule: function (params) {
-          this.$refs.loginForm.validate((valid) => {
+          this.$refs.scheduleForm.validate((valid) => {
             if (valid){
-              if (params.startTime > params.endTime){
+              if (params.startTime < params.endTime){
                 if (params.id === ""){
                   this.submitAddSchedule(params);
                 }
@@ -592,10 +604,12 @@
 
       },
       mounted: function () {
-        this.getDetail(this.$route.query.id);
+        let movie=this.$route.query.id;
+        console.log(movie.id);
+        this.getDetail(movie.id);
         this.getMovieList();
         this.getHallList();
-        this.getSchedule(this.$route.query.id);
+        this.getSchedule(movie.id);
       }
     }
 </script>

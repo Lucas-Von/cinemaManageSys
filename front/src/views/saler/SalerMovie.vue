@@ -47,15 +47,45 @@
               <br><br><br><br>
               <el-row type="flex" justify="end">
                 <el-col :span="4">
-                  <el-button type="primary" @click="showViewTime">修改排片可见时间</el-button>
-                  <el-dialog title="修改排片可见时间" :visible.sync="viewTimeVisiable" :before-close="closeViewTime">
-                    <el-form :model="viewTimeForm" :rules="viewTimeRules" ref="viewTimeForm">
-                      <el-form-item label="可见时间" prop="day">
-                        <el-input v-model="viewTimeForm.day"></el-input>
+                  <el-button type="primary" @click="addMovie">上架电影</el-button>
+                  <el-dialog title="上架电影" :visible.sync="movieDialogVisiable" :before-close="closeMovieDialog">
+                    <el-form :model="movieForm" :rules="movieRules" ref="movieForm">
+                      <el-form-item label="名称" prop="name">
+                        <el-input v-model="movieForm.name" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="海报" prop="posterUrl">
+                        <el-input v-model="movieForm.posterUrl" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="导演" prop="director">
+                        <el-input v-model="movieForm.director" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="编剧" prop="screenWriter">
+                        <el-input v-model="movieForm.screenWriter" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="主演" prop="starring">
+                        <el-input v-model="movieForm.starring" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="电影类型" prop="type">
+                        <el-input v-model="movieForm.type" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="制片国家" prop="country">
+                        <el-input v-model="movieForm.country" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="语言" prop="language">
+                        <el-input v-model="movieForm.language" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="片长" prop="length">
+                        <el-input v-model="movieForm.length" style="width: 70%"></el-input>
+                      </el-form-item>
+                      <el-form-item label="上映日期" prop="startDate">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="movieForm.startDate" style="width: 70%"></el-date-picker>
+                      </el-form-item>
+                      <el-form-item label="描述" prop="description">
+                        <el-input v-model="movieForm.description" type="textarea" style="width: 70%"></el-input>
                       </el-form-item>
                       <el-form-item>
-                        <el-button type="primary" @click="submitViewTime(viewTimeForm.day)">保存</el-button>
-                        <el-button @click="closeViewTime">取消</el-button>
+                        <el-button type="primary" @click="submit(movieForm)">确定</el-button>
+                        <el-button @click="closeMovieDialog">取消</el-button>
                       </el-form-item>
                     </el-form>
                   </el-dialog>
@@ -89,7 +119,7 @@
 </template>
 
 <script>
-  import {getMovie, getScheduleView, setScheduleView} from "../../api/salerAPI"
+  import {getMovie, addMovie} from "../../api/salerAPI"
   import {isInteger} from "../../api/util"
 
     export default {
@@ -97,20 +127,74 @@
       data() {
         return{
           movieData: [],
-          viewTimeVisiable: false,
-          day: "",
-          viewTimeForm: {
-            day: ""
+          movieDialogVisiable: false,
+          movieForm: {
+            name: "",
+            posterUrl: "",
+            director: "",
+            screenWriter: "",
+            starring: "",
+            type: "",
+            country: "",
+            language: "",
+            startDate: "",
+            length: "",
+            description: ""
           },
-          viewTimeRules: {
-            day: [{
+          movieRules: {
+            name: {
               required: true,
-              message: "请输入排片可见时间",
+              message: "请输入名称",
+              trigger: "blur"
+            },
+            posterUrl: {
+              required: true,
+              message: "请输入海报",
+              trigger: "blur"
+            },
+            director: {
+              required: true,
+              message: "请输入主演",
+              trigger: "blur"
+            },
+            screenWriter: {
+              required: true,
+              message: "请输入编剧",
+              trigger: "blur"
+            },
+            starring: {
+              required: true,
+              message: "请输入主演",
+              trigger: "blur"
+            },
+            type: {
+              required: true,
+              message: "请输入电影类型",
+              trigger: "blur"
+            },
+            country: {
+              required: true,
+              message: "请输入制片国家",
+              trigger: "blur"
+            },
+            language: {
+              required: true,
+              message: "请输入语言",
+              trigger: "blur"
+            },
+            startDate: {
+              required: true,
+              message: "请输入上映日期",
+              trigger: "blur"
+            },
+            length: [{
+              required: true,
+              message: "请输入片场",
               trigger: "blur"
             },{
               validator: isInteger,
               trigger: "blur"
-            }]
+            }],
           }
         }
       },
@@ -138,63 +222,56 @@
 
         /*--------------------------------------------------*/
 
+        addMovie: function() {
+          this.movieDialogVisiable = true;
+        },
+
+        closeMovieDialog: function() {
+          this.movieDialogVisiable = false;
+          this.resetMovieDialog();
+        },
+
+        resetMovieDialog: function() {
+          this.movieForm = {};
+        },
+
+        submit: function(params) {
+          this.$refs.movieForm.validate((valid) => {
+            if (valid){
+              addMovie(params).then(res => {
+                if (res.success){
+                  this.$message({
+                    type: 'success',
+                    message: '上架成功!'
+                  });
+                  this.closeMovieDialog();
+                  this.getMovie();
+                }
+                else {
+                  this.$message({
+                    type: 'error',
+                    message: res.message
+                  });
+                }
+              })
+            }
+            else {
+              return false;
+            }
+          })
+        },
+
+        /*--------------------------------------------------*/
+
         getMovie: function () {
           getMovie().then(res => {
             this.movieData = res.content;
           })
         },
 
-        /*--------------------------------------------------*/
-
-        getViewTime: function() {
-          getScheduleView().then(res => {
-            if (res.success){
-              this.viewTimeForm.day = res.content;
-              this.day = res.content;
-            }
-            else {
-              this.$message({
-                type: 'error',
-                message: res.message
-              });
-            }
-          })
-        },
-
-        showViewTime: function () {
-          this.viewTimeVisiable = true;
-        },
-
-        closeViewTime: function () {
-          this.viewTimeVisiable = false;
-          this.viewTimeForm.day = this.day;
-        },
-
-        submitViewTime: function (days) {
-          let params = {
-            day: days
-          };
-          setScheduleView(params).then(res => {
-            if (res.success){
-              this.$message({
-                type: 'success',
-                message: '修改成功'
-              });
-              this.getViewTime();
-              this.closeViewTime();
-            }
-            else {
-              this.$message({
-                type: 'error',
-                message: res.message
-              });
-            }
-          })
-        }
       },
       mounted: function () {
         this.getMovie();
-        this.getViewTime();
       }
     }
 </script>

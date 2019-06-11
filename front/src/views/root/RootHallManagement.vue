@@ -54,8 +54,10 @@
           <template>
             <div>
               <div>
-                <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label" @click="addHallInfo">添加影厅</el-button>
+                <el-col :span="2"><h1>影厅管理</h1></el-col>
+                <el-col :span="1" style="margin-top: 10px">
+                  <el-row type="flex" justify="end">
+                    <el-button  circle class="el-icon-circle-plus-outline" @click="addHallInfo"></el-button>
                   <el-dialog title="添加影厅" :visible.sync="hallDialogVisiable" :before-close="closeHallDialog">
                     <el-form :model="hallForm" :rules="hallRules" ref="hallForm'[">
                       <el-form-item label="名称" prop="name">
@@ -84,14 +86,9 @@
                     </el-form>
                   </el-dialog>
 
+
                 </el-row>
-                <el-row type="flex">
-                  <el-col :span="2"></el-col>
-                  <el-col :span="6">影厅信息</el-col>
-                </el-row>
-                <el-row type="flex">
-                  <el-col :span="4"></el-col>
-                  <el-col>
+                </el-col>
                     <el-table
                       :data="hallData"
                       :stripe=true
@@ -99,12 +96,12 @@
                       <el-table-column
                         prop="name"
                         label="名称"
-                        width="180">
+                        width="200">
                       </el-table-column>
                       <el-table-column
                         prop="size"
                         label="容量"
-                        width="150"
+                        width="200"
                         :formatter="sizeFormat"
                         sortable>
                       </el-table-column>
@@ -121,16 +118,14 @@
                         sortable>
                       </el-table-column>
                       <el-table-column
-                        label="操作"
-                        width="200">
+                        label="操作">
                         <template slot-scope="scope">
-                          <el-button type="primary" size="small" @click="updateHallInfo(scope.row)">修改影厅</el-button>
-                          <el-button type="danger" size="small" @click="deleteHallInfo(scope.row.id)">删除影厅</el-button>
+                          <el-button circle class="el-icon-edit" @click="updateHallInfo(scope.row)"></el-button>
+                          <el-button circle class="el-icon-delete" @click="deleteHallInfo(scope.row.id)"></el-button>
                         </template>
                       </el-table-column>
                     </el-table>
-                  </el-col>
-                </el-row>
+
               </div>
             </div>
           </template>

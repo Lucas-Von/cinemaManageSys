@@ -49,12 +49,37 @@
         </el-menu>
       </el-aside>
       <el-container>
+
         <el-main class="app-body" >
+          <template>
+            <nav class="navbar navbar-default">
+              <div class="container-fluid" style="margin-top: -20px;margin-left: -20px;margin-right: -20px">
+                <el-menu
+                  class="el-menu-demo"
+                  mode="horizontal"
+                  @select="handleSelect"
+                  background-color="#545c64"
+                  text-color="#fff"
+                  active-text-color="#ffd04b"
+                >
+                  <el-col :span="12" >
+                    <el-menu-item index="1" @click="Vip">充值优惠</el-menu-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-menu-item index="2" @click="Ticket">购票优惠</el-menu-item>
+                  </el-col>
+                </el-menu>
+
+              </div>
+            </nav>
+          </template>
           <template>
             <div>
               <div>
-                <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label" @click="addRecharge">添加优惠</el-button>
+                <el-col :span="2"><h1>充值优惠</h1></el-col>
+                <el-col :span="1" style="margin-top: 10px">
+                  <el-row type="flex" justify="end">
+                    <el-button  circle class="el-icon-circle-plus-outline" @click="addRecharge"></el-button>
                   <el-dialog title="添加充值优惠" :visible.sync="rechargeDialogVisiable" :before-close="closeRechargeDialog">
                     <el-form :model="rechargeForm" :rules="rechargeRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
@@ -90,24 +115,15 @@
                     </el-form>
                   </el-dialog>
                 </el-row>
-                <el-row type="flex">
-                  <el-col :span="2"></el-col>
-                  <el-col :span="6">充值优惠</el-col>
-                </el-row>
+                </el-col>
                 <el-table
                   :data="rechargeData"
                   :stripe=true
-                  :height="250"
                   style="width: 100%">
                   <el-table-column
                     prop="name"
                     label="名称"
-                    width="180">
-                  </el-table-column>
-                  <el-table-column
-                    prop="description"
-                    label="描述"
-                    width="300">
+                    width="150">
                   </el-table-column>
                   <el-table-column
                     prop="targetAmount"
@@ -117,7 +133,7 @@
                   <el-table-column
                     prop="plusAmount"
                     label="额外金额"
-                    width="100">
+                    width="150">
                   </el-table-column>
 
                   <el-table-column
@@ -136,105 +152,105 @@
                   </el-table-column>
                   <el-table-column label="操作">
                     <template slot-scope="scope">
-                      <el-button type="primary" size="small" @click="updateRecharge(scope.row)">修改优惠</el-button>
-                      <el-button type="danger" size="small" @click="deleteRecharge(scope.row.id)">删除优惠</el-button>
+                      <el-button circle class="el-icon-edit" @click="updateRecharge(scope.row)"></el-button>
+                      <el-button circle class="el-icon-delete" @click="deleteRecharge(scope.row.id)"></el-button>
                     </template>
                   </el-table-column>
                 </el-table>
               </div>
-              <br><br><br>
-              <div>
-                <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label" @click="addTicket">添加优惠</el-button>
-                  <el-dialog title="添加购票优惠" :visible.sync="ticketDialogVisiable" :before-close="closeTicketDialog">
-                    <el-form :model="ticketForm" :rules="ticketRules" ref="ticketForm">
-                      <el-form-item label="名称" prop="name">
-                        <el-input v-model="ticketForm.name"></el-input>
-                      </el-form-item>
-                      <el-form-item label="描述" prop="description" clearable>
-                        <el-input type="textarea" v-model="ticketForm.description"></el-input>
-                      </el-form-item>
-                      <el-form-item label="目标电影票数量" prop="targetCount">
-                        <el-input v-model="ticketForm.targetCount"></el-input>
-                      </el-form-item>
-                      <el-form-item label="折扣" prop="discount">
-                        <el-input v-model="ticketForm.discount"></el-input>
-                      </el-form-item>
-                      <el-form-item label="选择时间">
-                        <el-col :span="8">
-                          <el-form-item prop="startTime">
-                            <el-date-picker type="date" placeholder="开始时间" v-model="ticketForm.startTime" style="width: 100%"></el-date-picker>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="2">&nbsp</el-col>
-                        <el-col :span="8">
-                          <el-form-item prop="endTime">
-                            <el-date-picker placeholder="结束时间" v-model="ticketForm.endTime" style="width: 100%"></el-date-picker>
-                          </el-form-item>
-                        </el-col>
-                      </el-form-item>
-                      <br>
-                      <el-form-item>
-                        <el-button type="primary" @click="submitTicket(ticketForm)">保存</el-button>
-                        <el-button @click="closeTicketDialog()">取消</el-button>
-                      </el-form-item>
-                    </el-form>
-                  </el-dialog>
-                </el-row>
-                <el-row type="flex">
-                  <el-col :span="2"></el-col>
-                  <el-col :span="6">购票优惠</el-col>
-                </el-row>
-                <el-table
-                  :data="ticketData"
-                  :stripe=true
-                  :height="250"
-                  style="width: 100%">
-                  <el-table-column
-                    prop="name"
-                    label="名称"
-                    width="180">
-                  </el-table-column>
-                  <el-table-column
-                    prop="description"
-                    label="描述"
-                    width="300">
-                  </el-table-column>
-                  <el-table-column
-                    prop="targetCount"
-                    label="目标电影票数量"
-                    width="150">
-                  </el-table-column>
-                  <el-table-column
-                    prop="discount"
-                    label="折扣"
-                    width="100"
-                    sortable>
-                  </el-table-column>
-                  <el-table-column
-                    prop="startTime"
-                    label="开始日期"
-                    width="180"
-                    :formatter = "startTimeFormat"
-                    sortable>
-                  </el-table-column>
-                  <el-table-column
-                    prop="endTime"
-                    label="结束日期"
-                    width="180"
-                    :formatter = "endTimeFormat"
-                    sortable>
-                  </el-table-column>
-                  <el-table-column
-                    label="操作"
-                    width="200">
-                    <template slot-scope="scope">
-                      <el-button type="primary" size="small" @click="updateTicket(scope.row)"><i></i>修改优惠</el-button>
-                      <el-button type="danger" size="small" @click="deleteDiscount(scope.row.id)">删除优惠</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
+              <!--<br><br><br>-->
+              <!--<div>-->
+                <!--<el-row type="flex" justify="end">-->
+                  <!--<el-button type="primary" class="label" @click="addTicket">添加优惠</el-button>-->
+                  <!--<el-dialog title="添加购票优惠" :visible.sync="ticketDialogVisiable" :before-close="closeTicketDialog">-->
+                    <!--<el-form :model="ticketForm" :rules="ticketRules" ref="ticketForm">-->
+                      <!--<el-form-item label="名称" prop="name">-->
+                        <!--<el-input v-model="ticketForm.name"></el-input>-->
+                      <!--</el-form-item>-->
+                      <!--<el-form-item label="描述" prop="description" clearable>-->
+                        <!--<el-input type="textarea" v-model="ticketForm.description"></el-input>-->
+                      <!--</el-form-item>-->
+                      <!--<el-form-item label="目标电影票数量" prop="targetCount">-->
+                        <!--<el-input v-model="ticketForm.targetCount"></el-input>-->
+                      <!--</el-form-item>-->
+                      <!--<el-form-item label="折扣" prop="discount">-->
+                        <!--<el-input v-model="ticketForm.discount"></el-input>-->
+                      <!--</el-form-item>-->
+                      <!--<el-form-item label="选择时间">-->
+                        <!--<el-col :span="8">-->
+                          <!--<el-form-item prop="startTime">-->
+                            <!--<el-date-picker type="date" placeholder="开始时间" v-model="ticketForm.startTime" style="width: 100%"></el-date-picker>-->
+                          <!--</el-form-item>-->
+                        <!--</el-col>-->
+                        <!--<el-col :span="2">&nbsp</el-col>-->
+                        <!--<el-col :span="8">-->
+                          <!--<el-form-item prop="endTime">-->
+                            <!--<el-date-picker placeholder="结束时间" v-model="ticketForm.endTime" style="width: 100%"></el-date-picker>-->
+                          <!--</el-form-item>-->
+                        <!--</el-col>-->
+                      <!--</el-form-item>-->
+                      <!--<br>-->
+                      <!--<el-form-item>-->
+                        <!--<el-button type="primary" @click="submitTicket(ticketForm)">保存</el-button>-->
+                        <!--<el-button @click="closeTicketDialog()">取消</el-button>-->
+                      <!--</el-form-item>-->
+                    <!--</el-form>-->
+                  <!--</el-dialog>-->
+                <!--</el-row>-->
+                <!--<el-row type="flex">-->
+                  <!--<el-col :span="2"></el-col>-->
+                  <!--<el-col :span="6">购票优惠</el-col>-->
+                <!--</el-row>-->
+                <!--<el-table-->
+                  <!--:data="ticketData"-->
+                  <!--:stripe=true-->
+                  <!--:height="250"-->
+                  <!--style="width: 100%">-->
+                  <!--<el-table-column-->
+                    <!--prop="name"-->
+                    <!--label="名称"-->
+                    <!--width="180">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="description"-->
+                    <!--label="描述"-->
+                    <!--width="300">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="targetCount"-->
+                    <!--label="目标电影票数量"-->
+                    <!--width="150">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="discount"-->
+                    <!--label="折扣"-->
+                    <!--width="100"-->
+                    <!--sortable>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="startTime"-->
+                    <!--label="开始日期"-->
+                    <!--width="180"-->
+                    <!--:formatter = "startTimeFormat"-->
+                    <!--sortable>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="endTime"-->
+                    <!--label="结束日期"-->
+                    <!--width="180"-->
+                    <!--:formatter = "endTimeFormat"-->
+                    <!--sortable>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--label="操作"-->
+                    <!--width="200">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<el-button type="primary" size="small" @click="updateTicket(scope.row)"><i></i>修改优惠</el-button>-->
+                      <!--<el-button type="danger" size="small" @click="deleteDiscount(scope.row.id)">删除优惠</el-button>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                <!--</el-table>-->
+              <!--</div>-->
             </div>
           </template>
         </el-main>
@@ -359,6 +375,12 @@
       },
       toMovieManagement(){
         this.$router.push({path: '/root/MovieManagement'});
+      },
+      Vip(){
+        this.$router.push({path: '/root/VIPActivity'});
+      },
+      Ticket(){
+        this.$router.push({path: '/root/TicketActivity'});
       },
       toVIPActivity(){
         this.$router.push({path: '/root/VIPActivity'});

@@ -9,6 +9,7 @@ import AdminCinemaInfoManagement from '@/views/admin/AdminCinemaInfoManagement'
 import RootContainer from '@/container/RootContainer'
 import RootMovieManagement from '@/views/root/RootMovieManagement'
 import RootVIPActivity from '@/views/root/RootVIPActivity'
+import RootTicketActivity from '@/views/root/RootTicketActivity'
 import RootRefundStrategy from '@/views/root/RootRefundStrategy'
 import RootHallManagement from '@/views/root/RootHallManagement'
 import SalerContainer from '@/container/SalerContainer'
@@ -47,6 +48,7 @@ export default new Router({
     {path: '/root', name: 'RootContainer', component: RootContainer},
     {path: '/root/MovieManagement', name: 'RootMovieManagement', component: RootMovieManagement},
     {path: '/root/VIPActivity', name: 'RootVIPActivity', component: RootVIPActivity},
+    {path: '/root/TicketActivity', name: 'RootTicketActivity', component: RootTicketActivity},
     {path: '/root/RefundStrategy', name: 'RootRefundStrategy', component: RootRefundStrategy},
     {path: '/root/HallManagement', name: 'RootHallManagement', component: RootHallManagement},
     {path: '/user',  name: 'UserContainer',  component: UserContainer,},

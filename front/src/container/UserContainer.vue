@@ -1,5 +1,5 @@
 <template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
-  <div class="app"  >
+  <div class="app" >
 
     <el-container  >
       <el-aside class="app-side app-side-left"
@@ -11,9 +11,6 @@
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
-          <!-- 我是样例菜单 -->
-
-
           <el-menu default-active="1-5-1"
                    class="el-menu-vertical-demo"
                    @open="handleOpen"
@@ -63,7 +60,7 @@
 
           <template>
             <nav class="navbar navbar-default">
-              <div class="container-fluid">
+              <div class="container-fluid" style="margin-top: -20px;margin-left: -20px;margin-right: -20px">
                 <el-menu
                   class="el-menu-demo"
                   mode="horizontal"
@@ -72,11 +69,11 @@
                   text-color="#fff"
                   active-text-color="#ffd04b"
                 >
-                  <el-col :span="11" >
+                  <el-col :span="12" >
                     <el-menu-item index="1" @click="intheather">正在上映</el-menu-item>
                   </el-col>
-                  <el-col :span="11">
-                    <el-menu-item index="2" @click="coming">即将上映</el-menu-item>
+                  <el-col :span="12">
+                    <el-menu-item index="2" @click="coming">已下架</el-menu-item>
                   </el-col>
                 </el-menu>
 
@@ -88,27 +85,36 @@
             <div class="canvas" v-show="loading">
               <div class="spinner"></div>
             </div>
+            <div>
+              <div style="margin-top: 15px;">
+                <el-input type="text" name="" id="hh" placeholder="搜索" v-model="search">
+
+                  <el-button slot="append" icon="el-icon-search" @click="btn"></el-button>
+                </el-input>
+              </div>
+
+            </div>
             <div class="row">
 
-              <div class="col-md-2 text-center" v-for="item in list" :key="item.id">
-
-                <router-link :to="{path:'/detail/'+item.id}">
+              <div class="col-md-2 text-center" v-for="item in result" :key="item.name">
+                <div v-show="item.status==0">
                   <el-col :span="8" >
 
                     <el-card class="box-moviecard">
                       <br>
-                      <img class="movie" height="320px" width="250px" :src="item.images">
-                      <br>
-
-                      <div style="padding: 14px;">
+                      <router-link :to="{path:'/user/MovieDetails/id',query:{id:item}}">
+                        <img class="movie" height="320px" width="250px" style="margin-left: 5px" :src="item.posterUrl" >
+                      </router-link>
+                      <div >
                         <div class="bottom clearfix">
-                          <h3 class="text">{{item.id}}</h3>
+                          <h3 class="text" >{{item.name}}</h3>
                         </div>
                       </div>
                     </el-card>
+                    <br><br>
                   </el-col>
-                </router-link>
-
+                  <!--</router-link>-->
+                </div>
               </div>
 
             </div>
@@ -121,63 +127,41 @@
 </template>
 
 <script>
+  import {
+    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
+  }from "../api/userAPI"
   export default {
     name: 'Container',
     data() {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      };
       return {
         loading: true,
         title: '',
-        list: [
-
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test4.jpg")},
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test5.jpg")},
-          {id:'皮卡丘',title:'fds',images:require("@/assets/test6.jpg")}
-
-        ],
+        result:[],
         username: '',
         isCollapse: false,
-        imagesbox:[
-          {id:0,idView:require("@/assets/test1.jpg")},
-          {id:1,idView:require("@/assets/test2.jpg")},
-          {id:2,idView:require("@/assets/test3.jpg")},
-          {id:3,idView:require("@/assets/test4.jpg")},
-          {id:4,idView:require("@/assets/test5.jpg")},
-          {id:5,idView:require("@/assets/test6.jpg")},
-        ],
-        tableData: [{
-          picture:require("@/assets/test1.jpg"),
-          date: '2016-05-02',
-          name: '王小虎',
-          state:'已完成',
-          film: '建国大业',
-          room:'一号厅',
-          open:'2019-8-10 12:12',
-          seat:'三排5座 三排4座',
-          money:'66',
-          num:2,
-        },
-          {
-            picture:require("@/assets/test1.jpg"),
-            date: '2016-05-02',
-            name: '王小虎',
-            state:'已完成',
-            film: '建国大业',
-            room:'一号厅',
-            open:'2019-8-10 12:12',
-            seat:'三排5座 三排4座',
-            money:'66',
-            num:2,
-          }]
+        imgList:[],
+        search:'',
+
       }
+
     }
     ,
 
     methods: {
+      btn(){
+        let p=[]
+        for(let h in this.result){
+          if(this.result[h].name.indexOf(this.search)>=0){
+            p=p.concat(this.result[h])
+          }
+        }
+        this.result=p
+      },
+      sds(){
+        getMovie().then((res)=>{
+          this.result=res.data.content;
+        },(error) => console.log('promise catch err'));
+      },
       submit(){
         if (!this.searchKey) {
           alert('请输入搜索内容');
@@ -240,7 +224,6 @@
           params['q'] = this.$route.params.searchKey;
         }
         this.$http.post(movieUrl, params).then((res) => {
-          console.log(res.data)
           // 这里不做多校验，可自己加，直接上数据
           this.list = res.data.subjects;
           this.title = res.data.title;
@@ -254,6 +237,7 @@
       if (user) {
         this.username = user;
       }
+      this.sds()
     },
   }
 
@@ -269,11 +253,8 @@
 
   .box-moviecard {
     margin-left: 30px;
-    width: 325px;
+    width: 300px;
     height: 450px;
-  }
-  .movie{
-    margin-left: 20px;
   }
   .text{
     margin-left: 75px;

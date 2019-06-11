@@ -19,10 +19,7 @@
               <i class="el-icon-camera"></i>
               <span slot="title">员工管理</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="toUserManagement">
-              <i class="el-icon-menu"></i>
-              <span slot="title">用户管理</span>
-            </el-menu-item>
+
             <el-menu-item index="3" @click="toCinemaInfoManagement">
               <i class="el-icon-document"></i>
               <span slot="title">影院信息管理</span>

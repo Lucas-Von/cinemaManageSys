@@ -54,8 +54,10 @@
           <template>
             <div>
               <div>
-                <el-row type="flex" justify="end">
-                  <el-button type="primary" class="label" @click="addRefund">添加退票策略</el-button>
+                <el-col :span="2"><h1>充值优惠</h1></el-col>
+                <el-col :span="1" style="margin-top: 10px">
+                  <el-row type="flex" justify="end">
+                    <el-button  circle class="el-icon-circle-plus-outline" @click="addRefund"></el-button>
                   <el-dialog title="添加/修改 退票策略" :visible.sync="refundDialogVisiable" :before-close="closeRefundDialog">
                     <el-form :model="refundForm" :rules="refundRules" ref="ruleForm">
                       <el-form-item label="名称" prop="name">
@@ -77,13 +79,9 @@
                     </el-form>
                   </el-dialog>
                 </el-row>
-                <el-row type="flex">
-                  <el-col :span="2"></el-col>
-                  <el-col :span="6">退票策略</el-col>
-                </el-row>
-                <el-row type="flex">
-                  <el-col :span="4"></el-col>
-                  <el-col>
+              </el-col>
+
+
                     <el-table
                       :data="refundData"
                       :stripe=true
@@ -101,26 +99,24 @@
                       <el-table-column
                         prop="remainingTime"
                         label="剩余时间"
-                        width="150"
+                        width="200"
                         sortable>
                       </el-table-column>
                       <el-table-column
                         prop="percentage"
                         label="退款比例"
-                        width="100"
+                        width="200"
                         sortable>
                       </el-table-column>
                       <el-table-column
-                        label="操作"
-                        width="200">
+                        label="操作">
                         <template slot-scope="scope">
-                          <el-button type="primary" size="small" @click="updateRefund(scope.row)">修改策略</el-button>
-                          <el-button type="danger" size="small" @click="deleteRefund(scope.row.id)">删除策略</el-button>
+                          <el-button circle class="el-icon-edit" @click="updateRefund(scope.row)"></el-button>
+                          <el-button circle class="el-icon-delete" @click="deleteRefund(scope.row.id)"></el-button>
                         </template>
                       </el-table-column>
                     </el-table>
-                  </el-col>
-                </el-row>
+
               </div>
             </div>
           </template>

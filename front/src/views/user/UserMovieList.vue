@@ -105,9 +105,9 @@
                       <router-link :to="{path:'/user/MovieDetails/id',query:{id:item}}">
                         <img class="movie" height="320px" width="250px" style="margin-left: 5px" :src="item.posterUrl" >
                       </router-link>
-                    <div style="padding: 14px;">
+                    <div >
                       <div class="bottom clearfix">
-                        <h3 class="text">{{item.name}}</h3>
+                        <h3 class="text" >{{item.name}}</h3>
                       </div>
                     </div>
                     </el-card>

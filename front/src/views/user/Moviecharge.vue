@@ -88,17 +88,18 @@
               <h1>优惠券：</h1></el-col>
               <el-col :span="16">
               <template>
-                  <el-select v-model="name" placeholder="请选择" style="margin-top: 10px">
+                  <el-select  placeholder="请选择" style="margin-top: 10px"   @change="chickvalue" v-model="searchValue">
                     <el-option
                       v-for="item in coupon"
                       :key="item.id"
-                      :label="item.name"
-                      :value="item.name">
+                      :label="item.description"
+                      :value="item.description"
+                      v-model="item.id">
                     </el-option>
                   </el-select>
                 </template></el-col></span>
             <br><br><br><br>
-            <span><h1>现&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length}}</h1></span><br>
+            <span><h1>现&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length-Number(discountA)}}</h1></span><br>
 
             <span>
 
@@ -134,7 +135,7 @@
 
 <script>
   import {
-    getMovie,getVIP,getOccupiedSeat,lockSeats,getCoupon,getCommonBuy,getTicketByUserId,getVipBuy
+    getMovie,getVIP,getOccupiedSeat,lockSeats,getCoupon,getCommonBuy,getTicketByUserId,getVipBuy,getCouponById
   }from "../../api/userAPI"
     export default {
         name: "Moviecharge",
@@ -151,8 +152,11 @@
           detail:[],
           movieid:'',
           coupon:[],
+          discountA:'',
+          discountId:0,
           lock:[],
           name:'',
+          searchValue:'',
           sit:{
             columnIndex:'',
             rowIndex:'',
@@ -165,6 +169,15 @@
         }
       },
       methods: {
+        chickvalue () {
+          getCouponById(this.searchValue).then((res) => {
+            this.discountA=res.data.content.discountAmount
+            this.discountId=res.data.content.id
+            console.log(res)
+
+          }, (error) => console.log('promise catch err'));
+        },
+
         VipBuy(){
           this.$confirm('确认购买?', '提示', {})
             .then(() => {
@@ -223,7 +236,7 @@
 
 
         ComonBuy2(){
-            getCommonBuy(this.ticketid,0).then((res)=>{
+            getCommonBuy(this.ticketid,this.discountId).then((res)=>{
               console.log("fsadds")
                 console.log(res)
               this.total=res.data.content.total
@@ -252,26 +265,21 @@
             for(let img in this.detail){
 
               if(this.detail[img].id==this.movieid){
+                console.log("hhhhhhhxyh")
                 this.img=this.detail[img].posterUrl
               }
             }
             console.log(this.detail)
           },(error) => console.log('promise catch err'));
         },
-        acti(){
-          getCoupon(sessionStorage.getItem('userId')).then((res)=>{
-            console.log("fssfdsaffds")
-            this.coupon=res.data.content
-            console.log(res)
 
-          },(error) => console.log('promise catch err'));
-        },
         movieSh() {
-
             getOccupiedSeat(this.ids[0].scheduleId).then((res) => {
+              console.log("pppppp/")
+              console.log(this.ids[0].scheduleId)
               this.movieid = res.data.content.scheduleItem.movieId
               this.scheduleItem=res.data.content.scheduleItem
-              console.log(this.scheduleItem.startTime)
+              console.log(this.scheduleItem)
               let arrayObj = [this.ids.length]
               for (let k in this.ids) {
 
@@ -285,8 +293,18 @@
               this.seats=arrayObj
               console.log("dsagfds")
               console.log(this.seats)
+              this. acti()
               this.locks()
               },(error) => console.log('promise catch err'));
+        },
+        acti(){
+          getCoupon(sessionStorage.getItem('userId'),this.scheduleItem.fare*this.ids.length).then((res)=>{
+            console.log(this.scheduleItem.fare*this.ids.length)
+            console.log("xyhssb")
+            this.coupon=res.data.content
+            console.log(res)
+
+          },(error) => console.log('promise catch err'));
         },
         locks(){
           this.seat.scheduleId=this.ids[0].scheduleId
@@ -351,7 +369,6 @@
         console.log(ids)
         this.movieSh()
         this.sds()
-        this.acti()
         this.judegeVip()
       }
     }

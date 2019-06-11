@@ -11,6 +11,10 @@ export const getMovie =() => {
   return axios.get('/movie/all/exclude/off')
 }
 
+export const getoffMovie =() => {
+  return axios.get('/movie/all')
+}
+
 
 
 
@@ -42,13 +46,16 @@ export const getVipBuy =(ticketId, couponId) => {
 }
 
 //获得优惠券
-export const getCoupon =(userId) => {
-  return axios.get('/coupon/' + userId+'/get')
+export const getCoupon =(userId,amount) => {
+  return axios.get('/coupon/getByIdAndAmount?userId='+userId+'&amount='+amount)
 }
 
 //标记电影为想看
 export const markMovie =(movieId, userId) => {
   return axios.post('/movie/' + movieId + '/like?userId=' + userId)
+}
+export const getCouponById=(couponId)=>{
+  return axios.get('/coupon//getById?couponId='+couponId)
 }
 
 
@@ -101,7 +108,9 @@ export const getLockTicketByUserId =(userId) => {
   return axios.get('/ticket/get/lockedTickets?userId=' + userId)
 }
 
-
+export const cancel=(ticketId)=>{
+  return axios.post('/ticket/cancel?ticketId=' + ticketId)
+}
 
 export const checkTicketByUserId =(userId) => {
   return axios.get('/ticket/checkLocked?userId=' + userId)
@@ -121,3 +130,6 @@ export const getConsumptionRecord =(userId) => {
   return axios.get('/record/consumption/getAll?userId=' + userId)
 }
 
+export const toPay =(userId) => {
+  return axios.get('/ticket/checkLocked?userId=' + userId)
+}

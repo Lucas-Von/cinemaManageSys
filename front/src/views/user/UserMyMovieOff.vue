@@ -154,6 +154,20 @@
           getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
             console.log(res.data.content)
             this.infiledList=res.data.content
+            for(let t in this.infiledList){
+              let p=this.infiledList[t].seats.split(" ")
+              let re=''
+              for(let i in p){
+                let in1=Number(p[i].indexOf("排"))
+                let m=p[i].charAt(in1-1)
+                let in2=Number(p[i].indexOf("座"))
+                let n=p[i].charAt(in2-1)
+                let sea=String(Number(m)+1)+"排"+String(Number(n)+1)+"座"+" "
+                re=re+sea
+              }
+              console.log(re)
+              this.infiledList[t].seats=re
+            }
             console.log(this.infiledList)
           },(error) => console.log('promise catch err'));
         },

@@ -76,10 +76,14 @@
                 <el-divider></el-divider>
               </div>
               <span style="margin: 80px">会员卡号:{{vipme.id}}</span><br><br><br><br>
+
               <span style="margin: 80px">余&nbsp&nbsp&nbsp&nbsp&nbsp额：{{vipme.balance}}</span><br><br>
+
+              <!--<span style="margin: 80px">会&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp员:&nbsp&nbsp&nbsp小&nbsp&nbsp&nbsp印</span><br><br><br><br>-->
+              <!--<span style="margin: 80px">余&nbsp&nbsp&nbsp&nbsp&nbsp额：1000000000000</span><br><br>-->
               <span style="margin: 80px">
 
-              <el-button type="primary" class="label" @click="chargecard">充值会员卡</el-button>
+              <el-button type="primary" class="label" @click="chargecard" style="margin-top: 50px">充值会员卡</el-button>
                   <el-dialog title="充值会员卡" :visible.sync="chargevipDialogVisiable" :before-close="closeRechargeDialog">
                       <el-form :model="chargevip" :rules="rule">
                         <el-form-item label="会员卡号" prop="vipId" >

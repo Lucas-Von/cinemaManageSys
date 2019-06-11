@@ -148,16 +148,32 @@
     },
     methods: {
       sds(){
-
+        console.log(sessionStorage.getItem('userId'))
         getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
-
           console.log(res)
           console.log(res.data.content)
           for(let y in res.data.content){
             if(res.data.content[y].state==1){
               this.infiledList=this.infiledList.concat(res.data.content[y])
+
             }
           }
+          for(let t in this.infiledList){
+            let p=this.infiledList[t].seats.split(" ")
+            let re=''
+            for(let i in p){
+              let in1=Number(p[i].indexOf("排"))
+              let m=p[i].charAt(in1-1)
+              let in2=Number(p[i].indexOf("座"))
+              let n=p[i].charAt(in2-1)
+              let sea=String(Number(m)+1)+"排"+String(Number(n)+1)+"座"+" "
+              re=re+sea
+            }
+            console.log(re)
+            this.infiledList[t].seats=re
+          }
+
+
           console.log(this.infiledList)
         },(error) => console.log('promise catch err'));
       },
@@ -167,18 +183,19 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+
+
           this.$message({
               type: 'success',
               message: '退票成功!',
 
             },
             refundMovie(salesId).then((res)=>{
-
               console.log(res)
               console.log(res.data.content)
-              this.$router.push({path: '/user/MyMovie'});
+
             })
-          );
+          );this.$router.go(0)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -203,6 +220,8 @@
             },
             this.out(salesId)
           );
+
+          this.$router.go(0)
         }).catch(() => {
           this.$message({
             type: 'info',

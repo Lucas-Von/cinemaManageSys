@@ -65,16 +65,15 @@
             <el-step title="选座" ></el-step>
             <el-step title="支付" ></el-step>
           </el-steps>
+
+
           <div class="details">
-          <img  height="350px" width="250px" :src="ids.posterUrl" style="float:left" >
+          <img  height="430px" width="320px" :src="ids.posterUrl" style="float:left;margin-top: 10px" >
             <span>
               <el-col :span="3">
               <h1>{{ids.name}}</h1>
               </el-col>
-              <el-col :span="3" style="margin-top: 10px">
-                <el-button v-if="like==0" @click="MarkMovie"><li class="el-icon-star-on" style="color:gainsboro;" ></li></el-button>
-                <el-button v-if="like==1" @click="EaseMovie"><li class="el-icon-star-on" style="color:red;"></li></el-button>
-              </el-col>
+
             </span><br><br><br><br>
             <span >简介：{{ids.description}}</span><br><br>
             <span>上映：{{ids.startDate.substring(0,10)}}</span><br>
@@ -83,9 +82,22 @@
             <span>语言：{{ids.language}}</span><br>
             <span>导演：{{ids.director}}</span><br>
             <span>主演：{{ids.starring}}</span><br>
-            <span>编剧：{{ids.screenWriter}}</span><br>
+            <span>编剧：{{ids.screenWriter}}</span><br><br>
+            <span>
+
+              <el-col :span="1.5">
+              <span>想看：</span>
+              </el-col>
+              <el-col :span="1.5"  style="margin-top: -5px">
+
+                <!--<el-button v-show="like==0" @click="MarkMovie" :class="{ liBackground:changeLeftBackground == index}" ><li class="el-icon-star-on" ></li></el-button>-->
+                <el-button circle @click="change"  :class="changeLeftBackground==index? 'liBackground' : 'ltBackground'" ><i class="el-icon-star-off"></i></el-button>
+              </el-col>
+
+            </span><br><br><br><br><br>
 
           </div>
+          <el-divider></el-divider>
 
           <div>
             <el-tabs style="margin-top: 50px">
@@ -164,38 +176,52 @@
     name: "MovieDetails",
     data(){
       return{
+        changeLeftBackground: 0,
         isCollapse:false,
         result:[],
         ids:'',
         like:'',
-        name:''
+        name:'',
+        index:1,
       }},
     methods: {
+      change(){
+        if(this.like==0){
+          this.MarkMovie()
+        }else{
+          this.EaseMovie()
+        }
+      },
       likeMivie(){
         LikeMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
           console.log("fdsfdv")
           console.log(res)
           this.like=res.data.content.islike
-
+          this.index=this.like
         },(error) => console.log('promise catch err'));
       },
       MarkMovie(){
         markMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
-          console.log("fdsfdv")
+          this.like=res.data.content.islike
+          this.like=1
+          this.index=1
 
         },(error) => console.log('promise catch err'));
       },
       EaseMovie(){
         easeMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
-          console.log("fdsfdv")
-
+          console.log(res)
+          this.like=0
+          this.like=0
+          console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+          this.index=this.like
+          console.log(this.like)
         },(error) => console.log('promise catch err'));
       },
       movieSh(){
         getMovieSchedule(this.ids.id).then((res)=>{
           console.log(this.ids.id)
           this.result=res.data.content;
-
           console.log(this.result.scheduleItemList)
 
         },(error) => console.log('promise catch err'));
@@ -279,6 +305,12 @@
     margin-right: 20px
   }
 
+  .liBackground {
+    background: #FFFFFF;
+  }
+  .ltBackground {
+    background: cornflowerblue;
+  }
 
 
 </style>

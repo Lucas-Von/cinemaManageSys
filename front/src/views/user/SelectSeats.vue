@@ -83,29 +83,29 @@
               </div>
             </el-row>
           </div>
-            <div v-for="se in init">
-              <span style="margin: 250px">已选座位：{{((se-col(se))/(seats[0].length))+1}}排{{col(se)}}座</span>
-            </div>
+            <!--<div v-for="se in init">-->
+              <!--<span style="margin: 250px">已选座位：{{((se-col(se))/(seats[0].length))+1}}排{{col(se)}}座</span>-->
+            <!--</div>-->
           </el-col>
 
           <el-col :span="6">
-          <el-card class="box-card" style="width: 250px;height: 450px;margin-top: 10px" >
             <span><h1>{{ids.movieName}}</h1></span>
             <span><img :src="img" width="100px" height="120px"></span><br>
             <span>影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{ids.hallName}}</span><br>
             <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{ids.startTime.substring(0,10)}}</span><br>
             <span>开始时间：{{ids.startTime.substring(11,19)}}</span><br>
             <span>结束时间：{{ids.endTime.substring(11,19)}}</span><br>
-
+            <span>
+              <!--<div>已选座位：</div>-->
             <div v-for="se in init">
-              <span>已选座位：{{((se-col(se))/(seats[0].length))+1}}排{{col(se)}}座</span>
+              <span >已选座位：{{((se-col(se))/(seats[0].length))+1}}排{{col(se)}}座</span>
             </div>
+            </span>
             <span>票&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{ids.fare*init.length}}</span><br>
             <router-link :to="{path:'/user/Moviecharge/id',query:{id:ticketALL}}">
 
               <el-button  size="small" style="margin-top: 40px"> 支付</el-button>
             </router-link>
-          </el-card>
         </el-col>
         </el-main>
       </el-container>
@@ -115,7 +115,7 @@
 
 <script>
   import {
-    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
+    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,toPay
   }from "../../api/userAPI"
   export default {
     name: "SelectSeats",
@@ -145,8 +145,19 @@
       }
       },
     methods: {
+      topay(){
+        toPay(sessionStorage.getItem('userId')).then((res)=>{
+
+          if(res.data.message!="没有已锁座未支付的票！"){
+            alert("请先支付已锁座的订单！")
+            this.$router.push({path: '/user/MyMovie'});
+          }
+          console.log(res)
+        },(error) => console.log('promise catch err'));
+      },
       col(k){
         if(k%this.seats[0].length==0){
+
           return this.seats[0].length
         }else{
           return k%this.seats[0].length
@@ -162,7 +173,7 @@
           this.init.splice(index, 1);
           this.ticketALL.splice(index, 1);
         }else{
-          this.ticket={rowIndex:((k-k%this.seats[0].length)/(this.seats[0].length))+1,columnIndex:k%this.seats[0].length+1,scheduleId:this.sh.id}
+          this.ticket={rowIndex:((k-this.col(k))/(this.seats[0].length))+1,columnIndex:this.col(k)+1,scheduleId:this.sh.id}
           this.init=this.init.concat(k)
           this.ticketALL=this.ticketALL.concat(this.ticket)
 
@@ -263,6 +274,7 @@
       let movieid=this.$route.query.id.movieId
       this.ids=ids
       this.movieid=movieid
+      this.topay()
       this.movieSh(this.ids)
       this.sds();
     }

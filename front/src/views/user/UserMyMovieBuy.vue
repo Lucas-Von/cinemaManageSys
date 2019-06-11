@@ -92,7 +92,6 @@
             <el-form-item >
               <template>
                 <el-table border :data="infiledList" style="width: 100%" v-if="infiledList.length>0">
-
                   <el-table-column prop="fildna" label="海报" style="width:6vw;" >
                     <template slot-scope="scope">
                       <img :src=scope.row.posterUrl class="image" height="200px">
@@ -109,12 +108,14 @@
                       <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.totalPrice }}<br></span>
                     </template>
                   </el-table-column>
-                  <!--<el-table-column fixed="right" label="操作">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<el-button @click.native.prevent="outRow(scope.row.id)" size="small"> 取消锁座 </el-button>-->
-                      <!--<el-button @click.native.prevent="reRow(scope.row.id)" size="small"> 去支付 </el-button>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
+                  <el-table-column fixed="right" label="操作">
+                    <template slot-scope="scope">
+                      <router-link :to="{path:'/user/Moviecharge/id',query:{id:ticketALL}}">
+                       <el-button  size="small"> 去支付 </el-button>
+                      </router-link>
+                      <el-button @click="reRow(scope.row.ticketIds)" size="small"> 取消锁座</el-button>
+                    </template>
+                  </el-table-column>
                 </el-table>
               </template>
             </el-form-item>
@@ -127,7 +128,7 @@
 
 <script>
   import {
-    outMovie,refundMovie,getLockTicketByUserId
+    outMovie,refundMovie,getLockTicketByUserId,cancel
   }from "../../api/userAPI"
   export default {
 
@@ -139,68 +140,63 @@
         username: '',
         isCollapse: false,
         infiledList:[],
-        tickets:[]
+        tickets:[],
+        ticket:'',
+        ticketALL:[],
+        ticketChinese:[],
+        scheduleId:'',
+        toCan:[],
       }
     },
     methods: {
       sds(){
-
         getLockTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
           console.log(res.data.content)
+          this.scheduleId=res.data.content.scheduleId
           this.infiledList=this.infiledList.concat(res.data.content)
+          for(let t in this.infiledList){
+            let p=this.infiledList[t].seats.split(" ")
+            let re=''
+            for(let i in p){
+              let in1=Number(p[i].indexOf("排"))
+              let m=p[i].charAt(in1-1)
+              let in2=Number(p[i].indexOf("座"))
+              let n=p[i].charAt(in2-1)
+              let sea=String(Number(m)+1)+"排"+String(Number(n)+1)+"座"+" "
+              re=re+sea
+            }
+            console.log(re)
+            this.infiledList[t].seats=re
+          }
+          this.outRow(this.infiledList[0].seats)
 
           console.log(this.infiledList)
         },(error) => console.log('promise catch err'));
       },
-      reRow(salesId) {
-        this.$confirm('此操作将退票, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-              type: 'success',
-              message: '出票成功!',
-
-            },
-            refundMovie(salesId).then((res)=>{
-
+      reRow(k) {
+        this.toCan=k.split(",")
+        this.$confirm('确认取消锁座?', '提示', {}).then(() => {
+            cancel(this.toCan).then((res)=>{
               console.log(res)
-              console.log(res.data.content)
-              this.$router.push({path: '/user/MyMovie'});
-            })
-          );
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消出票'
-          });
-        });
+              alert("取消锁座成功")
+
+              this.$router.go(0)
+            },(error) => console.log('promise catch err'));
+          }
+
+        )
+          .catch(() => { });
       },
-      outRow(salesId) {
-        this.$confirm('此操作将在影院出票，是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-              type: 'success',
-              message: '退票成功!',
+      outRow(ticketSeats) {
+        this.ticketChinese=ticketSeats.split(" ")
+        for(let m in this.ticketChinese){
+          let k=this.ticketChinese[m].indexOf("排")
+          let t=this.ticketChinese[m].indexOf("座")
+          this.ticket={rowIndex:Number(this.ticketChinese[m].substring(0,k)),columnIndex:Number(this.ticketChinese[m].substring(2,t)),scheduleId:this.scheduleId}
+          this.ticketALL=this.ticketALL.concat(this.ticket)
+        }
 
-            },
-            outMovie(salesId).then((res)=>{
-
-              console.log(res)
-              console.log(res.data.content)
-              this.$router.push({path: '/user/MyMovie'});
-            })
-          );
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消出票'
-          });
-        });
+        console.log(this.ticketALL)
       },
       addRow(tableData,event){
         tableData.push({ fildna: '',fildtp:'',remark:''

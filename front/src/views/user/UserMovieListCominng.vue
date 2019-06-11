@@ -1,5 +1,5 @@
 <template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
-  <div class="app"  >
+  <div class="app" >
 
     <el-container  >
       <el-aside class="app-side app-side-left"
@@ -11,9 +11,6 @@
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
-          <!-- 我是样例菜单 -->
-
-
           <el-menu default-active="1-5-1"
                    class="el-menu-vertical-demo"
                    @open="handleOpen"
@@ -36,7 +33,7 @@
               <span slot="title">个人信息</span>
             </el-menu-item>
             <el-menu-item index="5" @click="logout">
-              <i class="el-icon-setting" ></i>
+              <i class="el-icon-setting"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
@@ -63,7 +60,7 @@
 
           <template>
             <nav class="navbar navbar-default">
-              <div class="container-fluid">
+              <div class="container-fluid" style="margin-top: -20px;margin-left: -20px;margin-right: -20px">
                 <el-menu
                   class="el-menu-demo"
                   mode="horizontal"
@@ -72,11 +69,11 @@
                   text-color="#fff"
                   active-text-color="#ffd04b"
                 >
-                  <el-col :span="11" >
+                  <el-col :span="12" >
                     <el-menu-item index="1" @click="intheather">正在上映</el-menu-item>
                   </el-col>
-                  <el-col :span="11">
-                    <el-menu-item index="2" @click="coming">即将上映</el-menu-item>
+                  <el-col :span="12">
+                    <el-menu-item index="2" @click="coming">已下架</el-menu-item>
                   </el-col>
                 </el-menu>
 
@@ -88,30 +85,40 @@
             <div class="canvas" v-show="loading">
               <div class="spinner"></div>
             </div>
+            <div>
+              <div style="margin-top: 15px;">
+                <el-input type="text" name="" id="hh" placeholder="搜索" v-model="search">
+
+                  <el-button slot="append" icon="el-icon-search" @click="btn"></el-button>
+                </el-input>
+              </div>
+
+            </div>
             <div class="row">
 
               <div class="col-md-2 text-center" v-for="item in result" :key="item.name">
                 <div v-show="item.status==1">
-                  <router-link :to="{path:'/detail/'+item.id}">
-                    <el-col :span="8" >
+                  <el-col :span="8" >
 
-                      <el-card class="box-moviecard">
-                        <span>{{item.id}}</span>
-                        <br>
-                        <img class="movie" height="320px" width="250px" :src="item.posterUrl">
-                        <br>
-
-                        <div style="padding: 14px;">
-                          <div class="bottom clearfix">
-                            <h3 class="text">{{item.name}}</h3>
-                          </div>
+                    <el-card class="box-moviecard">
+                      <br>
+                      <router-link :to="{path:'/user/MovieDetailOff/id',query:{id:item}}">
+                        <img class="moviekk" height="320px" width="250px" style="margin-left: 5px" :src="item.posterUrl" >
+                      </router-link>
+                      <div style="padding: 14px;">
+                        <div class="bottom clearfix">
+                          <h3 class="text">{{item.name}}</h3>
                         </div>
-                      </el-card>
-                    </el-col>
-                  </router-link>
+                      </div>
+                    </el-card>
+                    <br><br>
+                  </el-col>
+                  <!--</router-link>-->
                 </div>
               </div>
+
             </div>
+
           </div>
         </el-main>
       </el-container>
@@ -121,28 +128,39 @@
 
 <script>
   import {
-    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
+    getoffMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
   }from "../../api/userAPI"
   export default {
     name: 'Container',
     data() {
       return {
-
         loading: true,
         title: '',
         result:[],
         username: '',
         isCollapse: false,
+        imgList:[],
+        search:'',
+
       }
 
     }
     ,
 
     methods: {
+      btn(){
+        let p=[]
+        for(let h in this.result){
+          if(this.result[h].name.indexOf(this.search)>=0){
+            p=p.concat(this.result[h])
+          }
+        }
+        this.result=p
+      },
       sds(){
-        getMovie().then((res)=>{
+        getoffMovie().then((res)=>{
+          console.log(res)
           this.result=res.data.content;
-          console.log(res.data)
         },(error) => console.log('promise catch err'));
       },
       submit(){
@@ -188,11 +206,11 @@
       getinfo(event){
         this.$router.push({path: '/user/Info'});
       },
-      intheather(event){
-        this.$router.push({path: '/user/MovieList'});
-      },
       coming(event){
         this.$router.push({path: '/user/Coming'});
+      },
+      intheather(event){
+        this.$router.push({path: '/user/MovieList'});
       },
       loadMovieList(){
         this.loading = true;
@@ -207,7 +225,6 @@
           params['q'] = this.$route.params.searchKey;
         }
         this.$http.post(movieUrl, params).then((res) => {
-          console.log(res.data)
           // 这里不做多校验，可自己加，直接上数据
           this.list = res.data.subjects;
           this.title = res.data.title;
@@ -221,7 +238,7 @@
       if (user) {
         this.username = user;
       }
-      this.sds();
+      this.sds()
     },
   }
 
@@ -237,13 +254,11 @@
 
   .box-moviecard {
     margin-left: 30px;
-    width: 325px;
+    width: 300px;
     height: 450px;
-  }
-  .movie{
-    margin-left: 20px;
   }
   .text{
     margin-left: 75px;
   }
 </style>
+

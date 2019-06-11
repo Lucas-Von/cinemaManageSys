@@ -1,5 +1,5 @@
 <template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
-  <div class="app" >
+  <div class="app"  >
 
     <el-container  >
       <el-aside class="app-side app-side-left"
@@ -11,6 +11,9 @@
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
+          <!-- 我是样例菜单 -->
+
+
           <el-menu default-active="1-5-1"
                    class="el-menu-vertical-demo"
                    @open="handleOpen"
@@ -32,8 +35,8 @@
               <i class="el-icon-setting"></i>
               <span slot="title">个人信息</span>
             </el-menu-item>
-            <el-menu-item index="5" @click="logout">
-              <i class="el-icon-setting"></i>
+            <el-menu-item index="5">
+              <i class="el-icon-setting" @click="logout"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
@@ -58,68 +61,25 @@
 
         <el-main class="app-body">
 
-            <template>
-              <nav class="navbar navbar-default">
-                <div class="container-fluid" style="margin-top: -20px;margin-left: -20px;margin-right: -20px">
-                  <el-menu
-                    class="el-menu-demo"
-                    mode="horizontal"
-                    @select="handleSelect"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    active-text-color="#ffd04b"
-                  >
-                    <el-col :span="12" >
-                    <el-menu-item index="1" @click="intheather">正在上映</el-menu-item>
-                    </el-col>
-                    <el-col :span="12">
-                    <el-menu-item index="2" @click="coming">已下架</el-menu-item>
-                    </el-col>
-                  </el-menu>
+          <div class="details">
+            <img  height="470px" width="300px" :src="ids.posterUrl" style="float:left;margin-top: 10px" >
+            <span>
+              <el-col :span="3">
+              <h1>{{ids.name}}</h1>
+              </el-col>
 
-                </div>
-              </nav>
-            </template>
-
-          <div class="container">
-            <div class="canvas" v-show="loading">
-              <div class="spinner"></div>
-            </div>
-            <div>
-              <div style="margin-top: 15px;">
-                <el-input type="text" name="" id="hh" placeholder="搜索" v-model="search">
-
-                  <el-button slot="append" icon="el-icon-search" @click="btn"></el-button>
-                </el-input>
-              </div>
-
-            </div>
-            <div class="row">
-
-              <div class="col-md-2 text-center" v-for="item in result" :key="item.name">
-                <div v-show="item.status==0">
-                  <el-col :span="8" >
-
-                    <el-card class="box-moviecard">
-                      <br>
-                      <router-link :to="{path:'/user/MovieDetails/id',query:{id:item}}">
-                        <img class="movie" height="320px" width="250px" style="margin-left: 5px" :src="item.posterUrl" >
-                      </router-link>
-                    <div style="padding: 14px;">
-                      <div class="bottom clearfix">
-                        <h3 class="text">{{item.name}}</h3>
-                      </div>
-                    </div>
-                    </el-card>
-                    <br><br>
-                  </el-col>
-                <!--</router-link>-->
-              </div>
-              </div>
-
-            </div>
+            </span><br><br><br><br>
+            <span >简介：{{ids.description}}</span><br><br>
+            <span>上映：{{ids.startDate.substring(0,10)}}</span><br>
+            <span>地区：{{ids.country}}</span><br>
+            <span>类型：{{ids.type}}</span><br>
+            <span>语言：{{ids.language}}</span><br>
+            <span>导演：{{ids.director}}</span><br>
+            <span>主演：{{ids.starring}}</span><br>
+            <span>编剧：{{ids.screenWriter}}</span><br>
 
           </div>
+
         </el-main>
       </el-container>
     </el-container>
@@ -128,50 +88,52 @@
 
 <script>
   import {
-    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat
+    getMovie,getMovieDetail,markMovie,getMovieSchedule,getOccupiedSeat,LikeMovie,easeMovie
   }from "../../api/userAPI"
   export default {
-    name: 'Container',
-    data() {
-      return {
-        loading: true,
-        title: '',
+    name: "MovieOffDetails",
+    data(){
+      return{
+        isCollapse:false,
         result:[],
-        username: '',
-        isCollapse: false,
-        imgList:[],
-        search:'',
-
-      }
-
-    }
-    ,
-
+        ids:'',
+        like:'',
+        name:''
+      }},
     methods: {
-      btn(){
-        let p=[]
-        for(let h in this.result){
-          if(this.result[h].name.indexOf(this.search)>=0){
-            p=p.concat(this.result[h])
-          }
-        }
-        this.result=p
-      },
-      sds(){
-        getMovie().then((res)=>{
-          this.result=res.data.content;
+      likeMivie(){
+        LikeMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
+          console.log("fdsfdv")
+          console.log(res)
+          this.like=res.data.content.islike
+
+
         },(error) => console.log('promise catch err'));
       },
-      submit(){
-        if (!this.searchKey) {
-          alert('请输入搜索内容');
-          return;
-        }
-        // 搜索页面跳转
-        this.$router.push({
-          path: '/search/' + this.searchKey,
-        })
-        this.searchKey = "";
+      MarkMovie(){
+        markMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
+          console.log("fdsfdv")
+          console.log(res)
+          this.like=res.data.content.islike
+
+        },(error) => console.log('promise catch err'));
+      },
+      EaseMovie(){
+        easeMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
+          console.log("fdsfdv")
+          console.log(res)
+          this.like=res.data.content.islike
+
+        },(error) => console.log('promise catch err'));
+      },
+      movieSh(){
+        getMovieSchedule(this.ids.id).then((res)=>{
+          console.log(this.ids.id)
+          this.result=res.data.content;
+
+          console.log(this.result.scheduleItemList)
+
+        },(error) => console.log('promise catch err'));
       },
       toggleSideBar() {
         this.isCollapse = !this.isCollapse
@@ -224,39 +186,35 @@
           params['q'] = this.$route.params.searchKey;
         }
         this.$http.post(movieUrl, params).then((res) => {
+          console.log(res.data)
           // 这里不做多校验，可自己加，直接上数据
           this.list = res.data.subjects;
           this.title = res.data.title;
           this.loading = false;
+
         })
       }
     },
+    create(){
 
-    mounted: function () {
-      let user = sessionStorage.getItem('user');
-      if (user) {
-        this.username = user;
-      }
-      this.sds()
     },
+    mounted() {
+      let ids=this.$route.query.id;
+      console.log(this.$route.query.id)
+      this.ids=ids
+      this.movieSh(this.ids)
+      this.likeMivie()
+    }
   }
 
 </script>
 
-<style>
-
-
-    .row > div {
-      margin-bottom: 20px;
-    }
-
-
-    .box-moviecard {
-      margin-left: 30px;
-      width: 300px;
-      height: 450px;
-    }
-  .text{
-    margin-left: 75px;
+<style scoped>
+  img{
+    margin-right: 20px
   }
+
+
+
 </style>
+

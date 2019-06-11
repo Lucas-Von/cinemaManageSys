@@ -57,12 +57,19 @@
                 <el-row type="flex" justify="end">
                   <el-button type="primary" class="label" @click="addHallInfo">添加影厅</el-button>
                   <el-dialog title="添加影厅" :visible.sync="hallDialogVisiable" :before-close="closeHallDialog">
-                    <el-form :model="hallForm" :rules="hallRules" ref="ruleForm">
+                    <el-form :model="hallForm" :rules="hallRules" ref="hallForm'[">
                       <el-form-item label="名称" prop="name">
                         <el-input v-model="hallForm.name"></el-input>
                       </el-form-item>
                       <el-form-item label="容量" prop="size">
-                        <el-input v-model="hallForm.size"></el-input>
+                        <el-select v-model="hallForm.size" placeholder="请选择">
+                          <el-option
+                            v-for="item in sizes"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
                       </el-form-item>
                       <el-form-item label="行数" prop="hallRow">
                         <el-input v-model="hallForm.hallRow"></el-input>
@@ -98,6 +105,7 @@
                         prop="size"
                         label="容量"
                         width="150"
+                        :formatter="sizeFormat"
                         sortable>
                       </el-table-column>
                       <el-table-column
@@ -183,7 +191,17 @@
                 validator: isInteger,
                 trigger: "blur"
               }]
-          }
+          },
+          sizes: [{
+            value: 0,
+            label: "大"
+          }, {
+            value: 1,
+            label: "中"
+          }, {
+            value: 2,
+            label: "小"
+          }]
         }
       },
       methods:{
@@ -213,6 +231,19 @@
 
         /*--------------------------------------------------*/
 
+        sizeFormat: function(row) {
+          switch (row.size) {
+            case 0:
+              return "大";
+            case 1:
+              return "中";
+            case 2:
+              return "小"
+          }
+        },
+
+        /*--------------------------------------------------*/
+
         closeHallDialog: function() {
           this.hallDialogVisiable = false;
           this.resetHallDialog();
@@ -227,7 +258,15 @@
 
         getHallInfo: function() {
           getHall().then(res => {
-            this.hallData = res.content;
+            if (res.success){
+              this.hallData = res.content;
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
           })
         },
 

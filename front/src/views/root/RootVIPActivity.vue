@@ -520,12 +520,12 @@
         this.$confirm('确认删除该优惠？','提示',{})
           .then(() => {
             deleteRechargeActivity(id).then(res => {
-                this.getRecharge();
                 if (res.success){
                   this.$message({
                     type: 'success',
                     message: '删除成功!'
                   });
+                  this.getRecharge();
                 }
                 else {
                   this.$message({

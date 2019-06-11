@@ -6,37 +6,25 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production'
   ? 'http://47.103.9.254:8000'
   : 'http://localhost:8000';
 
-//获取排片信息
-export const getSchedule =() => {
-  return axios.get('/schedule/view').then(res => res.data)
+//获取电影列表
+export const  getMovie =() => {
+  return axios.get('/movie/all/exclude/off').then(res => res.data)
 };
 
-//添加排片信息
-export const addSchedule =(params) => {
-  return axios.post('/schedule/add', params).then(res => res.data)
+//获取电影想看人数
+export const getMovieLikeCount =(movieId) => {
+  return axios.get('/movie/' + movieId + '/like/count').then(res => res.data)
 };
 
-//修改排片信息
-export const updateSchedule =(params) => {
-  return axios.post('/schedule/update', params).then(res => res.data)
-};
-
-//删除拍片信息
-export const deleteSchedule =(params) => {
-  return axios.delete('/schedule/delete/batch', params).then(res => res.data)
+//按日获取电影想看人数
+export const getMovieLikeByDate =(movieId) => {
+  return axios.get('/movie/' + movieId + '/like/date').then(res => res.data)
 };
 
 // 获取会员卡充值优惠
 export const getRechargeActivity =() => {
   return axios.get('/vip/rechargeActivity/getAll').then(res => res.data)
 };
-
-// export const getRechargeActivity =() => {
-//   this.$ajax.get('/vip/rechargeActivity/getAll').then(function (res) {
-//     console.log(res.data);
-//     return res.data;
-//   })
-// }
 
 //添加会员卡充值优惠
 export const addRechargeActivity =(params) => {

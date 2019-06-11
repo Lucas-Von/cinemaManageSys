@@ -33,7 +33,7 @@ export const getScheduleById =(id) => {
 
 //批量删除排片
 export const deleteSchedule =(params) => {
-  return axios.delete('/schedule/delete/batch', params).then(res => res.data)
+  return axios.post('/schedule/delete/batch', params).then(res => res.data)
 };
 
 //获取排片可见时间
@@ -101,6 +101,11 @@ export const getMovie =() => {
   return axios.get('/movie/all/exclude/off').then(res => res.data)
 };
 
+//上架电影
+export const addMovie =(params) => {
+  return axios.post('/movie/add', params).then(res => res.data)
+}
+
 //获取电影详情
 export const getMovieDetails =(id, userId) => {
   return axios.get('/movie/' + id + '/' + userId).then(res => res.data)
@@ -118,6 +123,6 @@ export const getHall =() => {
 
 //下架电影
 export const deleteMovie =(params) => {
-  return axios.post('/movie/update', params).then(res => res.data)
+  return axios.post('/movie/off/batch', params).then(res => res.data)
 };
 

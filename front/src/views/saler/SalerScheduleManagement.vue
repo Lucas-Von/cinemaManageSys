@@ -146,17 +146,17 @@
           </el-row>
           <div v-if="term === 'hall'">
             <div id="schedule-date-container">
-              <div class="schedule-date">2019/04/01</div>
+              <div id="schedule-date">2019/04/01</div>
             </div>
-            <div class="schedule-container" >
-              <ul class="schedule-time-line">
+            <div id="schedule-container" >
+              <ul id="schedule-time-line">
                 <li class="schedule-time-item">00:00</li>
                 <li class="schedule-time-item">06:00</li>
                 <li class="schedule-time-item">12:00</li>
                 <li class="schedule-time-item">18:00</li>
                 <li class="schedule-time-item">24:00</li>
               </ul>
-              <ul class="schedule-item-line">
+              <ul id="schedule-item-line">
               </ul>
             </div>
           </div>

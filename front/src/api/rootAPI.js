@@ -21,6 +21,11 @@ export const getMovieLikeByDate =(movieId) => {
   return axios.get('/movie/' + movieId + '/like/date').then(res => res.data)
 };
 
+//获取所有电影想看人数
+export const getAllMovieLike =() => {
+  return axios.get('/movie/all/like/date').then(res => res.data)
+};
+
 // 获取会员卡充值优惠
 export const getRechargeActivity =() => {
   return axios.get('/vip/rechargeActivity/getAll').then(res => res.data)

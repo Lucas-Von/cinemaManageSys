@@ -101,7 +101,7 @@
               <span >已选座位：{{((se-col(se))/(seats[0].length))+1}}排{{col(se)}}座</span>
             </div>
             </span>
-            <span>票&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{ids.fare*init.length}}</span><br>
+            <span>票&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{round(ids.fare*init.length)}}</span><br>
             <router-link :to="{path:'/user/Moviecharge/id',query:{id:ticketALL}}">
 
               <el-button  size="small" style="margin-top: 40px" > 支付</el-button>
@@ -145,6 +145,9 @@
       }
       },
     methods: {
+      round(k){
+        return k.toFixed(2)
+      },
       topay(){
         toPay(sessionStorage.getItem('userId')).then((res)=>{
 

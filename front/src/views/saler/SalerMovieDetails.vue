@@ -112,48 +112,48 @@
           </div>
 
           <div>
+            <el-row type="flex" justify="end">
+              <el-col :span="3">
+                <el-button type="primary" @click="addSchedule">添加排片</el-button>
+                <el-dialog title="添加排片" :visible.sync="scheduleDialogVisiable" :before-close="closeSchedule">
+                  <el-form :model="scheduleForm" :rules="scheduleRules" ref="scheduleForm">
+                    <el-form-item label="选择影厅">
+                      <template>
+                        <el-select v-model="scheduleForm.hallId" placeholder="请选择">
+                          <el-option
+                            v-for="item in hallList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                      </template>
+                    </el-form-item>
+                    <el-form-item label="选择时间">
+                      <el-col :span="8">
+                        <el-form-item prop="startTime">
+                          <el-date-picker type="datetime" placeholder="开始时间" v-model="scheduleForm.startTime" style="width: 100%"></el-date-picker>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="2">&nbsp</el-col>
+                      <el-col :span="8">
+                        <el-form-item prop="endTime">
+                          <el-date-picker type="datetime" placeholder="结束时间" v-model="scheduleForm.endTime" style="width: 100%"></el-date-picker>
+                        </el-form-item>
+                      </el-col>
+                    </el-form-item>
+                    <el-form-item label="票价" prop="fare">
+                      <el-input v-model="scheduleForm.fare"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="submitSchedule(scheduleForm)">保存</el-button>
+                      <el-button @click="closeSchedule">取消</el-button>
+                    </el-form-item>
+                  </el-form>
+                </el-dialog>
+              </el-col>
+            </el-row>
             <el-tabs style="margin-top: 50px">
-              <el-row type="flex" justify="end">
-                <el-col>
-                  <el-button type="primary" @click="addSchedule">添加排片</el-button>
-                  <el-dialog title="添加排片" :visible.sync="scheduleDialogVisiable" :before-close="closeSchedule">
-                    <el-form :model="scheduleForm" :rules="scheduleRules" ref="scheduleForm">
-                      <el-form-item label="选择影厅">
-                        <template>
-                          <el-select v-model="scheduleForm.hallId" placeholder="请选择">
-                            <el-option
-                              v-for="item in hallList"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                          </el-select>
-                        </template>
-                      </el-form-item>
-                      <el-form-item label="选择时间">
-                        <el-col :span="8">
-                          <el-form-item prop="startTime">
-                            <el-time-picker type="date" placeholder="开始时间" v-model="scheduleForm.startTime" style="width: 100%"></el-time-picker>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="2">&nbsp</el-col>
-                        <el-col :span="8">
-                          <el-form-item prop="endTime">
-                            <el-time-picker placeholder="结束时间" v-model="scheduleForm.endTime" style="width: 100%"></el-time-picker>
-                          </el-form-item>
-                        </el-col>
-                      </el-form-item>
-                      <el-form-item label="票价" prop="fare">
-                        <el-input v-model="scheduleForm.fare"></el-input>
-                      </el-form-item>
-                      <el-form-item>
-                        <el-button type="primary" @click="submitSchedule(scheduleForm)">保存</el-button>
-                        <el-button @click="closeSchedule">取消</el-button>
-                      </el-form-item>
-                    </el-form>
-                  </el-dialog>
-                </el-col>
-              </el-row>
               <el-tab-pane
                 v-for="item in scheduleList"
                 :label="item.date.substring(0,10)"
@@ -356,11 +356,11 @@
         /*--------------------------------------------------*/
 
         startTimeFormat: function(row) {
-          return row.startTime.substring(11, 19);
+          return row.startTime.substring(11, 16);
         },
 
         endTimeFormat: function(row) {
-          return row.endTime.substring(11, 19);
+          return row.endTime.substring(11, 16);
         },
 
         /*--------------------------------------------------*/

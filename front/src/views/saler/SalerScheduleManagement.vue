@@ -146,17 +146,17 @@
           </el-row>
           <div v-if="term === 'hall'">
             <div id="schedule-date-container">
-              <div id="schedule-date">2019/04/01</div>
+              <div class="schedule-date"></div>
             </div>
             <div id="schedule-container" >
-              <ul id="schedule-time-line">
+              <ul class="schedule-time-line">
                 <li class="schedule-time-item">00:00</li>
                 <li class="schedule-time-item">06:00</li>
                 <li class="schedule-time-item">12:00</li>
                 <li class="schedule-time-item">18:00</li>
                 <li class="schedule-time-item">24:00</li>
               </ul>
-              <ul id="schedule-item-line">
+              <ul class="schedule-item-line">
               </ul>
             </div>
           </div>
@@ -493,38 +493,43 @@
         showSchedule: function() {
           getScheduleByHallId(this.hallId, new Date().toLocaleDateString()).then(res => {
             let schedules = res.content;
-            console.log("--------a--------------");
-            console.log(document.getElementById("schedule-date-container"));
+            console.log("----------------------");
             document.getElementById("schedule-date-container").innerHTML = "";
-            document.getElementById("schedule-time-line").siblings().remove();
             for (let i = 0; i < schedules.length; i ++){
               let schedule = schedules[i];
-              document.getElementById("schedule-date-container").append("<div class='schedule-date'>" + this.formatTime(new Date(schedule.date)) + "</div>");
-              let scheduleDateDom = document.getElementById("<ul class='schedule-item-line'></ul>");
-              document.getElementById("schedule-container").append(scheduleDateDom);
+              document.getElementById("schedule-date-container").innerHTML += "<div class='schedule-date'>" + schedule.date.substring(0, 10) + "</div>";
+              document.getElementById("schedule-container").innerHTML += "<ul class='schedule-item-line' id='" + schedule.date + "'></ul>";
               for (let j = 0; j < schedule.scheduleItemList.length; j ++){
                 let scheduleItem = schedule.scheduleItemList[j];
                 let scheduleItemStyle = this.mapStyle(scheduleItem);
-                let scheduleItemDom = document.getElementById("<li id='schedule-"+ scheduleItem.id +"' class='schedule-item' data-schedule='"+JSON.stringify(scheduleItem)+"' style='background:"+scheduleItemStyle.color+";top:"+scheduleItemStyle.top+";height:"+scheduleItemStyle.height+"'>"+
-                  "<span>"+scheduleItem.movieName+"</span>"+
-                  "<span class='error-text'>¥"+scheduleItem.fare+"</span>"+
-                  "<span>"+this.formatTime(new Date(scheduleItem.startTime))+"-"+this.formatTime(new Date(scheduleItem.endTime))+"</span>"+
-                  "</li>");
-                scheduleDateDom.append(scheduleItemDom);
+                console.log(scheduleItemStyle.top);
+                let scheduleItemDom =
+                  "<li class='schedule-item' data-schedule='"+JSON.stringify(scheduleItem)+
+                  "' style='background:"+scheduleItemStyle.color+ ";top:"+scheduleItemStyle.top+";height:"+scheduleItemStyle.height+"'>"+
+                  "<span>"+scheduleItem.movieName+"</span>"+"<br>"+
+                  "<span class='error-text'>¥"+scheduleItem.fare+"</span>"+"<br>"+
+                  "<span>"+scheduleItem.startTime.substring(11,16)+"-"+scheduleItem.endTime.substring(11,16)+"</span>"+
+                  "</li>";
+                document.getElementById(schedule.date).innerHTML += scheduleItemDom;
               }
             }
           })
         },
 
-        formatTime: function(time) {
-
+        formatTime: function(date) {
+          let year = date.getFullYear();
+          let month = date.getMonth()+1+'';
+          let day = date.getDate()+'';
+          month.length===1 && (month = '0'+month);
+          day.length===1 && (day = '0'+day);
+          return year+'-'+month+'-'+day;
         },
 
         mapStyle: function(schedule) {
           let start = new Date(schedule.startTime).getHours()+new Date(schedule.startTime).getMinutes()/60;
           let end = new Date(schedule.endTime).getHours()+new Date(schedule.endTime).getMinutes()/60 ;
           return {
-            color: colors[schedule.movieId%this.colors.length],
+            color: this.colors[schedule.movieId%this.colors.length],
             top: 40*start+'px',
             height: 40*(end-start)+'px'
           }
@@ -644,7 +649,7 @@
 </script>
 
 <style scoped>
-  .schedule-container {
+  #schedule-container {
     display: flex;
     padding: 0 20px;
   }
@@ -658,13 +663,13 @@
 
   .schedule-item-line {
     height: 960px;
-    width: 150px;
+    width: 80px;
     border-left: 1px solid #ccc;
     position: relative;
   }
 
   .schedule-item {
-    width: 100%;
+    width: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -673,7 +678,7 @@
     overflow-y: scroll;
   }
 
-  .schedule-date-container {
+  #schedule-date-container {
     padding-left: 100px;
     height: 40px;
     line-height: 30px;
@@ -681,7 +686,7 @@
   }
 
   .schedule-date {
-    width: 150px;
+    width: 250px;
     text-align: center;
   }
 </style>

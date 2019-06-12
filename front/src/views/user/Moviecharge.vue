@@ -166,9 +166,19 @@
             userId:'',
             seats:''
           },
+          tick:'',
+          battle:true,
         }
       },
       methods: {
+          AllTic(){
+            getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
+             this.tick=res.data.content
+              console.log("?????????????????????")
+              console.log(this.tick)
+              this.movieSh()
+            },(error) => console.log('promise catch err'));
+          },
         chickvalue () {
           getCouponById(this.searchValue).then((res) => {
             this.discountA=res.data.content.discountAmount
@@ -185,7 +195,6 @@
 
                 for(let k in res.data.content){
                   if(k>=res.data.content.length-this.ids.length){
-
                     console.log(res.data.content[k])
                     this.ticketid=this.ticketid.concat(Number(res.data.content[k].id))
                   }
@@ -213,6 +222,7 @@
             this.$confirm('确认购买?', '提示', {}).then(() => {
                 console.log("ggggg")
                 getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
+                  this.tick=res.data.content
                   console.log(res)
                   for(let k in res.data.content){
                     if(k>=res.data.content.length-this.ids.length){
@@ -228,9 +238,6 @@
 
               )
               .catch(() => { });
-
-
-
 
           },
 
@@ -276,13 +283,13 @@
         movieSh() {
             getOccupiedSeat(this.ids[0].scheduleId).then((res) => {
               console.log("pppppp/")
+              console.log(res)
               console.log(this.ids[0].scheduleId)
               this.movieid = res.data.content.scheduleItem.movieId
               this.scheduleItem=res.data.content.scheduleItem
               console.log(this.scheduleItem)
               let arrayObj = [this.ids.length]
               for (let k in this.ids) {
-
                 this.sit={
                   columnIndex:this.ids[k].columnIndex-2,
                     rowIndex:this.ids[k].rowIndex-1,
@@ -293,8 +300,22 @@
               this.seats=arrayObj
               console.log("dsagfds")
               console.log(this.seats)
+
+              for(let y in this.tick){
+                for(let x in this.seats){
+                  if(this.tick[y].rowIndex==this.seats[x].rowIndex&&this.tick[y].columnIndex==this.seats[x].columnIndex&&this.tick[y].scheduleId==this.ids[0].scheduleId){
+                    this.battle=false
+                  }
+                }
+              }
+              console.log(this.tick)
+              console.log(this.seats)
+              console.log(this.battle)
+              if(this.battle==true){
+
+                this.locks()
+              }
               this. acti()
-              this.locks()
               },(error) => console.log('promise catch err'));
         },
         acti(){
@@ -367,7 +388,7 @@
         this.ids=ids
         console.log("dfsa")
         console.log(ids)
-        this.movieSh()
+        this.AllTic()
         this.sds()
         this.judegeVip()
       }

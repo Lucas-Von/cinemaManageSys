@@ -165,6 +165,7 @@
               let sea=String(Number(m)+1)+"排"+String(Number(n)+1)+"座"+" "
               re=re+sea
             }
+            re=re.substring(0,re.length)
             console.log(re)
             this.infiledList[t].seats=re
           }
@@ -188,11 +189,12 @@
           .catch(() => { });
       },
       outRow(ticketSeats) {
-        this.ticketChinese=ticketSeats.split(" ")
+        console.log("?????")
+        this.ticketChinese=ticketSeats.substring(0,ticketSeats.length-1).split(" ")
         for(let m in this.ticketChinese){
           let k=this.ticketChinese[m].indexOf("排")
           let t=this.ticketChinese[m].indexOf("座")
-          this.ticket={rowIndex:Number(this.ticketChinese[m].substring(0,k)),columnIndex:Number(this.ticketChinese[m].substring(2,t)),scheduleId:this.scheduleId}
+          this.ticket={rowIndex:Number(this.ticketChinese[m].substring(0,k)),columnIndex:Number(this.ticketChinese[m].substring(2,t))+1,scheduleId:this.scheduleId}
           this.ticketALL=this.ticketALL.concat(this.ticket)
         }
 

@@ -104,7 +104,7 @@
             <span>票&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{ids.fare*init.length}}</span><br>
             <router-link :to="{path:'/user/Moviecharge/id',query:{id:ticketALL}}">
 
-              <el-button  size="small" style="margin-top: 40px"> 支付</el-button>
+              <el-button  size="small" style="margin-top: 40px" @click=""> 支付</el-button>
             </router-link>
         </el-col>
         </el-main>

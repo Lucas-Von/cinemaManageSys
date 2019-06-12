@@ -105,7 +105,7 @@
                       <span style="margin-left: 10px">影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scope.row.hallName }}<br></span>
                       <span style="margin-left: 10px">票&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp数：{{scope.row.count }}<br></span>
                       <span style="margin-left: 10px">座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{scope.row.seats }}<br></span>
-                      <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{scope.row.totalPrice }}<br></span>
+                      <span style="margin-left: 10px">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp价：{{round(scope.row.totalPrice)}}<br></span>
                     </template>
                   </el-table-column>
                   <el-table-column fixed="right" label="操作">
@@ -149,6 +149,9 @@
       }
     },
     methods: {
+      round(k){
+        return k.toFixed(2)
+      },
       sds(){
         getLockTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
           console.log(res.data.content)

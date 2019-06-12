@@ -309,7 +309,7 @@
     background: #FFFFFF;
   }
   .ltBackground {
-    background: cornflowerblue;
+    background: lightgray;
   }
 
 

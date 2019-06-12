@@ -18,23 +18,23 @@
                    :collapse="isCollapse">
 
             <el-menu-item index="1" @click="toMovie">
-              <i class="el-icon-camera"></i>
+              <i class="el-icon-s-grid"></i>
               <span slot="title">全部电影</span>
             </el-menu-item>
             <el-menu-item index="2" @click="toScheduleManagement">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-s-management"></i>
               <span slot="title">排片管理</span>
             </el-menu-item>
             <el-menu-item index="3" @click="toStatistics">
-              <i class="el-icon-document" ></i>
+              <i class="el-icon-s-data" ></i>
               <span slot="title">影院统计</span>
             </el-menu-item>
             <el-menu-item index="4" @click="toActivityPublishment">
-              <i class="el-icon-setting" ></i>
+              <i class="el-icon-s-ticket" ></i>
               <span slot="title">优惠劵发布策略</span>
             </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting" @click="logout"></i>
+            <el-menu-item index="5" @click="logout">
+              <i class="el-icon-switch-button"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>

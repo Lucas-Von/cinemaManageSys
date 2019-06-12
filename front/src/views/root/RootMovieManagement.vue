@@ -216,7 +216,7 @@
         drawCharts: function() {
           for (let i = 0; i < this.movieLikeData.length; i ++){
             let movieLike = this.movieLikeData[i];
-            document.getElementById("charts").innerHTML += "<el-row><div id='" + movieLike.id +"'></div></el-row>";
+            document.getElementById("charts").innerHTML += "<el-row><el-col :span='12'><div id='" + movieLike.id +"' :style=‘{width:'400px',height:'500px'}’></div></el-col></el-row>";
             let chart = this.$echarts.init(document.getElementById(movieLike.id));
             let xArray = [];
             let yArray = [];

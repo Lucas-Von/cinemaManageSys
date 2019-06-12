@@ -486,6 +486,7 @@
 
         setSchedule: function (scheduleList) {
           console.log(scheduleList);
+          console.log(this.schedule);
           this.schedule = [];
           for (let i = 0; i < scheduleList.length; i ++){
             let list = scheduleList[i].scheduleItemList;
@@ -508,8 +509,9 @@
         showSchedule: function() {
           getScheduleByHallId(this.hallId, new Date().toLocaleDateString()).then(res => {
             let schedules = res.content;
-            console.log("----------------------");
             document.getElementById("schedule-date-container").innerHTML = "";
+            console.log(document.getElementById("schedule-container").innerHTML);
+            document.getElementById("schedule-container").innerHTML = '<ul data-v-4fa0c552="" class="schedule-time-line"><li data-v-4fa0c552="" class="schedule-time-item">00:00</li> <li data-v-4fa0c552="" class="schedule-time-item">06:00</li> <li data-v-4fa0c552="" class="schedule-time-item">12:00</li> <li data-v-4fa0c552="" class="schedule-time-item">18:00</li> <li data-v-4fa0c552="" class="schedule-time-item">24:00</li></ul> <ul data-v-4fa0c552="" class="schedule-item-line"></ul>';
             for (let i = 0; i < schedules.length; i ++){
               let schedule = schedules[i];
               document.getElementById("schedule-date-container").innerHTML += "<div class='schedule-date'>" + schedule.date.substring(0, 10) + "</div>";

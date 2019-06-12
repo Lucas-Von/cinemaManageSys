@@ -155,7 +155,6 @@
           for(let y in res.data.content){
             if(res.data.content[y].state==1){
               this.infiledList=this.infiledList.concat(res.data.content[y])
-
             }
           }
           for(let t in this.infiledList){

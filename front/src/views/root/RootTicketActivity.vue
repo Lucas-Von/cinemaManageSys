@@ -676,7 +676,15 @@
           }
         })
       },
-
+      handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
       submitUpdateTicket: function(params) {
         updateTicketActivity(params).then(res => {
           this.getTicket();

@@ -24,12 +24,12 @@
               <i class="el-icon-menu"></i>
               <span slot="title">排片管理</span>
             </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-document" @click="toStatistics"></i>
+            <el-menu-item index="3" @click="toStatistics">
+              <i class="el-icon-document" ></i>
               <span slot="title">影院统计</span>
             </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting" @click="toActivityPublishment"></i>
+            <el-menu-item index="4" @click="toActivityPublishment">
+              <i class="el-icon-setting" ></i>
               <span slot="title">优惠劵发布策略</span>
             </el-menu-item>
             <el-menu-item index="5" @click="logout">
@@ -589,7 +589,16 @@
               })
             })
             .catch(() => { });
-        }
+        },
+        handleOpen(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleClose(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleSelect(key, keyPath) {
+          console.log(key, keyPath);
+        },
 
       },
       mounted: function () {

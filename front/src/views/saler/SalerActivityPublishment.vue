@@ -1,4 +1,4 @@
-<template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
+<template >
   <div class="app" >
     <el-container >
       <el-aside class="app-side app-side-left"
@@ -25,8 +25,8 @@
               <i class="el-icon-menu"></i>
               <span slot="title">排片管理</span>
             </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-document" @click="toStatistics"></i>
+            <el-menu-item index="3"@click="toStatistics">
+              <i class="el-icon-document" ></i>
               <span slot="title">影院统计</span>
             </el-menu-item>
             <el-menu-item index="4" @click="toActivityPublishment">
@@ -39,6 +39,20 @@
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+
+        </div>
+        <!-- 我是样例菜单 -->
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+
+        </el-menu>
       </el-aside>
 
       <el-container>
@@ -605,7 +619,16 @@
               })
             }
           })
-        }
+        },
+        handleOpen(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleClose(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleSelect(key, keyPath) {
+          console.log(key, keyPath);
+        },
         },
 
       mounted: function () {

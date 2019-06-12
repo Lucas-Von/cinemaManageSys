@@ -75,7 +75,7 @@
                 <span style="margin: 150px">恭喜！你已是会员！<br></span>
                 <el-divider></el-divider>
               </div>
-              <span style="margin: 80px">会员卡号:{{vipme.id}}</span><br><br><br><br>
+              <span style="margin: 80px;margin-top: 20px">会员卡号:{{vipme.id}}</span><br><br><br><br>
 
               <span style="margin: 80px">余&nbsp&nbsp&nbsp&nbsp&nbsp额：{{vipme.balance}}</span><br><br>
 

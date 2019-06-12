@@ -66,12 +66,17 @@
                   </el-option>
                 </el-select>
               </el-col>
+              <el-col :span="1">
+                &nbsp
+              </el-col>
               <el-col :span="4">
                 <el-button type="primary" @click="search">查询</el-button>
               </el-col>
             </el-row>
-            <div id="chart">
-            </div>
+            <el-row>
+              <div id="chart" :style="{width:'400px',height:'500px'}">
+              </div>
+            </el-row>
           </template>
         </el-main>
       </el-container>
@@ -153,18 +158,28 @@
           getMovieLikeByDate(movieId).then(res => {
             if (res.success){
               this.movieLikeData = res.content;
-              console.log(this.movieLikeData);
-              console.log(document.getElementById('chart'));
               let chart = this.$echarts.init(document.getElementById('chart'));
               let xArray = [];
               let yArray = [];
+              let movieName = "";
+              console.log(this.movieId);
+              console.log(this.movieList);
+              for (let i = 0; i < this.movieList.length; i ++){
+                if (this.movieList[i].value === this.movieId){
+                  movieName = this.movieList[i].label;
+                  break;
+                }
+              }
               for (let i = 0; i < this.movieLikeData.length; i ++){
                 xArray.push(this.movieLikeData[i].likeTime);
-                yArray.push(this.movieLikeData[i].likeNum);
+                yArray.push(parseInt(this.movieLikeData[i].likeNum));
               }
-              console.log(xArray);
-              console.log(yArray);
               let option = {
+                title: {
+                  text: '想看人数变化',
+                  subtext: movieName,
+                  left: 'center'
+                },
                 xAxis: {
                   type: 'category',
                   data: xArray
@@ -177,6 +192,7 @@
                   type: 'line'
                 }]
               };
+              console.log(option);
               chart.setOption(option);
             }
             else {
@@ -191,7 +207,7 @@
         getMovieLikeCount: function (movieId) {
           getMovieLikeCount(movieId).then(res => {
             if (res.success){
-              this.movieLikeCount = res.content;
+              this.movieLikeCovunt = res.content;
             }
             else {
               this.$message({

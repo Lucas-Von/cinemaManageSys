@@ -100,7 +100,10 @@
                 </template></el-col></span>
             <br><br><br><br>
             <span><h1>现&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length-Number(discountA)}}</h1></span><br>
+            <span v-if="vip">
+              <h1>会&nbsp&nbsp员&nbsp&nbsp价：{{VipAmount.mount}}</h1>
 
+            </span><br><br>
             <span>
 
               <el-col :span="12" ><el-button style="width: 200px;margin-left: 0px;margin-top: 5px" @click="ComonBuy">普通支付</el-button></el-col>
@@ -135,12 +138,13 @@
 
 <script>
   import {
-    getMovie,getVIP,getOccupiedSeat,lockSeats,getCoupon,getCommonBuy,getTicketByUserId,getVipBuy,getCouponById
+    getMovie,getVIP,getOccupiedSeat,lockSeats,getCoupon,getCommonBuy,getTicketByUserId,getVipBuy,getCouponById,getVip
   }from "../../api/userAPI"
     export default {
         name: "Moviecharge",
       data(){
         return{
+          VipAmount:'',
           scheduleItem:[],
           isCollapse:false,
           ids:[],
@@ -174,7 +178,6 @@
           AllTic(){
             getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
              this.tick=res.data.content
-              console.log("?????????????????????")
               console.log(this.tick)
               this.movieSh()
             },(error) => console.log('promise catch err'));
@@ -184,6 +187,7 @@
             this.discountA=res.data.content.discountAmount
             this.discountId=res.data.content.id
             console.log(res)
+            this.Vipmoney()
 
           }, (error) => console.log('promise catch err'));
         },
@@ -220,9 +224,7 @@
         },
           ComonBuy(){
             this.$confirm('确认购买?', '提示', {}).then(() => {
-                console.log("ggggg")
                 getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
-                  this.tick=res.data.content
                   console.log(res)
                   for(let k in res.data.content){
                     if(k>=res.data.content.length-this.ids.length){
@@ -244,7 +246,6 @@
 
         ComonBuy2(){
             getCommonBuy(this.ticketid,this.discountId).then((res)=>{
-              console.log("fsadds")
                 console.log(res)
               this.total=res.data.content.total
               alert("购票成功")
@@ -262,31 +263,36 @@
                 console.log(this.vipid)
               }
               console.log(res)
+              if(this.vip){
+                this.Vipmoney()
+              }
 
             },(error) => console.log('promise catch err'));
           },
+
         sds(){
           getMovie().then((res)=>{
             this.detail=res.data.content;
+            console.log("!!!!!!!!!!!11")
             console.log(this.movieid)
             for(let img in this.detail){
-
+              console.log(this.detail[img])
               if(this.detail[img].id==this.movieid){
-                console.log("hhhhhhhxyh")
                 this.img=this.detail[img].posterUrl
+                console.log(this.img)
               }
             }
-            console.log(this.detail)
           },(error) => console.log('promise catch err'));
         },
 
         movieSh() {
+
             getOccupiedSeat(this.ids[0].scheduleId).then((res) => {
-              console.log("pppppp/")
               console.log(res)
               console.log(this.ids[0].scheduleId)
               this.movieid = res.data.content.scheduleItem.movieId
               this.scheduleItem=res.data.content.scheduleItem
+              this.sds()
               console.log(this.scheduleItem)
               let arrayObj = [this.ids.length]
               for (let k in this.ids) {
@@ -300,7 +306,8 @@
               this.seats=arrayObj
               console.log("dsagfds")
               console.log(this.seats)
-
+              this. acti()
+              this.judegeVip()
               for(let y in this.tick){
                 for(let x in this.seats){
                   if(this.tick[y].rowIndex==this.seats[x].rowIndex&&this.tick[y].columnIndex==this.seats[x].columnIndex&&this.tick[y].scheduleId==this.ids[0].scheduleId){
@@ -308,22 +315,27 @@
                   }
                 }
               }
-              console.log(this.tick)
-              console.log(this.seats)
-              console.log(this.battle)
               if(this.battle==true){
 
                 this.locks()
               }
-              this. acti()
+
+
               },(error) => console.log('promise catch err'));
+        },
+        Vipmoney(){
+          console.log(this.scheduleItem)
+          getVip(this.scheduleItem.fare*this.ids.length-Number(this.discountA),this.ids.length).then((res)=>{
+            this.VipAmount=res.data.content
+          },(error) => console.log('promise catch err'));
         },
         acti(){
           getCoupon(sessionStorage.getItem('userId'),this.scheduleItem.fare*this.ids.length).then((res)=>{
             console.log(this.scheduleItem.fare*this.ids.length)
-            console.log("xyhssb")
             this.coupon=res.data.content
             console.log(res)
+            this.judegeVip()
+
 
           },(error) => console.log('promise catch err'));
         },
@@ -332,11 +344,9 @@
           this.seat.userId=Number(sessionStorage.getItem('userId'))
           this.seat.seats=this.seats
 
-          console.log("dsagfds")
           console.log(this.seat.seats)
 
           lockSeats(this.seat)(res => {
-            console.log("hhhhhh")
 
           },(error) => console.log('promise catch err'));
         },
@@ -387,10 +397,8 @@
         let ids=this.$route.query.id;
         this.ids=ids
         console.log("dfsa")
-        console.log(ids)
         this.AllTic()
         this.sds()
-        this.judegeVip()
       }
     }
 

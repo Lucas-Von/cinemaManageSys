@@ -91,7 +91,7 @@
           <el-form   ref="inServForm" size="small">
             <el-form-item >
               <template>
-                <el-table border :data="infiledList" style="width: 100%" v-if="infiledList.length>0">
+                <el-table border :data="infiledList" style="width: 100%" >
                   <el-table-column prop="fildna" label="海报" style="width:6vw;" >
                     <template slot-scope="scope">
                       <img :src=scope.row.posterUrl class="image" height="200px">

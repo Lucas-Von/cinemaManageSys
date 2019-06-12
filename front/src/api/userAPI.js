@@ -104,6 +104,10 @@ export const getTicketByUserId =(userId) => {
 }
 
 
+export  const getVip=(money,amount)=>{
+  return axios.get('/ticket/get/VIPTotal?money=' + money+'&amount='+amount)
+}
+
 export const getLockTicketByUserId =(userId) => {
   return axios.get('/ticket/get/lockedTickets?userId=' + userId)
 }

@@ -1,21 +1,23 @@
 <template xmlns:vertical-align="http://www.w3.org/1999/xhtml">
-  <div class="app" >
-    <el-container >
-      <el-aside class="app-side app-side-left">
-                <!--:class="isCollapse ? 'app-side-collapsed' : 'app-side-expanded'">-->
+  <div class="app"  >
+
+    <el-container  >
+      <el-aside class="app-side app-side-left"
+                :class="isCollapse ? 'app-side-collapsed' : 'app-side-expanded'">
         <div class="app-side-logo">
-          <img src="@/assets/1.jpg">
-               <!--:width="isCollapse ? '60' : '60'"-->
-               <!--:height="isCollapse ? '60' : '60'"-->
+          <img src="@/assets/1.jpg"
+               :width="isCollapse ? '60' : '60'"
+               :height="isCollapse ? '60' : '60'"
                style="float:left"/><br>&nbsp&nbsp&nbsp已登录
         </div>
         <div >
           <!-- 我是样例菜单 -->
 
-          <el-menu default-active="2"
-                   class="el-menu-vertical-demo">
-                   <!--@open="handleOpen"-->
-                   <!--:collapse="isCollapse">-->
+
+          <el-menu default-active="1-5-1"
+                   class="el-menu-vertical-demo"
+                   @open="handleOpen"
+                   :collapse="isCollapse">
 
             <el-menu-item index="1" @click="toMovie">
               <i class="el-icon-camera"></i>
@@ -25,20 +27,34 @@
               <i class="el-icon-menu"></i>
               <span slot="title">排片管理</span>
             </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-document" @click="toStatistics"></i>
+            <el-menu-item index="3" @click="toStatistics">
+              <i class="el-icon-document" ></i>
               <span slot="title">影院统计</span>
             </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting" @click="toActivityPublishment"></i>
+            <el-menu-item index="4" @click="toActivityPublishment">
+              <i class="el-icon-setting" ></i>
               <span slot="title">优惠劵发布策略</span>
             </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting" @click="logout"></i>
+            <el-menu-item index="5" @click="logout">
+              <i class="el-icon-setting"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+
+        </div>
+        <!-- 我是样例菜单 -->
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+
+        </el-menu>
       </el-aside>
 
       <el-container>
@@ -227,6 +243,7 @@
           }],
           hallId: "",
           movieId: "",
+          isCollapse:false,
           hall: [],
           movie: [],
           schedule: [],
@@ -638,7 +655,16 @@
               });
             }
           })
-        }
+        },
+        handleOpen(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleClose(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleSelect(key, keyPath) {
+          console.log(key, keyPath);
+        },
       },
       mounted: function () {
         this.getAllMovie();

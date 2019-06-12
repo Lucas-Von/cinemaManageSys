@@ -426,7 +426,15 @@
           this.rechargeForm.startTime = "";
           this.rechargeForm.endTime = "";
         },
-
+      handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
       getRecharge: function() {
         getRechargeActivity().then(res => {
           this.rechargeData = res.content;

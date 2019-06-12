@@ -118,18 +118,6 @@
                   <el-button type="primary" @click="addSchedule">添加排片</el-button>
                   <el-dialog title="添加排片" :visible.sync="scheduleDialogVisiable" :before-close="closeSchedule">
                     <el-form :model="scheduleForm" :rules="scheduleRules" ref="scheduleForm">
-                      <el-form-item label="选择电影">
-                        <template>
-                          <el-select v-model="scheduleForm.movieId" placeholder="请选择">
-                            <el-option
-                              v-for="item in movieList"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                          </el-select>
-                        </template>
-                      </el-form-item>
                       <el-form-item label="选择影厅">
                         <template>
                           <el-select v-model="scheduleForm.hallId" placeholder="请选择">
@@ -302,7 +290,7 @@
             scheduleForm: {
               id: "",
               hallId: "",
-              movieId: "",
+              movieId: this.$route.query.id.id,
               startTime: "",
               endTime: "",
               fare: ""
@@ -394,6 +382,7 @@
           },
 
         getSchedule: function(movieId) {
+          this.scheduleList = [];
           getScheduleByMovieId(movieId).then(res => {
             let list = res.content;
             for (let i = 0; i < 7 && i < list.length; i++) {
@@ -500,7 +489,7 @@
         },
 
         resetSchedule: function () {
-          this.scheduleForm.id = "";
+          this.scheduleForm.id = this.$route.query.id.id;
           this.scheduleForm.hallId = "";
           this.scheduleForm.movieId = "";
           this.scheduleForm.startTime = "";
@@ -544,10 +533,10 @@
             if (res.success){
               this.$message({
                 type: 'success',
-                message: '删除成功'
+                message: '添加成功'
               });
               this.closeSchedule();
-              this.getSchedule(this.$route.query.id);
+              this.getSchedule(this.$route.query.id.id);
             }
             else {
               this.$message({

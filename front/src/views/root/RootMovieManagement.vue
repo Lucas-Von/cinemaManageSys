@@ -70,16 +70,13 @@
                 <el-button type="primary" @click="search">查询</el-button>
               </el-col>
             </el-row>
+            <div id="chart">
+            </div>
           </template>
         </el-main>
       </el-container>
     </el-container>
   </div>
-
-  <!--<div>-->
-    <!--<el-dialog title="新增排片" :visible.sync="dialogFormVisible">-->
-      <!--<div>ABC</div>-->
-    <!--</el-dialog>-->
 
   <!--</div>-->
 </template>
@@ -94,6 +91,7 @@
       data() {
         return{
           isCollapse:false,
+          chartVisiable: false,
           movieId: "",
           movieList: [],
           movieLikeCount: [],
@@ -155,6 +153,31 @@
           getMovieLikeByDate(movieId).then(res => {
             if (res.success){
               this.movieLikeData = res.content;
+              console.log(this.movieLikeData);
+              console.log(document.getElementById('chart'));
+              let chart = this.$echarts.init(document.getElementById('chart'));
+              let xArray = [];
+              let yArray = [];
+              for (let i = 0; i < this.movieLikeData.length; i ++){
+                xArray.push(this.movieLikeData[i].likeTime);
+                yArray.push(this.movieLikeData[i].likeNum);
+              }
+              console.log(xArray);
+              console.log(yArray);
+              let option = {
+                xAxis: {
+                  type: 'category',
+                  data: xArray
+                },
+                yAxis: {
+                  type: 'value'
+                },
+                series: [{
+                  data: yArray,
+                  type: 'line'
+                }]
+              };
+              chart.setOption(option);
             }
             else {
               this.$message({
@@ -192,6 +215,7 @@
           else {
             this.getMovieLike(this.movieId);
             this.getMovieLikeCount(this.movieId);
+            this.chartVisiable = true;
           }
         }
       },

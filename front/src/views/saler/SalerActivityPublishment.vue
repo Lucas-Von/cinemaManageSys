@@ -59,7 +59,7 @@
         <el-main class="app-body">
           <template>
             <div>
-              <el-row type="flex" justify="end">
+              <el-col :span="17" style="margin-top: -20px"><h1>已发布的优惠</h1></el-col>
                 <el-col :span="3">
                   <el-button type="primary" class="label" @click="showActivityDialog">发布优惠</el-button>
                   <el-dialog title="添加优惠活动" :visible.sync="activityDialogVisiable" :before-close="closeActivityDialog">
@@ -121,7 +121,7 @@
                     </el-form>
                   </el-dialog>
                 </el-col>
-                <el-col :span="3">
+                <el-col :span="1">
                   <el-button type="primary" class="label" @click="showDiscount">赠送优惠券</el-button>
                   <el-dialog title="赠送优惠券" :visible.sync="discountDialogVisiable" :before-close="closeDiscount">
                     <el-form :model="discountForm" :rules="discountRules" ref="discountForm">
@@ -145,11 +145,7 @@
                     </el-form>
                   </el-dialog>
                 </el-col>
-                </el-row>
-              <el-row type="flex">
-                <el-col :span="2"></el-col>
-                <el-col :span="6">已发布的优惠</el-col>
-              </el-row>
+
               <el-table
                 :data="activityData"
                 :stripe=true

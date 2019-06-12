@@ -41,74 +41,133 @@
       </el-aside>
       <el-container>
         <el-main class="app-body">
-          <el-row type="flex" justify="end">
-            <el-col :span="2">
-              <el-button @click="updateDetail">修改影片信息</el-button>
-              <el-dialog title="修改影片信息" :visible.sync="detailDialogVisiable" :before-close="closeDetail">
-                <el-form :model="detailForm" :rules="detailRules" ref="detailForm">
-                  <el-form-item label="影片名称" prop="name">
-                    <el-input v-model="detailForm.name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="影片描述" prop="name">
-                    <el-input type="text" v-model="detailForm.description"></el-input>
-                  </el-form-item>
-                  <el-form-item label="上映时间">
-                    <el-col :span="8">
-                      <el-form-item prop="startDate">
-                        <el-date-picker placeholder="选择时间" v-model="detailForm.startDate" style="width: 100%"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                  </el-form-item>
-                  <el-form-item label="时长" prop="length">
-                    <el-input v-model="detailForm.length"></el-input>
-                  </el-form-item>
-                  <el-form-item label="海报URL" prop="name">
-                    <el-input v-model="detailForm.posterUrl"></el-input>
-                  </el-form-item>
-                  <el-form-item label="制片国家" prop="name">
-                    <el-input v-model="detailForm.country"></el-input>
-                  </el-form-item>
-                  <el-form-item label="类型" prop="name">
-                    <el-input v-model="detailForm.type"></el-input>
-                  </el-form-item>
-                  <el-form-item label="语言" prop="name">
-                    <el-input v-model="detailForm.language"></el-input>
-                  </el-form-item>
-                  <el-form-item label="导演" prop="name">
-                    <el-input v-model="detailForm.director"></el-input>
-                  </el-form-item>
-                  <el-form-item label="主演" prop="name">
-                    <el-input v-model="detailForm.starring"></el-input>
-                  </el-form-item>
-                  <el-form-item label="编剧" prop="name">
-                    <el-input v-model="detailForm.screenWriter"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="submitDetail(detailForm)">保存</el-button>
-                    <el-button @click="closeDetail">取消</el-button>
-                  </el-form-item>
-                </el-form>
-              </el-dialog>
-            </el-col>
-            <el-col :span="1">
-              &nbsp
-            </el-col>
-            <el-col :span="2">
-              <el-button type="danger" @click="deleteMovie">下架电影</el-button>
-            </el-col>
-          </el-row>
+          <!--<el-row type="flex" justify="end">-->
+            <!--<el-col :span="2">-->
+              <!--<el-button @click="updateDetail">修改影片信息</el-button>-->
+              <!--<el-dialog title="修改影片信息" :visible.sync="detailDialogVisiable" :before-close="closeDetail">-->
+                <!--<el-form :model="detailForm" :rules="detailRules" ref="detailForm">-->
+                  <!--<el-form-item label="影片名称" prop="name">-->
+                    <!--<el-input v-model="detailForm.name"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="影片描述" prop="name">-->
+                    <!--<el-input type="text" v-model="detailForm.description"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="上映时间">-->
+                    <!--<el-col :span="8">-->
+                      <!--<el-form-item prop="startDate">-->
+                        <!--<el-date-picker placeholder="选择时间" v-model="detailForm.startDate" style="width: 100%"></el-date-picker>-->
+                      <!--</el-form-item>-->
+                    <!--</el-col>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="时长" prop="length">-->
+                    <!--<el-input v-model="detailForm.length"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="海报URL" prop="name">-->
+                    <!--<el-input v-model="detailForm.posterUrl"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="制片国家" prop="name">-->
+                    <!--<el-input v-model="detailForm.country"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="类型" prop="name">-->
+                    <!--<el-input v-model="detailForm.type"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="语言" prop="name">-->
+                    <!--<el-input v-model="detailForm.language"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="导演" prop="name">-->
+                    <!--<el-input v-model="detailForm.director"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="主演" prop="name">-->
+                    <!--<el-input v-model="detailForm.starring"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="编剧" prop="name">-->
+                    <!--<el-input v-model="detailForm.screenWriter"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item>-->
+                    <!--<el-button type="primary" @click="submitDetail(detailForm)">保存</el-button>-->
+                    <!--<el-button @click="closeDetail">取消</el-button>-->
+                  <!--</el-form-item>-->
+                <!--</el-form>-->
+              <!--</el-dialog>-->
+            <!--</el-col>-->
+            <!--<el-col :span="1">-->
+              <!--&nbsp-->
+            <!--</el-col>-->
+            <!--<el-col :span="2">-->
+              <!--<el-button type="danger" @click="deleteMovie">下架电影</el-button>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
           <div class="details">
-            <img  height="350px" width="250px" :src="movieDetail.posterUrl" style="float:left" >
-            <span><h1>{{movieDetail.name}}</h1></span><br>
-            <span>简介：{{movieDetail.description}}</span><br><br>
-            <span>上映：{{movieDetail.startDate.substring(0,10)}}</span><br>
-            <span>时长：{{movieDetail.length}}</span><br>
-            <span>地区：{{movieDetail.country}}</span><br>
-            <span>类型：{{movieDetail.type}}</span><br>
-            <span>语言：{{movieDetail.language}}</span><br>
-            <span>导演：{{movieDetail.director}}</span><br>
-            <span>主演：{{movieDetail.starring}}</span><br>
-            <span>编剧：{{movieDetail.screenWriter}}</span>
+            <img  height="400px" width="300px" :src="movieDetail.posterUrl" style="float:left;margin-left: -10px"  >
+            <div>
+              <span>
+              <el-col :span="5">
+                <span><h1>&nbsp&nbsp&nbsp&nbsp{{movieDetail.name}}</h1></span>
+              </el-col>
+              <el-col :span="5">
+                <el-button @click="updateDetail" style="margin-top: 10px">修改影片信息</el-button>
+                <el-dialog title="修改影片信息" :visible.sync="detailDialogVisiable" :before-close="closeDetail">
+                <el-form :model="detailForm" :rules="detailRules" ref="detailForm">
+                <el-form-item label="影片名称" prop="name">
+                <el-input v-model="detailForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="影片描述" prop="name">
+                <el-input type="text" v-model="detailForm.description"></el-input>
+                </el-form-item>
+                <el-form-item label="上映时间">
+                <el-col :span="8">
+                <el-form-item prop="startDate">
+                <el-date-picker placeholder="选择时间" v-model="detailForm.startDate" style="width: 100%"></el-date-picker>
+                </el-form-item>
+                </el-col>
+                </el-form-item>
+                <el-form-item label="时长" prop="length">
+                <el-input v-model="detailForm.length"></el-input>
+                </el-form-item>
+                <el-form-item label="海报URL" prop="name">
+                <el-input v-model="detailForm.posterUrl"></el-input>
+                </el-form-item>
+                <el-form-item label="制片国家" prop="name">
+                <el-input v-model="detailForm.country"></el-input>
+                </el-form-item>
+                <el-form-item label="类型" prop="name">
+                <el-input v-model="detailForm.type"></el-input>
+                </el-form-item>
+                <el-form-item label="语言" prop="name">
+                <el-input v-model="detailForm.language"></el-input>
+                </el-form-item>
+                <el-form-item label="导演" prop="name">
+                <el-input v-model="detailForm.director"></el-input>
+                </el-form-item>
+                <el-form-item label="主演" prop="name">
+                <el-input v-model="detailForm.starring"></el-input>
+                </el-form-item>
+                <el-form-item label="编剧" prop="name">
+                <el-input v-model="detailForm.screenWriter"></el-input>
+                </el-form-item>
+                <el-form-item>
+                <el-button type="primary" @click="submitDetail(detailForm)">保存</el-button>
+                <el-button @click="closeDetail">取消</el-button>
+                </el-form-item>
+                </el-form>
+                </el-dialog>
+              </el-col>
+            <el-col :span="5">
+              <span>
+                  <el-button style="margin-top: 10px" type="danger" @click="deleteMovie">下架电影</el-button>
+              </span>
+            </el-col>
+                </span>
+            </div><br><br><br><br><br>
+            <span style="margin: 40px">简介：{{movieDetail.description}}</span><br><br>
+            <span style="margin-left: 20px">上映：{{movieDetail.startDate.substring(0,10)}}</span><br>
+            <span style="margin-left: 20px">时长：{{movieDetail.length}}</span><br>
+            <span style="margin-left: 20px">地区：{{movieDetail.country}}</span><br>
+            <span style="margin-left: 20px">类型：{{movieDetail.type}}</span><br>
+            <span style="margin-left: 20px">语言：{{movieDetail.language}}</span><br>
+            <span style="margin-left: 20px">导演：{{movieDetail.director}}</span><br>
+            <span style="margin-left: 20px">主演：{{movieDetail.starring}}</span><br>
+            <span style="margin-left: 20px">编剧：{{movieDetail.screenWriter}}</span>
           </div>
 
           <div>

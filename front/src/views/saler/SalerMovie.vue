@@ -61,9 +61,8 @@
         <el-main class="app-body">
           <div class="container">
             <div>
-              <br><br><br><br>
-              <el-row type="flex" justify="end">
-                <el-col :span="4">
+              <div>
+              <el-row  >
                   <el-button type="primary" @click="addMovie">上架电影</el-button>
                   <el-dialog title="上架电影" :visible.sync="movieDialogVisiable" :before-close="closeMovieDialog">
                     <el-form :model="movieForm" :rules="movieRules" ref="movieForm">
@@ -106,25 +105,22 @@
                       </el-form-item>
                     </el-form>
                   </el-dialog>
-                </el-col>
               </el-row>
+              </div>
               <br><br><br>
               <div v-for="item in movieData" :key="item.name">
                 <div v-show="item.status==0">
-                  <el-col :span="4.5" >
+                  <el-col :span="8" >
                     <el-card class="box-moviecard">
-                      <br>
-                      <div class="box-inside">
                         <router-link :to="{path:'/saler/MovieDetails/id',query:{id:item}}">
                           <img class="movie" height="320px" width="250px" :src="item.posterUrl" >
                         </router-link>
-                        <div style="padding: 10px;">
+                        <div class="bottom clearfix">
                             <h3 class="text">{{item.name}}</h3>
                         </div>
-                      </div>
                     </el-card>
+                    <br><br>
                   </el-col>
-                  <el-col :span="1.5">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</el-col>
                 </div>
               </div>
             </div>
@@ -312,19 +308,12 @@
 
   .box-moviecard {
     margin-left: 30px;
-    width: 325px;
+    width: 300px;
     height: 450px;
   }
 
-  .box-inside {
-    width: 250px;
-    margin-left: auto;
-    margin-right: auto;
+  .text{
+    margin-left: 75px;
   }
 
-  .text{
-    text-align: center;
-    font-weight: bold;
-    font-size: 150%;
-  }
 </style>

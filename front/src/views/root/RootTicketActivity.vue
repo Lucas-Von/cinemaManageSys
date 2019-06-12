@@ -16,11 +16,11 @@
                  class="el-menu-vertical-demo"
                  :collapse="isCollapse">
           <el-menu-item index="1" @click="toMovieManagement">
-            <i class="el-icon-camera"></i>
+            <i class="el-icon-s-grid"></i>
             <span slot="title">电影管理</span>
           </el-menu-item>
           <el-menu-item index="2" @click="toVIPActivity">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-postcard"></i>
             <span slot="title">会员卡优惠</span>
           </el-menu-item>
           <el-menu-item index="3" @click="toRefundStrategy">
@@ -32,7 +32,7 @@
             <span slot="title">影厅管理</span>
           </el-menu-item>
           <el-menu-item index="5" @click="logout">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-switch-button"></i>
             <span slot="title">登出</span>
           </el-menu-item>
         </el-menu>
@@ -201,10 +201,7 @@
                 </el-dialog>
               </el-row>
               </el-col>
-              <!--<el-row type="flex">-->
-                <!--<el-col :span="2"></el-col>-->
-                <!--<el-col :span="6">购票优惠</el-col>-->
-              <!--</el-row>-->
+
               <el-table
                 :data="ticketData"
                 :stripe=true

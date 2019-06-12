@@ -20,23 +20,23 @@
                    :collapse="isCollapse">
 
             <el-menu-item index="1" @click="getMovie">
-              <i class="el-icon-camera"></i>
+              <i class="el-icon-s-grid"></i>
               <span slot="title">全部电影</span>
             </el-menu-item>
             <el-menu-item index="2" @click="getmymovie">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-s-ticket"></i>
               <span slot="title">我的电影票</span>
             </el-menu-item>
             <el-menu-item index="3" @click="getmycard">
-              <i class="el-icon-document"></i>
+              <i class="el-icon-postcard"></i>
               <span slot="title">我的会员卡</span>
             </el-menu-item>
             <el-menu-item index="4" @click="getinfo">
               <i class="el-icon-setting"></i>
               <span slot="title">个人信息</span>
             </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting" @click="logout"></i>
+            <el-menu-item index="5" @click="logout">
+              <i class="el-icon-switch-button"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>
@@ -132,7 +132,7 @@
 
 <script>
   import {
-    outMovie,getConsumptionRecord,refundMovie
+    outMovie,getConsumptionRecord,refundMovie,refund
   }from "../../api/userAPI"
   export default {
 
@@ -144,10 +144,13 @@
         username: '',
         isCollapse: false,
         infiledList:[],
+        f:'',
+        des:[],
       }
     },
     methods: {
       sds(){
+        this.refu()
         console.log(sessionStorage.getItem('userId'))
         getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
           console.log(res)
@@ -176,12 +179,35 @@
           console.log(this.infiledList)
         },(error) => console.log('promise catch err'));
       },
+      refu(){
+        refund().then((res)=>{
+
+          this.f=res.data.content
+          this.des=this.des.concat("请确认您需要退票？")
+          for(let r in this.f){
+            this.des=this.des.concat(this.f[r].description);
+          }
+          console.log(this.des)
+        },(error) => console.log('promise catch err'));
+      },
       reRow(salesId) {
-        this.$confirm('此操作将退票, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+        const newDatas = []
+        const h = this.$createElement
+        for (let i in this.des) {
+          newDatas.push(h('p', null, this.des[i]))
+        }
+
+
+        this.$confirm(
+          '提示',
+          {
+            title: '提示',
+            message: h('div', null, newDatas),
+            showCancelButton: true,         
+            confirmButtonText: '确定',         
+            cancelButtonText: '取消',         
+            type: 'warning'
+          }).then(() => {
 
 
           this.$message({

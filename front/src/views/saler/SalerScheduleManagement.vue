@@ -59,7 +59,40 @@
 
       <el-container>
         <el-main class="app-body">
-          <el-row type="flex" justify="end">
+          <el-col :span="3">
+            <el-select v-model="term" placeholder="请选择查询方式">
+              <el-option
+                v-for="item in termOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          &nbsp&nbsp&nbsp
+          <el-col :span="8" v-if="term !== ''">
+            <el-select v-model="hallId" placeholder="请选择" style="width: 200px" v-if="term === 'hall'">
+              <el-option
+                v-for="item in hall"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            &nbsp&nbsp&nbsp
+            <el-select v-model="movieId" placeholder="请选择" v-if="term === 'movie'">
+              <el-option
+                v-for="item in movie"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          &nbsp&nbsp&nbsp
+          <el-col :span="2">
+            <el-button type="primary" style="width:80%;" @click="searchSchedule">查询</el-button>
+          </el-col>
             <el-col :span="3">
               <el-button type="primary" style="width:80%;" @click="addSchedule">添加排片</el-button>
               <el-dialog title="添加/修改排片" :visible.sync="scheduleDialogVisiable" :before-close="closeScheduleDialog">
@@ -124,42 +157,7 @@
                 </el-form>
               </el-dialog>
             </el-col>
-          </el-row>
-          <el-row type="flex">
-            <el-col :span="3">
-              <el-select v-model="term" placeholder="请选择查询方式">
-                <el-option
-                  v-for="item in termOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-col>
-            &nbsp&nbsp&nbsp
-            <el-col :span="3" v-if="term !== ''">
-              <el-select v-model="hallId" placeholder="请选择" v-if="term === 'hall'">
-                <el-option
-                  v-for="item in hall"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-              <el-select v-model="movieId" placeholder="请选择" v-if="term === 'movie'">
-                <el-option
-                  v-for="item in movie"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-col>
-            &nbsp&nbsp&nbsp
-            <el-col :span="2">
-              <el-button type="primary" style="width:80%;" @click="searchSchedule">查询</el-button>
-            </el-col>
-          </el-row>
+          <br><br><br><br>
           <div v-if="term === 'hall'">
             <div id="schedule-date-container">
               <div class="schedule-date"></div>

@@ -119,6 +119,11 @@ export const cancel=(ticketId)=>{
 export const checkTicketByUserId =(userId) => {
   return axios.get('/ticket/checkLocked?userId=' + userId)
 }
+
+export const refund=()=>{
+  return axios.get('/refundStrategy/getAll')
+}
+
 //退票
 export const refundTicket =(salesId) => {
   return axios.post('/ticket/refund?salesId=' + salesId)

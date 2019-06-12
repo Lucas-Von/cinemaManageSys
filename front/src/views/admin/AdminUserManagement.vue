@@ -17,19 +17,16 @@
                    :collapse="isCollapse">
 
             <el-menu-item index="1" @click="toEmployeeManagement">
-              <i class="el-icon-camera"></i>
+              <i class="el-icon-s-custom"></i>
               <span slot="title">员工管理</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="toUserManagement">
-              <i class="el-icon-menu"></i>
-              <span slot="title">用户管理</span>
-            </el-menu-item>
+
             <el-menu-item index="3" @click="toCinemaInfoManagement">
-              <i class="el-icon-document"></i>
+              <i class="el-icon-setting"></i>
               <span slot="title">影院信息管理</span>
             </el-menu-item>
             <el-menu-item index="4" @click="logout">
-              <i class="el-icon-setting"></i>
+              <i class="el-icon-switch-button"></i>
               <span slot="title">登出</span>
             </el-menu-item>
           </el-menu>

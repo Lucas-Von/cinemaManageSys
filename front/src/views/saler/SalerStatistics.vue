@@ -42,34 +42,34 @@
       </el-aside>
       <el-container>
         <el-main class="app-body">
-          <el-row type="flex" justify="end">
+          <el-row >
             <el-date-picker
               v-model="targetDate"
               type="date"
-              placeholder="请选择查询日期">
+              placeholder="请选择查询日期"
+            style="width: 950px">
             </el-date-picker>
             &nbsp&nbsp&nbsp&nbsp&nbsp
             <el-button type="primary" @click="check(targetDate)">查询</el-button>
-          </el-row>
-          <el-row type="flex">
-            <el-col :span="18">
-              <el-row>
+          </el-row><br><br>
+              <div>
                 <el-col :span="12">
                   <div id='scheduleRate' :style="{width:'400px',height:'500px'}"></div>
                 </el-col>
                 <el-col :span="12">
                   <div id='boxOffice' :style="{width:'400px',height:'500px'}"></div>
                 </el-col>
-              </el-row>
-              <el-row>
+              </div>
+            <br><br>
+
+            <div>
                 <el-col :span="12">
                   <div id='placingRate' :style="{width:'400px',height:'500px'}"></div>
                 </el-col>
                 <el-col :span="12">
                   <div id='audiencePrice' :style="{width:'400px',height:'500px'}"></div>
                 </el-col>
-              </el-row>
-            </el-col>
+            </div>
             <el-col :span="6">
               <br/><br/><br/>
               <el-row>
@@ -96,7 +96,6 @@
                 </el-table-column>
               </el-table>
             </el-col>
-          </el-row>
 
           <!--</template>-->
         </el-main>

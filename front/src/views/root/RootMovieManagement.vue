@@ -170,7 +170,10 @@
         //       }
         //       let option = {
         //         title: {
-        //           text: '想看人数变化',
+        //           text: '想看人数
+        //
+        //
+        //           变化',
         //           subtext: movieName,
         //           left: 'center'
         //         },

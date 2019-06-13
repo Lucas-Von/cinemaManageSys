@@ -159,10 +159,9 @@
             </el-col>
           <br><br><br><br>
           <div v-if="term === 'hall'">
-            <div id="schedule-date-container">
-              <div class="schedule-date"></div>
+            <div id="schedule-date-container" style="height: 40px;line-height: 30px;display: flex">
             </div>
-            <div id="schedule-container" >
+            <div id="schedule-container" style="display: flex;padding: 0 20px">
               <ul class="schedule-time-line">
                 <li class="schedule-time-item">00:00</li>
                 <li class="schedule-time-item">06:00</li>
@@ -509,37 +508,28 @@
         showSchedule: function() {
           getScheduleByHallId(this.hallId, new Date().toLocaleDateString()).then(res => {
             let schedules = res.content;
-            document.getElementById("schedule-date-container").innerHTML = "";
+            document.getElementById("schedule-date-container").innerHTML = "<div class='schedule-date' style='width: 180px;text-align: center'></div>";
             console.log(document.getElementById("schedule-container").innerHTML);
-            document.getElementById("schedule-container").innerHTML = '<ul data-v-4fa0c552="" class="schedule-time-line"><li data-v-4fa0c552="" class="schedule-time-item">00:00</li> <li data-v-4fa0c552="" class="schedule-time-item">06:00</li> <li data-v-4fa0c552="" class="schedule-time-item">12:00</li> <li data-v-4fa0c552="" class="schedule-time-item">18:00</li> <li data-v-4fa0c552="" class="schedule-time-item">24:00</li></ul> <ul data-v-4fa0c552="" class="schedule-item-line"></ul>';
+            document.getElementById("schedule-container").innerHTML = '<ul data-v-4fa0c552="" class="schedule-time-line" style="width: 120px;display: flex;flex-direction: column;justify-content: space-between;border-right: 1px solid #ccc"><li data-v-4fa0c552="" class="schedule-time-item">00:00</li> <li data-v-4fa0c552="" class="schedule-time-item">06:00</li> <li data-v-4fa0c552="" class="schedule-time-item">12:00</li> <li data-v-4fa0c552="" class="schedule-time-item">18:00</li> <li data-v-4fa0c552="" class="schedule-time-item">24:00</li></ul>';
             for (let i = 0; i < schedules.length; i ++){
               let schedule = schedules[i];
-              document.getElementById("schedule-date-container").innerHTML += "<div class='schedule-date'>" + schedule.date.substring(0, 10) + "</div>";
-              document.getElementById("schedule-container").innerHTML += "<ul class='schedule-item-line' id='" + schedule.date + "'></ul>";
+              document.getElementById("schedule-date-container").innerHTML += "<div class='schedule-date' style='width: 120px;text-align: center'>" + schedule.date.substring(0, 10) + "</div>";
+              document.getElementById("schedule-container").innerHTML += "<ul class='schedule-item-line' id='" + schedule.date + "' style='height: 960px;width: 120px;border-right: 1px solid #ccc;position: relative;padding-inline-start: 0px;'></ul>";
               for (let j = 0; j < schedule.scheduleItemList.length; j ++){
                 let scheduleItem = schedule.scheduleItemList[j];
                 let scheduleItemStyle = this.mapStyle(scheduleItem);
                 console.log(scheduleItemStyle.top);
                 let scheduleItemDom =
                   "<li class='schedule-item' data-schedule='"+JSON.stringify(scheduleItem)+
-                  "' style='background:"+scheduleItemStyle.color+ ";top:"+scheduleItemStyle.top+";height:"+scheduleItemStyle.height+"'>"+
-                  "<span>"+scheduleItem.movieName+"</span>"+"<br>"+
-                  "<span class='error-text'>¥"+scheduleItem.fare+"</span>"+"<br>"+
+                  "' style='background:"+scheduleItemStyle.color+ ";top:"+scheduleItemStyle.top+";height:"+scheduleItemStyle.height+";width: 120px;display: flex;flex-direction: column;align-items: center;color: #fff;position: absolute'>"+
+                  "<span>"+scheduleItem.movieName+"</span>"+
+                  "<span class='error-text' style='color: #FF3030'>¥"+scheduleItem.fare+"</span>"+
                   "<span>"+scheduleItem.startTime.substring(11,16)+"-"+scheduleItem.endTime.substring(11,16)+"</span>"+
                   "</li>";
                 document.getElementById(schedule.date).innerHTML += scheduleItemDom;
               }
             }
           })
-        },
-
-        formatTime: function(date) {
-          let year = date.getFullYear();
-          let month = date.getMonth()+1+'';
-          let day = date.getDate()+'';
-          month.length===1 && (month = '0'+month);
-          day.length===1 && (day = '0'+day);
-          return year+'-'+month+'-'+day;
         },
 
         mapStyle: function(schedule) {
@@ -677,7 +667,6 @@
 <style scoped>
   #schedule-container {
     display: flex;
-    padding: 0 20px;
   }
 
   .schedule-time-line {
@@ -705,7 +694,6 @@
   }
 
   #schedule-date-container {
-    padding-left: 100px;
     height: 40px;
     line-height: 30px;
     display: flex;

@@ -38,6 +38,20 @@
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+
+        </div>
+        <!-- 我是样例菜单 -->
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+
+        </el-menu>
       </el-aside>
       <el-container>
         <el-main class="app-body">
@@ -98,7 +112,7 @@
             <!--</el-col>-->
           <!--</el-row>-->
           <div class="details">
-            <img  height="400px" width="300px" :src="movieDetail.posterUrl" style="float:left;margin-left: -10px"  >
+            <img  height="400px" width="300px" :src="movieDetail.posterUrl" style="float:left;margin-left: -10px;margin-right: 20px"  >
             <div>
               <span>
               <el-col :span="5">
@@ -159,15 +173,15 @@
             </el-col>
                 </span>
             </div><br><br><br><br><br>
-            <span style="margin: 40px">简介：{{movieDetail.description}}</span><br><br>
-            <span style="margin-left: 20px">上映：{{movieDetail.startDate.substring(0,10)}}</span><br>
-            <span style="margin-left: 20px">时长：{{movieDetail.length}}</span><br>
-            <span style="margin-left: 20px">地区：{{movieDetail.country}}</span><br>
-            <span style="margin-left: 20px">类型：{{movieDetail.type}}</span><br>
-            <span style="margin-left: 20px">语言：{{movieDetail.language}}</span><br>
-            <span style="margin-left: 20px">导演：{{movieDetail.director}}</span><br>
-            <span style="margin-left: 20px">主演：{{movieDetail.starring}}</span><br>
-            <span style="margin-left: 20px">编剧：{{movieDetail.screenWriter}}</span>
+            <span >简介：{{movieDetail.description}}</span><br><br>
+            <span >上映：{{movieDetail.startDate.substring(0,10)}}</span><br>
+            <span >时长：{{movieDetail.length}}</span><br>
+            <span >地区：{{movieDetail.country}}</span><br>
+            <span>类型：{{movieDetail.type}}</span><br>
+            <span >语言：{{movieDetail.language}}</span><br>
+            <span >导演：{{movieDetail.director}}</span><br>
+            <span >主演：{{movieDetail.starring}}</span><br>
+            <span >编剧：{{movieDetail.screenWriter}}</span>
           </div>
 
           <div>
@@ -223,7 +237,7 @@
                     <el-table
                       :data="item.scheduleItemList"
                       :height="250"
-                      style="width: 80%">
+                      >
                       <el-table-column
                         prop="movieName"
                         label="影片名称"
@@ -251,7 +265,7 @@
                         label="票价"
                         width="150">
                       </el-table-column>
-                      <el-table-column fixed="right" label="操作" width="200">
+                      <el-table-column fixed="right" label="操作" >
                         <template slot-scope="scope">
                           <el-button type="primary" size="small" @click="updateSchedule(scope.row)">修改排片</el-button>
                           <el-button type="danger" size="small" @click="deleteSchedule(scope.row.id)">删除排片</el-button>
@@ -278,6 +292,7 @@
       data(){
           return{
             movieDetail: {},
+            isCollapse:false,
             detailDialogVisiable: false,
             detailForm: {
               id: "",
@@ -391,6 +406,18 @@
           }
       },
       methods:{
+        handleOpen(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleClose(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        handleSelect(key, keyPath) {
+          console.log(key, keyPath);
+        },
+        toggleSideBar() {
+          this.isCollapse = !this.isCollapse
+        },
         toActivityPublishment: function() {
           this.$router.push({path: '/saler/ActivityPublishment'});
         },

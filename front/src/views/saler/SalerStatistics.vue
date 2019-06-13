@@ -39,6 +39,20 @@
             </el-menu-item>
           </el-menu>
         </div>
+        <div style="width: 60px; cursor: pointer;"
+             @click.prevent="toggleSideBar">
+          <i v-show="!isCollapse" class="el-icon-d-arrow-left"></i>
+          <i v-show="isCollapse" class="el-icon-d-arrow-right"></i>
+
+        </div>
+        <!-- 我是样例菜单 -->
+        <el-menu default-active="1"
+                 class="el-menu-demo tab-page"
+                 mode="horizontal"
+                 @select="handleSelect"
+                 active-text-color="#409EFF">
+
+        </el-menu>
       </el-aside>
       <el-container>
         <el-main class="app-body">
@@ -111,6 +125,7 @@
         name: "SalerStatistics",
       data() {
           return{
+            isCollapse:false,
             targetDate: new Date(),
             scheduleRateData: [],
             scheduleRate: [],
@@ -124,6 +139,10 @@
           }
       },
       methods: {
+
+        toggleSideBar() {
+          this.isCollapse = !this.isCollapse
+        },
         toActivityPublishment: function () {
           this.$router.push({path: '/saler/ActivityPublishment'});
         },

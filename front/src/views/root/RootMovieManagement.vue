@@ -52,49 +52,49 @@
       <el-container>
         <el-main class="app-body" >
           <template>
-            <!--<el-row>-->
-              <!--<el-col :span="3">-->
-                <!--选择电影-->
-              <!--</el-col>-->
-              <!--<el-col :span="4">-->
-                <!--<el-select v-model="movieId" placeholder="请选择">-->
-                  <!--<el-option-->
-                    <!--v-for="item in movieList"-->
-                    <!--:key="item.value"-->
-                    <!--:label="item.label"-->
-                    <!--:value="item.value">-->
-                  <!--</el-option>-->
-                <!--</el-select>-->
-              <!--</el-col>-->
-              <!--<el-col :span="1">-->
-                <!--&nbsp-->
-              <!--</el-col>-->
-              <!--<el-col :span="4">-->
-                <!--<el-button type="primary" @click="search">查询</el-button>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
-            <!--<el-row>-->
-              <!--<div id="chart" :style="{width:'400px',height:'500px'}">-->
-              <!--</div>-->
-            <!--</el-row>-->
-            <!--<div v-for="item in movieData" :key="item.name">-->
-              <!--<div v-show="item.status==0">-->
-                <!--<el-col :span="4.5" >-->
-                  <!--<el-card class="box-moviecard">-->
-                    <!--<br>-->
-                    <!--<div class="box-inside">-->
-                      <!--<router-link :to="{path:'/saler/MovieDetails/id',query:{id:item}}">-->
-                        <!--<img class="movie" height="320px" width="250px" :src="item.posterUrl" >-->
-                      <!--</router-link>-->
-                      <!--<div style="padding: 10px;">-->
-                        <!--<h3 class="text">{{item.name}}</h3>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                  <!--</el-card>-->
-                <!--</el-col>-->
-                <!--<el-col :span="1.5">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</el-col>-->
-              <!--</div>-->
-            <!--</div>-->
+            <el-row>
+              <el-col :span="3">
+                选择电影
+              </el-col>
+              <el-col :span="4">
+                <el-select v-model="movieId" placeholder="请选择">
+                  <el-option
+                    v-for="item in movieList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="1">
+                &nbsp
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary" @click="search">查询</el-button>
+              </el-col>
+            </el-row>
+            <el-row>
+              <div id="chart" :style="{width:'400px',height:'500px'}">
+              </div>
+            </el-row>
+            <div v-for="item in movieData" :key="item.name">
+              <div v-show="item.status==0">
+                <el-col :span="4.5" >
+                  <el-card class="box-moviecard">
+                    <br>
+                    <div class="box-inside">
+                      <router-link :to="{path:'/saler/MovieDetails/id',query:{id:item}}">
+                        <img class="movie" height="320px" width="250px" :src="item.posterUrl" >
+                      </router-link>
+                      <div style="padding: 10px;">
+                        <h3 class="text">{{item.name}}</h3>
+                      </div>
+                    </div>
+                  </el-card>
+                </el-col>
+                <el-col :span="1.5">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</el-col>
+              </div>
+            </div>
             <div id="charts"></div>
           </template>
         </el-main>

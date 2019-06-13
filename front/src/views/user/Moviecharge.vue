@@ -82,7 +82,7 @@
             </el-col>
           </div>
           <el-col :span="6" style="margin-left: 40px">
-            <span><h1>原&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length}}</h1></span><br>
+            <span><h1>原&nbsp&nbsp&nbsp&nbsp价：{{round(scheduleItem.fare*ids.length)}}</h1></span><br>
             <span>
               <el-col :span="8">
               <h1>优惠券：</h1></el-col>
@@ -99,7 +99,7 @@
                   </el-select>
                 </template></el-col></span>
             <br><br><br><br>
-            <span><h1>现&nbsp&nbsp&nbsp&nbsp价：{{scheduleItem.fare*ids.length-Number(discountA)}}</h1></span><br>
+            <span><h1>现&nbsp&nbsp&nbsp&nbsp价：{{round(scheduleItem.fare*ids.length-Number(discountA))}}</h1></span><br>
             <span v-if="vip">
               <h1>会&nbsp&nbsp员&nbsp&nbsp价：{{VipAmount.mount}}</h1>
 
@@ -175,6 +175,9 @@
         }
       },
       methods: {
+          round(k){
+            return k.toFixed(2)
+          },
           AllTic(){
             getTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
              this.tick=res.data.content

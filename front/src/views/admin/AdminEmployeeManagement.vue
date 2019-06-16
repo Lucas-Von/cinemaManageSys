@@ -55,7 +55,7 @@
                   <el-col :span="3"><h1>售票员</h1></el-col>
                   <el-col :span="2">
                     <el-row type="flex" justify="end">
-                      <el-button  circle class="el-icon-circle-plus-outline" @click="addEmployee" style="margin-top: 12px"></el-button>
+                      <el-button  circle class="el-icon-circle-plus-outline" @click="addEmployee(2)" style="margin-top: 12px"></el-button>
                       <el-dialog title="添加员工" :visible.sync="addEmployeeDialogVisiable">
                         <el-form :model="addEmployeeForm" :rules="addEmployeeRules" ref="ruleForm">
                           <el-form-item label="用户名" prop="username">
@@ -66,12 +66,6 @@
                           </el-form-item>
                           <el-form-item label="重复密码" prop="passwordRepeat">
                             <el-input v-model="addEmployeeForm.passwordRepeat" show-password></el-input>
-                          </el-form-item>
-                          <el-form-item label="身份">
-                            <el-select v-model="addEmployeeForm.category" placeholder="请选择身份">
-                              <el-option label="经理" value=1></el-option>
-                              <el-option label="售票员" value=2></el-option>
-                            </el-select>
                           </el-form-item>
                           <el-form-item>
                             <el-button type="primary" @click="submitAddEmployee(addEmployeeForm)">保存</el-button>
@@ -128,30 +122,7 @@
                   <el-col :span="3"><h1>经理</h1></el-col>
                   <el-col :span="2">
                     <el-row type="flex" justify="end">
-                      <el-button  circle class="el-icon-circle-plus-outline" @click="addEmployee" style="margin-top: 12px"></el-button>
-                      <el-dialog title="添加员工" :visible.sync="addEmployeeDialogVisiable">
-                        <el-form :model="addEmployeeForm" :rules="addEmployeeRules" ref="ruleForm">
-                          <el-form-item label="用户名" prop="username">
-                            <el-input v-model="addEmployeeForm.username"></el-input>
-                          </el-form-item>
-                          <el-form-item label="密码" prop="password">
-                            <el-input v-model="addEmployeeForm.password" show-password></el-input>
-                          </el-form-item>
-                          <el-form-item label="重复密码" prop="passwordRepeat">
-                            <el-input v-model="addEmployeeForm.passwordRepeat" show-password></el-input>
-                          </el-form-item>
-                          <el-form-item label="身份">
-                            <el-select v-model="addEmployeeForm.category" placeholder="请选择身份">
-                              <el-option label="经理" value=1></el-option>
-                              <el-option label="售票员" value=2></el-option>
-                            </el-select>
-                          </el-form-item>
-                          <el-form-item>
-                            <el-button type="primary" @click="submitAddEmployee(addEmployeeForm)">保存</el-button>
-                            <el-button @click="closeAddEmployeeDialog">取消</el-button>
-                          </el-form-item>
-                        </el-form>
-                      </el-dialog>
+                      <el-button  circle class="el-icon-circle-plus-outline" @click="addEmployee(1)" style="margin-top: 12px"></el-button>
                     </el-row>
                   </el-col>
                 </el-row>
@@ -212,7 +183,8 @@
             },
             addEmployeeRules: {
 
-            }
+            },
+            category: ""
           }
       },
       methods : {
@@ -282,8 +254,9 @@
           })
         },
 
-        addEmployee: function() {
+        addEmployee: function(category) {
           this.addEmployeeDialogVisiable = true;
+          this.addEmployeeForm.category = category;
         },
 
         updateEmployee: function(params) {

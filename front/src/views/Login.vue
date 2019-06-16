@@ -99,7 +99,7 @@
                     this.$router.push({path: '/saler'});
                     break;
                   case 3:
-                    this.$router.push({path: '/admin'});
+                    this.$router.push({path: '/admin/EmployeeManagement'});
                     break;
                   default:
                     this.$message({

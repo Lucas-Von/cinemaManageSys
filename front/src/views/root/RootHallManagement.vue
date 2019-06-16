@@ -125,7 +125,6 @@
                         </template>
                       </el-table-column>
                     </el-table>
-
               </div>
             </div>
           </template>
@@ -188,13 +187,13 @@
               }]
           },
           sizes: [{
-            value: 0,
+            value: 1,
             label: "大"
           }, {
-            value: 1,
+            value: 2,
             label: "中"
           }, {
-            value: 2,
+            value: 3,
             label: "小"
           }]
         }
@@ -228,11 +227,11 @@
 
         sizeFormat: function(row) {
           switch (row.size) {
-            case 0:
-              return "大";
             case 1:
-              return "中";
+              return "大";
             case 2:
+              return "中";
+            case 3:
               return "小"
           }
         },

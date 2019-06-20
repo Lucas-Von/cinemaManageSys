@@ -216,7 +216,18 @@
                   label="适用影片"
                   width="180">
                   <template slot-scope="scope">
-                    <el-button type="primary" @click="" disabled>查看适用影片</el-button>
+                    <el-button type="primary" @click="showMovieDialog(scope.row)">查看适用影片</el-button>
+                    <el-dialog title="查看适用电影" :visible.sync="targetMoviesVisiable" :before-close="closeMoviedialog">
+                      <h1>适用影片：</h1>
+                      <el-table
+                        :data="targetMovies"
+                        style="width: 100%">
+                        <el-table-column
+                          prop="name"
+                          width="180">
+                        </el-table-column>
+                      </el-table>
+                    </el-dialog>
                   </template>
                 </el-table-column>
                 <!--<el-table-column-->
@@ -343,7 +354,9 @@
             },
             movieData: [],
             discountData: [],
-            userData: []
+            userData: [],
+            targetMoviesVisiable: false,
+            targetMovies: []
           }
       },
       methods: {
@@ -443,16 +456,18 @@
 
         /*--------------------------------------------------*/
 
-        showMovieDialog: function() {
-
+        showMovieDialog: function(params) {
+          this.targetMoviesVisiable = true;
+          this.targetMovies = params.movieList;
         },
 
         closeMoviedialog: function() {
-
+          this.targetMoviesVisiable = false;
+          this.resetMovieDialog();
         },
 
         resetMovieDialog: function() {
-
+          this.targetMovies = [];
         },
 
         /*--------------------------------------------------*/

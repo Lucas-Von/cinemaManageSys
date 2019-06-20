@@ -153,7 +153,6 @@
         this.refu()
         console.log(sessionStorage.getItem('userId'))
         getConsumptionRecord(sessionStorage.getItem('userId')).then((res)=>{
-          console.log(res)
           console.log(res.data.content)
           for(let y in res.data.content){
             if(res.data.content[y].state==1){

@@ -154,9 +154,7 @@
       },
       sds(){
         getLockTicketByUserId(sessionStorage.getItem('userId')).then((res)=> {
-          console.log("!!!!!!!!!!!!!!!!!!!!!!!")
-          console.log(res)
-          if (res.success) {
+
           this.scheduleId = res.data.content.scheduleId
           this.infiledList = this.infiledList.concat(res.data.content)
           for (let t in this.infiledList) {
@@ -176,9 +174,6 @@
           }
           this.outRow(this.infiledList[0].seats)
 
-        }else{
-
-          }
         },(error) => console.log('promise catch err'));
       },
       reRow(k) {

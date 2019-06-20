@@ -548,6 +548,7 @@
         /*--------------------------------------------------*/
 
         showDiscount: function() {
+          this.getCoupon()
           this.discountDialogVisiable = true;
         },
 
@@ -609,6 +610,7 @@
           this.discountData = [];
           getAllCoupon().then(res => {
             let list = res.content;
+            
             for (let i = 0; i < list.length; i ++){
               this.discountData.push({
                 value: list[i].id,

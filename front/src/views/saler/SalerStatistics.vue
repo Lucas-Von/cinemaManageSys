@@ -84,15 +84,17 @@
                   <div id='audiencePrice' :style="{width:'400px',height:'500px'}"></div>
                 </el-col>
             </div>
-            <el-col :span="6">
+            <el-col :span="24">
               <br/><br/><br/>
+              <el-divider><h3>最受欢迎电影排行榜</h3></el-divider>
+              <br>
+
               <el-row>
-                最受欢迎电影排行榜
-              </el-row>
-              <el-row>
-                请选择查询数量
-              </el-row>
-              <el-select v-model="targetNum" placeholder="请选择">
+                <el-col :span="8" style="margin-top: -20px">
+                <h4  style="margin-left: 50px">请选择查询数量:</h4>
+                </el-col>
+                <el-col :span="12">
+              <el-select v-model="targetNum" placeholder="请选择" style="width: 400px">
                 <el-option
                   v-for="item in [{
                   value: 1,
@@ -118,25 +120,30 @@
                   :value="item.value">
                 </el-option>
               </el-select>
-              <el-button type="primary" @click="getPopularMovie">查询</el-button>
+                </el-col>
+                <el-col :span="4">
+              <el-button style="width: 100px" type="primary" @click="getPopularMovie">查询</el-button>
+                </el-col>
+
+              </el-row>
+              <br><br>
               <el-table
                 :data="popularMovieData"
                 :stripe=true
                 :height="600"
-                style="width: 100%">
+                style="width: 1000px;margin-left: 50px;margin-right: 50px">
                 <el-table-column
                   prop="sequence"
-                  width="50">
+                  width="300">
                 </el-table-column>
                 <el-table-column
                   prop="name"
                   label="电影名称"
-                  width="150">
+                  width="300">
                 </el-table-column>
                 <el-table-column
                   prop="boxOffice"
-                  label="票房"
-                  width="100">
+                  label="票房">
                 </el-table-column>
               </el-table>
             </el-col>

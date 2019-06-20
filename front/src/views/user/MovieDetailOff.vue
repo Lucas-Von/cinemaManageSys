@@ -70,7 +70,7 @@
 
             </span><br><br><br><br>
             <span >简介：{{ids.description}}</span><br><br>
-            <span>上映：{{ids.startDate.substring(0,10)}}</span><br>
+            <span>上映：{{day(ids.startDate)}}</span><br>
             <span>地区：{{ids.country}}</span><br>
             <span>类型：{{ids.type}}</span><br>
             <span>语言：{{ids.language}}</span><br>
@@ -101,6 +101,12 @@
         name:''
       }},
     methods: {
+      day(k){
+        return String(k).substring(0,10)
+      },
+      time(k){
+        return String(k).substring(11,19)
+      },
       likeMivie(){
         LikeMovie(this.ids.id,sessionStorage.getItem('userId')).then((res)=>{
           console.log("fdsfdv")

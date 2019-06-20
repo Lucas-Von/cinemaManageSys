@@ -76,7 +76,7 @@
 
             </span><br><br><br><br>
             <span >简介：{{ids.description}}</span><br><br>
-            <span>上映：{{ids.startDate.substring(0,10)}}</span><br>
+            <span>上映：{{ids.startDate}}</span><br>
             <span>地区：{{ids.country}}</span><br>
             <span>类型：{{ids.type}}</span><br>
             <span>语言：{{ids.language}}</span><br>
@@ -103,7 +103,7 @@
             <el-tabs style="margin-top: 50px">
             <el-tab-pane
               v-for="item in result"
-              :label="item.date.substring(0,10)"
+              :label="day(item.date)"
               :key="item.date"
               >
               <span v-if="!item.scheduleItemList.length>0">今日暂无排片</span>
@@ -118,7 +118,7 @@
                         label="放映开始时间"
                         width="250">
                         <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.startTime.substring(11,19)}}</span>
+                        <span style="margin-left: 10px">{{ time(scope.row.startTime)}}</span>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -126,7 +126,7 @@
                         label="放映结束时间"
                         width="250">
                         <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.endTime.substring(11,19)}}</span>
+                        <span style="margin-left: 10px">{{ time(scope.row.endTime)}}</span>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -185,6 +185,12 @@
         index:1,
       }},
     methods: {
+      day(k){
+        return k.substring(0,10)
+      },
+      time(k){
+        return k.substring(11,19)
+      },
       change(){
         if(this.like==0){
           this.MarkMovie()

@@ -92,9 +92,9 @@
             <span><h1>{{ids.movieName}}</h1></span>
             <span><img :src="img" width="100px" height="120px"></span><br>
             <span>影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{ids.hallName}}</span><br>
-            <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{ids.startTime.substring(0,10)}}</span><br>
-            <span>开始时间：{{ids.startTime.substring(11,19)}}</span><br>
-            <span>结束时间：{{ids.endTime.substring(11,19)}}</span><br>
+            <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{day(ids.startTime)}}</span><br>
+            <span>开始时间：{{time(ids.startTime)}}</span><br>
+            <span>结束时间：{{time(ids.endTime)}}</span><br>
             <span>
               <!--<div>已选座位：</div>-->
             <div v-for="se in init">
@@ -145,6 +145,12 @@
       }
       },
     methods: {
+      day(k){
+        return String(k).substring(0,10)
+      },
+      time(k){
+        return String(k).substring(11,19)
+      },
       round(k){
         return k.toFixed(2)
       },
@@ -198,7 +204,6 @@
         getOccupiedSeat(this.ids.id).then((res)=>{
           console.log(this.ids.id)
           var n=0
-          console.log("fdsgaf")
           console.log(res)
           this.result=res.data.content;
           this.seats=this.result.seats

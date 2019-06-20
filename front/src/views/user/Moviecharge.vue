@@ -74,9 +74,9 @@
             <span><h1>{{scheduleItem.movieName}}</h1></span>
             <span><img :src="img" width="100px" height="120px"></span><br>
             <span>影&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp厅：{{scheduleItem.hallName}}</span><br>
-            <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{scheduleItem.startTime.substring(0,10)}}</span><br>
-            <span>开始时间：{{scheduleItem.startTime.substring(11,19)}}</span><br>
-            <span>结束时间：{{scheduleItem.endTime.substring(11,19)}}</span><br>
+            <span>日&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp期：{{day(scheduleItem.startTime)}}</span><br>
+            <span>开始时间：{{time(scheduleItem.startTime)}}</span><br>
+            <span>结束时间：{{time(scheduleItem.endTime)}}</span><br>
             <span>座&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp位：{{item.rowIndex}}排{{item.columnIndex-1}}座</span>
           </el-card>
             </el-col>
@@ -175,6 +175,12 @@
         }
       },
       methods: {
+        day(k){
+          return String(k).substring(0,10)
+        },
+        time(k){
+          return String(k).substring(11,19)
+        },
           round(k){
             return k.toFixed(2)
           },
@@ -307,7 +313,6 @@
               }
               console.log(arrayObj)
               this.seats=arrayObj
-              console.log("dsagfds")
               console.log(this.seats)
               this. acti()
               this.judegeVip()
@@ -322,8 +327,6 @@
 
                 this.locks()
               }
-
-
               },(error) => console.log('promise catch err'));
         },
         Vipmoney(){
@@ -338,19 +341,14 @@
             this.coupon=res.data.content
             console.log(res)
             this.judegeVip()
-
-
           },(error) => console.log('promise catch err'));
         },
         locks(){
           this.seat.scheduleId=this.ids[0].scheduleId
           this.seat.userId=Number(sessionStorage.getItem('userId'))
           this.seat.seats=this.seats
-
-          console.log(this.seat.seats)
-
           lockSeats(this.seat)(res => {
-
+            console.log(res)
           },(error) => console.log('promise catch err'));
         },
         toggleSideBar() {

@@ -153,28 +153,32 @@
         return k.toFixed(2)
       },
       sds(){
-        getLockTicketByUserId(sessionStorage.getItem('userId')).then((res)=>{
-          console.log(res.data.content)
-          this.scheduleId=res.data.content.scheduleId
-          this.infiledList=this.infiledList.concat(res.data.content)
-          for(let t in this.infiledList){
-            let p=this.infiledList[t].seats.split(" ")
-            let re=''
-            for(let i in p){
-              let in1=Number(p[i].indexOf("排"))
-              let m=p[i].charAt(in1-1)
-              let in2=Number(p[i].indexOf("座"))
-              let n=p[i].charAt(in2-1)
-              let sea=String(Number(m)+1)+"排"+String(Number(n)+1)+"座"+" "
-              re=re+sea
+        getLockTicketByUserId(sessionStorage.getItem('userId')).then((res)=> {
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!")
+          console.log(res)
+          if (res.success) {
+          this.scheduleId = res.data.content.scheduleId
+          this.infiledList = this.infiledList.concat(res.data.content)
+          for (let t in this.infiledList) {
+            let p = this.infiledList[t].seats.split(" ")
+            let re = ''
+            for (let i in p) {
+              let in1 = Number(p[i].indexOf("排"))
+              let m = p[i].charAt(in1 - 1)
+              let in2 = Number(p[i].indexOf("座"))
+              let n = p[i].charAt(in2 - 1)
+              let sea = String(Number(m) + 1) + "排" + String(Number(n) + 1) + "座" + " "
+              re = re + sea
             }
-            re=re.substring(0,re.length)
-            console.log(re)
-            this.infiledList[t].seats=re
+            re = re.substring(0, re.length)
+
+            this.infiledList[t].seats = re
           }
           this.outRow(this.infiledList[0].seats)
 
-          console.log(this.infiledList)
+        }else{
+
+          }
         },(error) => console.log('promise catch err'));
       },
       reRow(k) {

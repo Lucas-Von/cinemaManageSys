@@ -119,7 +119,7 @@
                 </span>
             </div><br><br><br><br><br>
             <span >简介：{{movieDetail.description}}</span><br><br>
-            <span >上映：{{movieDetail.startDate.substring(0,10)}}</span><br>
+            <span >上映：{{day(movieDetail.startDate)}}</span><br>
             <span >时长：{{movieDetail.length}}</span><br>
             <span >地区：{{movieDetail.country}}</span><br>
             <span>类型：{{movieDetail.type}}</span><br>
@@ -174,7 +174,7 @@
             <el-tabs style="margin-top: 50px">
               <el-tab-pane
                 v-for="item in scheduleList"
-                :label="item.date.substring(0,10)"
+                :label="day(item.date)"
                 :key="item.date">
                 <span v-if="!item.scheduleItemList.length>0">今日暂无排片</span>
                 <span v-if="item.scheduleItemList.length>0">
@@ -351,6 +351,12 @@
           }
       },
       methods:{
+        day(k){
+          return String(k).substring(0,10)
+        },
+        time(k){
+          return String(k).substring(11,19)
+        },
         handleOpen(key, keyPath) {
           console.log(key, keyPath);
         },
@@ -387,11 +393,11 @@
         /*--------------------------------------------------*/
 
         startTimeFormat: function(row) {
-          return row.startTime.substring(11, 16);
+          return String(row.startTime).substring(11, 16);
         },
 
         endTimeFormat: function(row) {
-          return row.endTime.substring(11, 16);
+          return String(row.endTime).substring(11, 16);
         },
 
         /*--------------------------------------------------*/

@@ -327,6 +327,8 @@
 
                 this.locks()
               }
+
+
               },(error) => console.log('promise catch err'));
         },
         Vipmoney(){
@@ -341,14 +343,19 @@
             this.coupon=res.data.content
             console.log(res)
             this.judegeVip()
+
+
           },(error) => console.log('promise catch err'));
         },
         locks(){
           this.seat.scheduleId=this.ids[0].scheduleId
           this.seat.userId=Number(sessionStorage.getItem('userId'))
           this.seat.seats=this.seats
+
+          console.log(this.seat.seats)
+
           lockSeats(this.seat)(res => {
-            console.log(res)
+
           },(error) => console.log('promise catch err'));
         },
         toggleSideBar() {

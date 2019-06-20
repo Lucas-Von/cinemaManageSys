@@ -244,6 +244,7 @@
         name: "SalerActivityPulishment",
       data(){
           return{
+            isCollapse:false,
             activityData: [],
             activityDialogVisiable: false,
             activityForm: {
@@ -616,6 +617,7 @@
             }
           })
         },
+
         handleOpen(key, keyPath) {
           console.log(key, keyPath);
         },
@@ -625,7 +627,11 @@
         handleSelect(key, keyPath) {
           console.log(key, keyPath);
         },
+        toggleSideBar() {
+          this.isCollapse = !this.isCollapse
         },
+
+      },
 
       mounted: function () {
           this.getActivity();

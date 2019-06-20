@@ -217,14 +217,13 @@
                   width="180">
                   <template slot-scope="scope">
                     <el-button type="primary" @click="showMovieDialog(scope.row)">查看适用影片</el-button>
-                    <el-dialog title="查看适用电影" :visible.sync="targetMoviesVisiable" :before-close="closeMoviedialog">
+                    <el-dialog style="width: 600px;margin-left: 300px" title="查看适用电影" :visible.sync="targetMoviesVisiable" :before-close="closeMoviedialog">
                       <h1>适用影片：</h1>
                       <el-table
                         :data="targetMovies"
-                        style="width: 100%">
+                        style="width: 300px">
                         <el-table-column
-                          prop="name"
-                          width="180">
+                          prop="name" style="margin-left: 30px">
                         </el-table-column>
                       </el-table>
                     </el-dialog>
@@ -625,7 +624,7 @@
           this.discountData = [];
           getAllCoupon().then(res => {
             let list = res.content;
-            
+
             for (let i = 0; i < list.length; i ++){
               this.discountData.push({
                 value: list[i].id,

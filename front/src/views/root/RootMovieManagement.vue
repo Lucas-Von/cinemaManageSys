@@ -17,7 +17,7 @@
                    :collapse="isCollapse">
             <el-menu-item index="1" @click="toMovieManagement">
               <i class="el-icon-s-grid"></i>
-              <span slot="title">电影管理</span>
+              <span slot="title">电影喜爱统计</span>
             </el-menu-item>
             <el-menu-item index="2" @click="toVIPActivity">
               <i class="el-icon-postcard"></i>
@@ -53,11 +53,11 @@
         <el-main class="app-body" >
           <template>
             <el-row>
-              <el-col :span="3">
-                选择电影
+              <el-col :span="4" style="margin-top: -15px">
+                <h3>选 &nbsp择 &nbsp电 &nbsp影:</h3>
               </el-col>
-              <el-col :span="4">
-                <el-select v-model="movieId" placeholder="请选择">
+              <el-col :span="10">
+                <el-select v-model="movieId" placeholder="请选择" style="width: 400px">
                   <el-option
                     v-for="item in movieList"
                     :key="item.value"
@@ -69,32 +69,26 @@
               <el-col :span="1">
                 &nbsp
               </el-col>
-              <el-col :span="4">
+              <el-col :span="6">
                 <el-button type="primary" @click="search">查询</el-button>
               </el-col>
+              <br><br><br><br>
             </el-row>
-            <el-row>
+
+            <el-row v-if="show">
               <div id="chart" :style="{width:'400px',height:'500px'}">
               </div>
             </el-row>
-            <!--<div v-for="item in movieData" :key="item.name">-->
-              <!--<div v-show="item.status==0">-->
-                <!--<el-col :span="4.5" >-->
-                  <!--<el-card class="box-moviecard">-->
-                    <!--<br>-->
-                    <!--<div class="box-inside">-->
-                      <!--<router-link :to="{path:'/saler/MovieDetails/id',query:{id:item}}">-->
-                        <!--<img class="movie" height="320px" width="250px" :src="item.posterUrl" >-->
-                      <!--</router-link>-->
-                      <!--<div style="padding: 10px;">-->
-                        <!--<h3 class="text">{{item.name}}</h3>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                  <!--</el-card>-->
-                <!--</el-col>-->
-                <!--<el-col :span="1.5">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</el-col>-->
-              <!--</div>-->
-            <!--</div>-->
+            <el-row v-if="!show">
+
+              <div  v-for="item in movieList"  :key="item.value" >
+                <el-col :span="12" >
+                <div :src="search2(item)" :id="item.value"  :style="{width:'400px',height:'500px'}">
+                </div>
+                </el-col>
+              </div>
+
+            </el-row>
           </template>
         </el-main>
       </el-container>
@@ -116,7 +110,8 @@
           isCollapse:false,
           movieList: [],
           movieId: "",
-          movieLikeData: []
+          movieLikeData: [],
+          show:false
         }
       },
       methods: {
@@ -168,6 +163,7 @@
         /*--------------------------------------------------*/
 
         search:function(){
+
           if (this.movieId === ""){
             this.$message({
               type: 'error',
@@ -175,11 +171,25 @@
             });
           }
           else {
+            this.show=true
             this.getMovieLike(this.movieId);
+          }
+        },
+        search2:function(k){
+          console.log(k.value)
+          if (k.value === ""){
+            this.$message({
+              type: 'error',
+              message: '请选择电影'
+            });
+          }
+          else {
+            this.getMovieLike2(k);
           }
         },
 
         getMovieLike: function (movieId) {
+
           getMovieLikeByDate(movieId).then(res => {
             if (res.success){
               this.movieLikeData = res.content;
@@ -228,58 +238,59 @@
             }
           })
         },
+        getMovieLike2: function (t) {
+          var movieId=t.value
+          getMovieLikeByDate(movieId).then(res => {
+            if (res.success){
+              this.movieLikeData = res.content;
+              let chart = this.$echarts.init(document.getElementById(t.value));
+              let xArray = [];
+              let yArray = [];
+              let movieName = "";
 
-        // getMovieLikeData: function() {
-        //   getAllMovieLike().then(res => {
-        //     if (res.success){
-        //       this.movieLikeData = res.content;
-        //       this.drawCharts();
-        //     }
-        //     else {
-        //       this.$message({
-        //         type: 'error',
-        //         message: res.message
-        //       });
-        //     }
-        //   })
-        // },
-        //
-        // drawCharts: function() {
-        //   for (let i = 0; i < this.movieLikeData.length; i ++){
-        //     let movieLike = this.movieLikeData[i];
-        //     document.getElementById("charts").innerHTML += "<el-row><el-col :span='12'><div id='" + movieLike.id +"' :style=‘{width:'400px',height:'500px'}’></div></el-col></el-row>";
-        //     let chart = this.$echarts.init(document.getElementById(movieLike.id));
-        //     let xArray = [];
-        //     let yArray = [];
-        //     for (let j = 0; j < movieLike.dateLikeVOS.length; j ++){
-        //       xArray.push(movieLike.dateLikeVOS[j].likeTime);
-        //       yArray.push(movieLike.dateLikeVOS[j].likeNum);
-        //     }
-        //     console.log(xArray);
-        //     console.log(yArray);
-        //     let option = {
-        //       title: {
-        //         text: movieLike.name,
-        //         left: 'center'
-        //       },
-        //       xAxis: {
-        //         type: 'category',
-        //         data: xArray
-        //       },
-        //       yAxis: {
-        //         type: 'value'
-        //       },
-        //       series: [{
-        //         data: yArray,
-        //         type: 'line'
-        //       }]
-        //     };
-        //     chart.setOption(option);
-        //   }
-        // },
+              for (let i = 0; i < this.movieList.length; i ++){
+                if (this.movieList[i].value === movieId){
+                  movieName = this.movieList[i].label;
+                  break;
+                }
+              }
+              for (let i = 0; i < this.movieLikeData.length; i ++){
+                xArray.push(this.movieLikeData[i].likeTime);
+                yArray.push(parseInt(this.movieLikeData[i].likeNum));
+              }
+              let option = {
+                title: {
+                  text: '想看人数变化',
+                  subtext: movieName,
+                  left: 'center'
+                },
+                xAxis: {
+                  type: 'category',
+                  data: xArray
+                },
+                yAxis: {
+                  type: 'value'
+                },
+                series: [{
+                  data: yArray,
+                  type: 'line'
+                }]
+              };
+              console.log(option);
+              chart.setOption(option);
+            }
+            else {
+              this.$message({
+                type: 'error',
+                message: res.message
+              });
+            }
+          })
+        },
+
+
       },
       mounted: function () {
-        // this.getMovieLikeData();
         this.getAllMovie();
       }
     }

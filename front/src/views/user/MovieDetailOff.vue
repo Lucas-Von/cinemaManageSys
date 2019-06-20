@@ -31,10 +31,10 @@
               <i class="el-icon-postcard"></i>
               <span slot="title">我的会员卡</span>
             </el-menu-item>
-            <el-menu-item index="4" @click="getinfo">
-              <i class="el-icon-setting"></i>
-              <span slot="title">个人信息</span>
-            </el-menu-item>
+            <!--<el-menu-item index="4" @click="getinfo">-->
+              <!--<i class="el-icon-setting"></i>-->
+              <!--<span slot="title">个人信息</span>-->
+            <!--</el-menu-item>-->
             <el-menu-item index="5" @click="logout">
               <i class="el-icon-switch-button"></i>
               <span slot="title">登出</span>

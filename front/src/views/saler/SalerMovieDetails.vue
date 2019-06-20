@@ -55,64 +55,9 @@
       </el-aside>
       <el-container>
         <el-main class="app-body">
-          <!--<el-row type="flex" justify="end">-->
-            <!--<el-col :span="2">-->
-              <!--<el-button @click="updateDetail">修改影片信息</el-button>-->
-              <!--<el-dialog title="修改影片信息" :visible.sync="detailDialogVisiable" :before-close="closeDetail">-->
-                <!--<el-form :model="detailForm" :rules="detailRules" ref="detailForm">-->
-                  <!--<el-form-item label="影片名称" prop="name">-->
-                    <!--<el-input v-model="detailForm.name"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="影片描述" prop="name">-->
-                    <!--<el-input type="text" v-model="detailForm.description"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="上映时间">-->
-                    <!--<el-col :span="8">-->
-                      <!--<el-form-item prop="startDate">-->
-                        <!--<el-date-picker placeholder="选择时间" v-model="detailForm.startDate" style="width: 100%"></el-date-picker>-->
-                      <!--</el-form-item>-->
-                    <!--</el-col>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="时长" prop="length">-->
-                    <!--<el-input v-model="detailForm.length"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="海报URL" prop="name">-->
-                    <!--<el-input v-model="detailForm.posterUrl"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="制片国家" prop="name">-->
-                    <!--<el-input v-model="detailForm.country"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="类型" prop="name">-->
-                    <!--<el-input v-model="detailForm.type"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="语言" prop="name">-->
-                    <!--<el-input v-model="detailForm.language"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="导演" prop="name">-->
-                    <!--<el-input v-model="detailForm.director"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="主演" prop="name">-->
-                    <!--<el-input v-model="detailForm.starring"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item label="编剧" prop="name">-->
-                    <!--<el-input v-model="detailForm.screenWriter"></el-input>-->
-                  <!--</el-form-item>-->
-                  <!--<el-form-item>-->
-                    <!--<el-button type="primary" @click="submitDetail(detailForm)">保存</el-button>-->
-                    <!--<el-button @click="closeDetail">取消</el-button>-->
-                  <!--</el-form-item>-->
-                <!--</el-form>-->
-              <!--</el-dialog>-->
-            <!--</el-col>-->
-            <!--<el-col :span="1">-->
-              <!--&nbsp-->
-            <!--</el-col>-->
-            <!--<el-col :span="2">-->
-              <!--<el-button type="danger" @click="deleteMovie">下架电影</el-button>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
+
           <div class="details">
-            <img  height="400px" width="300px" :src="movieDetail.posterUrl" style="float:left;margin-left: -10px;margin-right: 20px"  >
+            <img  height="450px" width="300px" :src="movieDetail.posterUrl" style="float:left;margin-left: -10px;margin-right: 20px"  >
             <div>
               <span>
               <el-col :span="5">
@@ -252,18 +197,18 @@
                         prop="startTime"
                         label="开始时间"
                         :formatter = "startTimeFormat"
-                        width="200">
+                        width="180">
                       </el-table-column>
                       <el-table-column
                         prop="endTime"
                         label="结束时间"
                         :formatter = "endTimeFormat"
-                        width="200">
+                        width="180">
                       </el-table-column>
                       <el-table-column
                         prop="fare"
                         label="票价"
-                        width="150">
+                        width="130">
                       </el-table-column>
                       <el-table-column fixed="right" label="操作" >
                         <template slot-scope="scope">

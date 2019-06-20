@@ -59,7 +59,7 @@
 
       <el-container>
         <el-main class="app-body">
-          <el-col :span="3">
+          <el-col :span="5">
             <el-select v-model="term" placeholder="请选择查询方式">
               <el-option
                 v-for="item in termOptions"
@@ -68,6 +68,10 @@
                 :value="item.value">
               </el-option>
             </el-select>
+
+          </el-col>
+          <el-col :span="1">
+            &nbsp
           </el-col>
           &nbsp&nbsp&nbsp
           <el-col :span="8" v-if="term !== ''">
@@ -89,7 +93,7 @@
               </el-option>
             </el-select>
           </el-col>
-          &nbsp&nbsp&nbsp
+
           <el-col :span="2">
             <el-button type="primary" style="width:80%;" @click="searchSchedule">查询</el-button>
           </el-col>

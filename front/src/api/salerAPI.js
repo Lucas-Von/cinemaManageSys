@@ -68,7 +68,7 @@ export const getPlacingRate =(date) => {
 
 //获取最受欢迎电影
 export const getPopularMovies =(days, movieNum) => {
-  return axios.get('statistics/popular/movie?days=' + movieNum + '&movieNum=' + movieNum).then(res => res.data)
+  return axios.get('statistics/popular/movie?days=' + days + '&movieNum=' + movieNum).then(res => res.data)
 };
 
 //发布优惠活动

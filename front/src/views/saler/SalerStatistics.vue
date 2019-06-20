@@ -89,6 +89,36 @@
               <el-row>
                 最受欢迎电影排行榜
               </el-row>
+              <el-row>
+                请选择查询数量
+              </el-row>
+              <el-select v-model="targetNum" placeholder="请选择">
+                <el-option
+                  v-for="item in [{
+                  value: 1,
+                  label: 1
+                  },{
+                  value: 2,
+                  label: 2
+                  },{
+                  value: 3,
+                  label: 3
+                  },{
+                  value: 4,
+                  label: 4
+                  },{
+                  value: 5,
+                  label: 5
+                  },{
+                  value: 6,
+                  label: 6
+                  }]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+              <el-button type="primary" @click="getPopularMovie">查询</el-button>
               <el-table
                 :data="popularMovieData"
                 :stripe=true
@@ -135,7 +165,8 @@
             placingRate: [],
             audiencePriceData: [],
             audiencePrice: [],
-            popularMovieData: []
+            popularMovieData: [],
+            targetNum: ""
           }
       },
       methods: {
@@ -270,24 +301,34 @@
         },
 
         getPopularMovie: function() {
-          getPopularMovies(7, 3).then(res => {
-            if (res.success){
-              let list = res.content;
-              for (let i = 0; i < list.length; i ++){
-                this.popularMovieData.push({
-                  sequence: i + 1,
-                  name: list[i].name,
-                  boxOffice: list[i].boxOffice
-                })
+          if (this.targetNum === ""){
+            this.$message({
+              type: 'error',
+              message: "请选择查询数量"
+            });
+          }
+          else {
+            console.log(this.targetNum);
+            getPopularMovies(7, this.targetNum).then(res => {
+              if (res.success){
+                let list = res.content;
+                this.popularMovieData = [];
+                for (let i = 0; i < list.length; i ++){
+                  this.popularMovieData.push({
+                    sequence: i + 1,
+                    name: list[i].name,
+                    boxOffice: list[i].boxOffice
+                  })
+                }
               }
-            }
-            else {
-              this.$message({
-                type: 'error',
-                message: res.message
-              });
-            }
-          })
+              else {
+                this.$message({
+                  type: 'error',
+                  message: res.message
+                });
+              }
+            })
+          }
         },
 
         /*--------------------------------------------------*/
@@ -446,7 +487,7 @@
           this.getBoxOffice(new Date());
           this.getPlacingRate(new Date());
           this.getAudiencePrice(new Date());
-          this.getPopularMovie();
+          // this.getPopularMovie();
       }
     }
 </script>
